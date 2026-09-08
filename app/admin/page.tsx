@@ -16,10 +16,15 @@ const NAV: { id: Sec; label: string; icon: string }[] = [
 const CENTERS = [["Website", 88, "--c-crown"], ["Listing", 74, "--c-eye"], ["Konten", 70, "--c-throat"], ["SEO", 72, "--c-heart"], ["GEO", 66, "--c-solar"], ["Social", 61, "--c-sacral"], ["Reputasi", 80, "--c-root"]] as const;
 const PERF = [["Kunjungan / bln", "3.240", "+14%", "--c-eye"], ["Lead masuk", "48", "+9", "--c-heart"], ["Listing aktif", "12", "2 baru", "--c-throat"], ["Peringkat SEO", "#3", "“vila Canggu”", "--c-solar"]] as const;
 const LISTINGS = [
-  { t: "Vila Uluwatu Cliff", st: "Dijual", price: "Rp 14 M", views: 320 },
-  { t: "Vila Canggu Estate", st: "Dijual", price: "Rp 8,5 M", views: 210 },
-  { t: "Vila Seminyak Retreat", st: "Disewa", price: "Rp 3,2 M/thn", views: 180 },
-  { t: "Townhouse Sanur", st: "Dijual", price: "Rp 4,8 M", views: 96 },
+  { t: "Vila Uluwatu Cliff", st: "Dijual", price: "Rp 14 M", views: 320, img: "/about/hero.jpg", loc: "Uluwatu, Bali", kt: 5, km: 5, luas: 450, rating: 4.9, desc: "Vila tebing menghadap Samudra Hindia, kolam infinity, dan sunset privat." },
+  { t: "Vila Canggu Estate", st: "Dijual", price: "Rp 8,5 M", views: 210, img: "/hero.jpg", loc: "Canggu, Bali", kt: 4, km: 4, luas: 320, rating: 4.8, desc: "Vila modern-tropis dekat pantai Berawa, taman luas, dan area hiburan." },
+  { t: "Vila Seminyak Retreat", st: "Disewa", price: "Rp 3,2 M/thn", views: 180, img: "/about/transform.jpg", loc: "Seminyak, Bali", kt: 3, km: 3, luas: 260, rating: 4.7, desc: "Retreat tenang di jantung Seminyak, cocok untuk sewa jangka panjang." },
+  { t: "Townhouse Sanur", st: "Dijual", price: "Rp 4,8 M", views: 96, img: "/about/invite.jpg", loc: "Sanur, Bali", kt: 3, km: 2, luas: 180, rating: 4.6, desc: "Townhouse elegan dekat pantai Sanur, desain fungsional untuk keluarga." },
+];
+const VIDEO_HISTORY = [
+  { t: "Vila Uluwatu Cliff", ar: "9:16", dur: "1:02", date: "2 Sep 2026", poster: "/hero.jpg" },
+  { t: "Canggu Estate", ar: "16:9", dur: "1:15", date: "27 Agu 2026", poster: "/about/hero.jpg" },
+  { t: "Seminyak Retreat", ar: "9:16", dur: "0:48", date: "19 Agu 2026", poster: "/about/transform.jpg" },
 ];
 const LISTING_HISTORY = [
   { t: "Vila Tegallalang", date: "1 Sep 2026", st: "Terjual" },
@@ -100,6 +105,8 @@ function MemberDashboard() {
   const [bgmOn, setBgmOn] = useState<string | null>(null);
   const [platform, setPlatform] = useState("Instagram Post");
   const [newStatus, setNewStatus] = useState<"jual" | "sewa">("jual");
+  const [listingModal, setListingModal] = useState<number | null>(null);
+  const [videoModal, setVideoModal] = useState<number | null>(null);
   // background video generation — persists across section switches (component stays mounted)
   const [genState, setGenState] = useState<"idle" | "working" | "done">("idle");
   const [genPct, setGenPct] = useState(0);
@@ -185,23 +192,25 @@ function MemberDashboard() {
           <H>Listing live</H>
           <span style={{ fontSize: ".78rem", color: "var(--good)", fontWeight: 600 }}>● {LISTINGS.length} tayang</span>
         </div>
-        <p className="muted" style={{ fontSize: ".86rem", marginTop: -8, marginBottom: 12 }}>Properti yang sedang tayang di website Anda.</p>
-        <div style={{ display: "grid", gap: 8 }}>
-          {LISTINGS.map((l) => (
-            <div key={l.t} style={{ display: "flex", alignItems: "center", gap: 10, padding: "11px 14px", borderRadius: 10, background: "var(--surface-2)" }}>
-              <div style={{ minWidth: 0 }}>
-                <div style={{ fontWeight: 600, fontSize: ".92rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{l.t}</div>
-                <div style={{ display: "flex", gap: 8, fontSize: ".78rem", marginTop: 2 }}>
-                  <span style={{ color: l.st === "Dijual" ? "var(--brand)" : "var(--jade)", fontWeight: 600 }}>{l.st}</span>
-                  <span className="mono muted">{l.price}</span>
-                  <span className="muted">· {l.views}×</span>
+        <p className="muted" style={{ fontSize: ".86rem", marginTop: -8, marginBottom: 12 }}>Properti yang sedang tayang — klik untuk lihat detail.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 12 }}>
+          {LISTINGS.map((l, i) => (
+            <button key={l.t} onClick={() => setListingModal(i)} style={{ display: "block", textAlign: "left", padding: 0, border: "1px solid var(--line)", borderRadius: 13, overflow: "hidden", background: "var(--surface)", cursor: "pointer", font: "inherit" }} className="adm-thumb">
+              <div style={{ position: "relative", aspectRatio: "4 / 3" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={l.img} alt={l.t} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                <span style={{ position: "absolute", top: 8, left: 8, fontSize: ".64rem", fontWeight: 700, letterSpacing: ".05em", padding: ".22rem .55rem", borderRadius: 999, color: "#fff", background: l.st === "Dijual" ? "var(--brand)" : "var(--jade)" }}>{l.st.toUpperCase()}</span>
+                <span style={{ position: "absolute", top: 8, right: 8, fontSize: ".64rem", fontWeight: 700, padding: ".22rem .5rem", borderRadius: 999, color: "var(--ink)", background: "rgba(255,255,255,.9)" }}>★ {l.rating}</span>
+              </div>
+              <div style={{ padding: "10px 12px" }}>
+                <div style={{ fontWeight: 600, fontSize: ".9rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{l.t}</div>
+                <div className="muted" style={{ fontSize: ".76rem", marginTop: 1 }}>{l.loc}</div>
+                <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 8, marginTop: 6 }}>
+                  <span className="mono" style={{ fontWeight: 700, fontSize: ".88rem", color: "var(--brand)" }}>{l.price}</span>
+                  <span className="muted" style={{ fontSize: ".72rem" }}>{l.views}× dilihat</span>
                 </div>
               </div>
-              <div style={{ marginLeft: "auto", display: "flex", gap: 6, flex: "none" }}>
-                <button style={{ ...btn("ghost"), padding: ".32rem .6rem", fontSize: ".78rem" }}>Edit</button>
-                <button style={{ ...btn("ghost"), padding: ".32rem .6rem", fontSize: ".78rem", color: "var(--crit)", borderColor: "color-mix(in oklab, var(--crit) 40%, var(--line-2))" }}>Hapus</button>
-              </div>
-            </div>
+            </button>
           ))}
         </div>
         <h3 className="display" style={{ fontSize: "1.05rem", fontWeight: 600, margin: "22px 0 4px" }}>Riwayat</h3>
@@ -276,19 +285,24 @@ function MemberDashboard() {
         </Card>
         <Card>
           <H>Riwayat video</H>
-          <div style={{ display: "grid", gap: 10 }}>
-            {[["Vila Uluwatu Cliff", "9:16 · 60 dtk", "2 Sep 2026"], ["Canggu Estate", "16:9 · 75 dtk", "27 Agu 2026"], ["Seminyak Retreat", "9:16 · 48 dtk", "19 Agu 2026"]].map(([t, m, d]) => (
-              <div key={t} style={{ display: "flex", alignItems: "center", gap: 11, padding: "10px 12px", borderRadius: 10, background: "var(--surface-2)", border: "1px solid var(--line)" }}>
-                <span style={{ width: 34, height: 34, borderRadius: 8, background: "var(--ink)", color: "var(--bg)", display: "grid", placeItems: "center", flex: "none" }}><Ic d="M8 5v14l11-7z" s={14} /></span>
-                <div style={{ minWidth: 0 }}>
-                  <div style={{ fontWeight: 600, fontSize: ".88rem" }}>{t}</div>
-                  <div className="muted mono" style={{ fontSize: ".74rem" }}>{m} · {d}</div>
+          <p className="muted" style={{ fontSize: ".84rem", marginTop: -8, marginBottom: 12 }}>Klik salah satu untuk memutarnya.</p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 12 }}>
+            {VIDEO_HISTORY.map((v, i) => (
+              <button key={v.t} onClick={() => setVideoModal(i)} style={{ display: "block", textAlign: "left", padding: 0, border: "1px solid var(--line)", borderRadius: 12, overflow: "hidden", background: "var(--surface)", cursor: "pointer", font: "inherit" }} className="adm-thumb">
+                <div style={{ position: "relative", aspectRatio: "16 / 10", background: "var(--ink)" }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={v.poster} alt={v.t} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", opacity: .82 }} />
+                  <span style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center" }}>
+                    <span style={{ width: 40, height: 40, borderRadius: "50%", background: "rgba(255,255,255,.9)", color: "var(--ink)", display: "grid", placeItems: "center", boxShadow: "0 4px 14px rgba(0,0,0,.3)" }}><Ic d="M8 5v14l11-7z" s={18} /></span>
+                  </span>
+                  <span style={{ position: "absolute", top: 7, left: 7, fontSize: ".6rem", fontWeight: 700, padding: ".18rem .45rem", borderRadius: 6, color: "#fff", background: "rgba(20,15,9,.6)" }} className="mono">{v.ar}</span>
+                  <span style={{ position: "absolute", bottom: 7, right: 7, fontSize: ".64rem", fontWeight: 700, padding: ".18rem .45rem", borderRadius: 6, color: "#fff", background: "rgba(20,15,9,.7)" }} className="mono">{v.dur}</span>
                 </div>
-                <div style={{ marginLeft: "auto", display: "flex", gap: 6, flex: "none" }}>
-                  <button style={{ ...btn("ghost"), padding: ".32rem .6rem", fontSize: ".76rem" }}>Unduh</button>
-                  <button style={{ ...btn("ghost"), padding: ".32rem .6rem", fontSize: ".76rem" }}>Bagikan</button>
+                <div style={{ padding: "8px 10px" }}>
+                  <div style={{ fontWeight: 600, fontSize: ".84rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{v.t}</div>
+                  <div className="muted mono" style={{ fontSize: ".72rem", marginTop: 1 }}>{v.date}</div>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </Card>
@@ -678,8 +692,83 @@ function MemberDashboard() {
         </main>
       </div>
 
+      {listingModal !== null && (() => {
+        const l = LISTINGS[listingModal];
+        return (
+          <div onClick={() => setListingModal(null)} style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(20,15,9,.55)", backdropFilter: "blur(3px)", display: "grid", placeItems: "center", padding: 20 }}>
+            <div onClick={(e) => e.stopPropagation()} style={{ width: "min(560px, 94vw)", maxHeight: "90vh", overflow: "auto", background: "var(--surface)", borderRadius: 18, border: "1px solid var(--line)", boxShadow: "0 40px 100px rgba(20,15,9,.4)" }}>
+              <div style={{ position: "relative", aspectRatio: "16 / 10" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={l.img} alt={l.t} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", borderRadius: "18px 18px 0 0" }} />
+                <span style={{ position: "absolute", top: 12, left: 12, fontSize: ".66rem", fontWeight: 700, letterSpacing: ".05em", padding: ".26rem .6rem", borderRadius: 999, color: "#fff", background: l.st === "Dijual" ? "var(--brand)" : "var(--jade)" }}>{l.st.toUpperCase()}</span>
+                <button onClick={() => setListingModal(null)} aria-label="Tutup" style={{ position: "absolute", top: 12, right: 12, width: 34, height: 34, borderRadius: "50%", border: "none", cursor: "pointer", background: "rgba(255,255,255,.92)", color: "var(--ink)", fontSize: "1rem", display: "grid", placeItems: "center" }}>✕</button>
+              </div>
+              <div style={{ padding: 22 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12 }}>
+                  <h3 className="display" style={{ fontSize: "1.35rem", fontWeight: 700, margin: 0 }}>{l.t}</h3>
+                  <span className="mono" style={{ fontWeight: 700, fontSize: "1.1rem", color: "var(--brand)", whiteSpace: "nowrap" }}>{l.price}</span>
+                </div>
+                <div className="muted" style={{ fontSize: ".9rem", marginTop: 3 }}>★ {l.rating} · {l.loc}</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, margin: "16px 0" }}>
+                  {[["Kamar tidur", `${l.kt} KT`], ["Kamar mandi", `${l.km} KM`], ["Luas", `${l.luas} m²`]].map(([k, val]) => (
+                    <div key={k} style={{ padding: "12px 10px", borderRadius: 11, background: "var(--surface-2)", textAlign: "center" }}>
+                      <div className="mono" style={{ fontWeight: 700, fontSize: "1rem" }}>{val}</div>
+                      <div className="muted" style={{ fontSize: ".72rem", marginTop: 2 }}>{k}</div>
+                    </div>
+                  ))}
+                </div>
+                <p className="muted" style={{ fontSize: ".92rem", lineHeight: 1.6, margin: "0 0 8px" }}>{l.desc}</p>
+                <div className="muted" style={{ fontSize: ".8rem", marginBottom: 16 }}>{l.views}× dilihat · tayang di website Anda</div>
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                  <button style={btn("brand")}>Edit listing</button>
+                  <button style={btn("ghost")}>Lihat di website</button>
+                  <button style={{ ...btn("ghost"), color: "var(--crit)", borderColor: "color-mix(in oklab, var(--crit) 40%, var(--line-2))", marginLeft: "auto" }}>Hapus</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {videoModal !== null && (() => {
+        const v = VIDEO_HISTORY[videoModal];
+        return (
+          <div onClick={() => setVideoModal(null)} style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(20,15,9,.62)", backdropFilter: "blur(3px)", display: "grid", placeItems: "center", padding: 20 }}>
+            <div onClick={(e) => e.stopPropagation()} style={{ width: v.ar === "9:16" ? "min(360px, 92vw)" : "min(760px, 94vw)", background: "var(--surface)", borderRadius: 18, border: "1px solid var(--line)", overflow: "hidden", boxShadow: "0 40px 100px rgba(20,15,9,.45)" }}>
+              <div style={{ position: "relative", aspectRatio: arCss(v.ar), background: "var(--ink)", maxHeight: "72vh", margin: "0 auto" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={v.poster} alt={v.t} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", opacity: .9 }} />
+                <button aria-label="Putar" style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", border: "none", background: "rgba(20,15,9,.12)", cursor: "pointer" }}>
+                  <span style={{ width: 66, height: 66, borderRadius: "50%", background: "rgba(255,255,255,.94)", color: "var(--ink)", display: "grid", placeItems: "center", boxShadow: "0 10px 28px rgba(0,0,0,.35)" }}><Ic d="M8 5v14l11-7z" s={28} /></span>
+                </button>
+                <button onClick={() => setVideoModal(null)} aria-label="Tutup" style={{ position: "absolute", top: 12, right: 12, width: 34, height: 34, borderRadius: "50%", border: "none", cursor: "pointer", background: "rgba(255,255,255,.92)", color: "var(--ink)", fontSize: "1rem", display: "grid", placeItems: "center" }}>✕</button>
+              </div>
+              <div style={{ padding: 18 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <Ic d="M8 5v14l11-7z" s={13} />
+                  <div style={{ flex: 1, height: 5, borderRadius: 3, background: "var(--line)" }}><div style={{ width: "28%", height: "100%", borderRadius: 3, background: "var(--brand)" }} /></div>
+                  <span className="mono muted" style={{ fontSize: ".74rem" }}>0:18 / {v.dur}</span>
+                </div>
+                <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 12, marginTop: 14, flexWrap: "wrap" }}>
+                  <div>
+                    <div style={{ fontWeight: 600, fontSize: ".98rem" }}>{v.t}</div>
+                    <div className="muted mono" style={{ fontSize: ".76rem" }}>{v.ar} · {v.dur} · {v.date}</div>
+                  </div>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <button style={{ ...btn("brand"), padding: ".5rem 1rem", fontSize: ".84rem" }}>Unduh</button>
+                    <button style={{ ...btn("ghost"), padding: ".5rem 1rem", fontSize: ".84rem" }}>Bagikan</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
       <style>{`
         .adm-asset:hover .adm-use{ opacity:1 !important; }
+        .adm-thumb{ transition:.15s; }
+        .adm-thumb:hover{ border-color:var(--brand) !important; box-shadow:0 8px 22px rgba(20,15,9,.12); transform:translateY(-2px); }
         .adm-eq.on span{ animation: admEq .9s ease-in-out infinite; }
         .adm-eq.on span:nth-child(2){ animation-delay:.15s } .adm-eq.on span:nth-child(3){ animation-delay:.3s } .adm-eq.on span:nth-child(4){ animation-delay:.45s } .adm-eq.on span:nth-child(5){ animation-delay:.6s }
         @keyframes admEq{ 0%,100%{ transform:scaleY(.4) } 50%{ transform:scaleY(1) } }
