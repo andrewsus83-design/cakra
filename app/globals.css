@@ -60,12 +60,13 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; width: 100%; }
 body {
   margin: 0; background: var(--bg); color: var(--ink);
   font-family: var(--font-sans), "Hanken Grotesk", system-ui, sans-serif;
   font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased;
   letter-spacing: -.005em;
+  overflow-x: hidden;
 }
 /* soft continuous gradient ground */
 body::before {
@@ -104,6 +105,12 @@ img { max-width: 100%; display: block; }
 .pill { display:inline-flex; align-items:center; gap:.4rem; font-size: .78rem; border: 1px solid var(--line-2); border-radius: 999px; padding: .35rem .8rem; color: var(--muted); background: var(--surface); }
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-soft); }
 .hair { border-color: var(--line); }
+
+/* mobile: consistent 8px side gutter so content is never cut off by the edge */
+@media (max-width: 640px) {
+  .wrap { padding-left: 8px; padding-right: 8px; }
+  .adm-main { padding-left: 8px !important; padding-right: 8px !important; }
+}
 
 /* ── theme-aware photo hero: light cream wash in light mode, dark in dark mode ── */
 .photo-scrim { position: absolute; inset: 0; pointer-events: none;

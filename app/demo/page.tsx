@@ -439,6 +439,7 @@ export default function Demo() {
         .k-madewith b{ color:var(--k-gold); }
 
         @media (max-width: 900px){ .k-links, .k-foot-links{ display:none; } .k-stats{ grid-template-columns:1fr 1fr; } .k-stat:nth-child(2){ border-right:none; } .k-stat{ border-bottom:1px solid var(--k-line); } .k-split{ grid-template-columns:1fr; } .k-about-img{ order:-1; } .k-faq-grid{ grid-template-columns:1fr; } }
+        @media (max-width: 640px){ .k-wrap{ padding-left:8px; padding-right:8px; } .k-sec{ padding-left:8px; padding-right:8px; } .k-hero-in{ padding-left:8px; padding-right:8px; } }
       `}</style>
     </div>
   );

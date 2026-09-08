@@ -286,7 +286,7 @@ function MemberDashboard() {
           <span style={{ fontSize: ".82rem", color: "var(--warn)", fontWeight: 600 }}>● Mode terbuka · tanpa autentikasi</span>
           <a href="https://kirana.cakra.site" className="mono" style={{ fontSize: ".82rem", color: "var(--muted)", textDecoration: "none" }}>kirana.cakra.site ↗</a>
         </header>
-        <main style={{ padding: "clamp(20px,3vw,34px)", maxWidth: 1120 }}>
+        <main className="adm-main" style={{ padding: "clamp(20px,3vw,34px)", maxWidth: 1120 }}>
           <h1 className="display" style={{ fontSize: "1.6rem", fontWeight: 700, margin: 0 }}>{titles[sec][0]}</h1>
           <p className="muted" style={{ margin: "4px 0 22px" }}>{titles[sec][1]}</p>
           {body}
@@ -305,6 +305,7 @@ function MemberDashboard() {
 export default function Admin() {
   const [host, setHost] = useState<string | null>(null);
   useEffect(() => { setHost(window.location.hostname); }, []);
-  const isMember = host === "member.cakra.xyz" || (host ? host.startsWith("member.") : false);
-  return isMember ? <MemberDashboard /> : <StaffAdmin />;
+  // Backend only on the root domain; every agent subdomain (sample/member/…) gets the member dashboard.
+  const isBackend = !host || host === "cakra.xyz" || host === "www.cakra.xyz" || host === "localhost" || host === "127.0.0.1";
+  return isBackend ? <StaffAdmin /> : <MemberDashboard />;
 }

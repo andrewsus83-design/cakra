@@ -145,7 +145,7 @@ export function StaffAdmin() {
             <span style={{ width: 34, height: 34, borderRadius: "50%", background: "var(--ink)", color: "var(--bg)", display: "grid", placeItems: "center", fontWeight: 700, fontSize: ".85rem" }}>A</span>
           </div>
         </header>
-        <main style={{ padding: "clamp(22px,3vw,36px)", maxWidth: 1100 }}>{content()}</main>
+        <main className="adm-main" style={{ padding: "clamp(22px,3vw,36px)", maxWidth: 1100 }}>{content()}</main>
       </div>
       <style>{`@media (max-width: 720px){ .adm-side{ display:none !important; } }`}</style>
     </div>
