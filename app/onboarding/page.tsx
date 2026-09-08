@@ -94,6 +94,22 @@ export default function Onboarding() {
   const [ans, setAns] = useState<Record<string, string | string[]>>({});
   const [genStep, setGenStep] = useState(0);
 
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+  useEffect(() => {
+    let t: "light" | "dark" = "light";
+    try { const s = localStorage.getItem("cakra-theme"); t = s === "dark" || s === "light" ? s : window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } catch {}
+    setTheme(t);
+    document.documentElement.setAttribute("data-theme", t);
+  }, []);
+  const toggleTheme = () => { const n = theme === "dark" ? "light" : "dark"; setTheme(n); document.documentElement.setAttribute("data-theme", n); try { localStorage.setItem("cakra-theme", n); } catch {} };
+  const themeToggleBtn = (variant: "photo" | "solid") => (
+    <button type="button" onClick={toggleTheme} aria-label="Ganti tema terang / gelap" className={variant === "photo" ? "btn btn-on-photo" : undefined} style={variant === "photo" ? { width: 40, height: 40, padding: 0, display: "grid", placeItems: "center", borderRadius: 10 } : { width: 38, height: 38, display: "grid", placeItems: "center", borderRadius: 10, border: "1px solid var(--line-2)", background: "transparent", color: "var(--ink)", cursor: "pointer" }}>
+      {theme === "dark"
+        ? <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1Zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1ZM4 11a1 1 0 1 1 0 2H2a1 1 0 1 1 0-2h2Zm18 0a1 1 0 1 1 0 2h-2a1 1 0 1 1 0-2h2ZM5.6 4.2 7 5.6A1 1 0 0 1 5.6 7L4.2 5.6a1 1 0 0 1 1.4-1.4Zm12.8 12.8 1.4 1.4a1 1 0 0 1-1.4 1.4L17 18.4a1 1 0 0 1 1.4-1.4ZM7 18.4 5.6 19.8a1 1 0 0 1-1.4-1.4L5.6 17A1 1 0 0 1 7 18.4ZM19.8 4.2a1 1 0 0 1 0 1.4L18.4 7A1 1 0 0 1 17 5.6l1.4-1.4a1 1 0 0 1 1.4 0Z" /></svg>
+        : <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" /></svg>}
+    </button>
+  );
+
   const page = PAGES[pageIdx];
   const setVal = (id: string, v: string | string[]) => setAns((p) => ({ ...p, [id]: v }));
   const isFilled = (f: Field) => {
@@ -131,7 +147,10 @@ export default function Onboarding() {
             <CakraMark size={38} />
             <span className="hand on-photo" style={{ fontSize: "2.2rem", fontWeight: 700, lineHeight: 1 }}>cakra</span>
           </Link>
-          <Link href="/" aria-label="Keluar" className="btn btn-on-photo" style={{ width: 40, height: 40, padding: 0, display: "grid", placeItems: "center", borderRadius: 10 }}>✕</Link>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            {themeToggleBtn("photo")}
+            <Link href="/" aria-label="Keluar" className="btn btn-on-photo" style={{ width: 40, height: 40, padding: 0, display: "grid", placeItems: "center", borderRadius: 10 }}>✕</Link>
+          </div>
         </div>
         <div style={{ position: "relative", flex: 1, display: "grid", placeItems: "center", padding: "10px 24px 72px", textAlign: "center" }}>
           <div style={{ maxWidth: "min(680px, 92vw)" }}>
@@ -156,7 +175,10 @@ export default function Onboarding() {
           <span className="hand" style={{ fontSize: "2rem", fontWeight: 700, lineHeight: 1 }}>cakra</span>
         </Link>
         {phase === "form" && <span className="mono" style={{ fontSize: ".8rem", color: "var(--muted)" }}>Langkah {pageIdx + 1}/8 · {page.section}</span>}
-        <Link href="/" aria-label="Keluar" style={{ width: 38, height: 38, display: "grid", placeItems: "center", borderRadius: 10, border: "1px solid var(--line-2)", color: "var(--ink)", textDecoration: "none" }}>✕</Link>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          {themeToggleBtn("solid")}
+          <Link href="/" aria-label="Keluar" style={{ width: 38, height: 38, display: "grid", placeItems: "center", borderRadius: 10, border: "1px solid var(--line-2)", color: "var(--ink)", textDecoration: "none" }}>✕</Link>
+        </div>
       </div>
       <div style={{ flex: 1, display: "grid", placeItems: "center", padding: "12px 24px 48px" }}>{children}</div>
     </div>
