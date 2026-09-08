@@ -48,6 +48,12 @@ const POSTS = [
   { cat: "Ditemukan", title: "SEO lokal & pencarian AI untuk agen", ex: "Agar nama Anda muncul saat calon pembeli mencari “agen properti di area Anda” — di Google dan AI.", read: "6 menit", img: "/blog-2.jpg" },
 ];
 
+const TESTI = [
+  { q: "Website saya jadi dalam satu sore, dan sekarang muncul di Google saat orang mencari agen di area saya. Klien bilang situs saya yang paling profesional.", n: "Andi Pratama", r: "Agen properti · Jakarta Selatan", c: "--c-eye" },
+  { q: "Video listing yang dulu makan waktu seminggu, kini jadi dalam hitungan menit. Closing pertama dari reels cakra datang di minggu kedua.", n: "Sarah Wijaya", r: "Agen vila · Bali", c: "--c-heart" },
+  { q: "Skor Cakra membuat saya tahu persis apa yang harus dikerjakan tiap minggu. Kehadiran online saya naik, dan lead pun ikut naik.", n: "Budi Santoso", r: "Agen properti · Surabaya", c: "--c-throat" },
+];
+
 export default function Home() {
   return (
     <main>
@@ -279,6 +285,26 @@ export default function Home() {
               Website, domain, konten, dan lead selalu milik Anda — bawa pergi kapan saja.
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="wrap" style={{ padding: "72px 0 40px" }}>
+        <SectionTitle hand="kata mereka" max="22ch">Agen yang bertumbuh bersama cakra.</SectionTitle>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 24 }}>
+          {TESTI.map((t) => (
+            <div key={t.n} className="card" style={{ padding: 30, display: "flex", flexDirection: "column" }}>
+              <div style={{ color: "var(--brand)", letterSpacing: 3, marginBottom: 14, fontSize: "1rem" }} aria-label="5 dari 5 bintang">★★★★★</div>
+              <p className="display" style={{ fontSize: "1.18rem", lineHeight: 1.5, fontStyle: "italic", margin: "0 0 22px", fontWeight: 500 }}>“{t.q}”</p>
+              <div style={{ marginTop: "auto", display: "flex", alignItems: "center", gap: 12 }}>
+                <span style={{ width: 44, height: 44, borderRadius: "50%", flex: "none", display: "grid", placeItems: "center", background: `var(${t.c})`, color: "#fff", fontWeight: 700, fontSize: "1.05rem" }}>{t.n.charAt(0)}</span>
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: ".98rem" }}>{t.n}</div>
+                  <div className="muted" style={{ fontSize: ".84rem" }}>{t.r}</div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
