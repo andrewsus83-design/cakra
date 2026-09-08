@@ -81,9 +81,9 @@ const PALETTES = [
 ];
 
 const FONTS = [
-  { id: "elegan", name: "Elegan", pair: "Serif + sans", fam: "var(--font-display), Georgia, serif", weight: 600 },
-  { id: "modern", name: "Modern", pair: "Sans tebal", fam: "var(--font-sans), system-ui, sans-serif", weight: 800 },
-  { id: "klasik", name: "Klasik", pair: "Serif klasik", fam: "Georgia, 'Times New Roman', serif", weight: 700 },
+  { id: "elegan", name: "Elegan", roles: "Playfair · Manrope · JetBrains · Dancing", fam: "'Playfair Display', var(--font-display), Georgia, serif", weight: 600 },
+  { id: "modern", name: "Modern", roles: "Sora · Inter · IBM Plex · Caveat", fam: "var(--font-sans), system-ui, sans-serif", weight: 800 },
+  { id: "klasik", name: "Klasik", roles: "Fraunces · Work Sans · Space Mono · Kalam", fam: "Georgia, 'Times New Roman', serif", weight: 700 },
 ];
 
 const GEN_STEPS = ["Menyiapkan website Anda…", "Menata listing & halaman…", "Mengoptimasi SEO & GEO…", "Menyalakan skor kehadiran…"];
@@ -240,9 +240,10 @@ export default function Onboarding() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12 }}>
             {FONTS.map((ft) => (
               <button key={ft.id} type="button" onClick={() => setVal(f.id, ft.id)} className="ob-opt" style={{ display: "block", padding: 16, borderColor: v === ft.id ? "var(--brand)" : "var(--line-2)" }}>
-                <div style={{ fontFamily: ft.fam, fontWeight: ft.weight, fontSize: "1.9rem", lineHeight: 1, marginBottom: 8, color: "var(--ink)" }}>Rumah Impian</div>
+                <div style={{ fontFamily: ft.fam, fontWeight: ft.weight, fontSize: "1.9rem", lineHeight: 1, marginBottom: 10, color: "var(--ink)" }}>Rumah Impian</div>
                 <div style={{ fontWeight: 600, fontSize: ".95rem" }}>{v === ft.id ? "✓ " : ""}{ft.name}</div>
-                <div className="muted" style={{ fontSize: ".82rem" }}>{ft.pair}</div>
+                <div className="mono" style={{ fontSize: ".58rem", letterSpacing: ".08em", textTransform: "uppercase", color: "var(--muted)", marginTop: 5 }}>Title · Body · Mono · Accent</div>
+                <div style={{ fontSize: ".82rem", color: "var(--ink)", marginTop: 2 }}>{ft.roles}</div>
               </button>
             ))}
           </div>
