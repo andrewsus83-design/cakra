@@ -11,7 +11,7 @@ const COLS = [
 
 export function SiteFooter() {
   const pathname = usePathname();
-  if (pathname === "/demo" || pathname.startsWith("/demo/") || pathname === "/admin" || pathname.startsWith("/admin/")) return null;
+  if (pathname === "/demo" || pathname.startsWith("/demo/") || pathname === "/admin" || pathname.startsWith("/admin/") || pathname === "/login" || pathname === "/signup" || pathname === "/onboarding") return null;
   return (
     <footer style={{ borderTop: "1px solid var(--line)", background: "var(--surface-2)" }}>
       <div className="wrap" style={{ padding: "48px 0 40px" }}>
