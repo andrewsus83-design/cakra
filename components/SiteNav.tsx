@@ -49,6 +49,8 @@ export function SiteNav() {
   const muted = heroWhite ? "rgba(255,255,255,.85)" : overHero ? "var(--ink-2)" : "var(--muted)";
   const heroBorder = heroWhite ? "rgba(255,255,255,.5)" : "var(--line-2)";
 
+  if (pathname === "/demo" || pathname.startsWith("/demo/")) return null;
+
   return (
     <>
       <header

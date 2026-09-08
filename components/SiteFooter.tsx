@@ -1,4 +1,6 @@
+"use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { CakraMark } from "./CakraMark";
 
 const COLS = [
@@ -8,6 +10,8 @@ const COLS = [
 ];
 
 export function SiteFooter() {
+  const pathname = usePathname();
+  if (pathname === "/demo" || pathname.startsWith("/demo/")) return null;
   return (
     <footer style={{ borderTop: "1px solid var(--line)", background: "var(--surface-2)" }}>
       <div className="wrap" style={{ padding: "48px 0 40px" }}>
