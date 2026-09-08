@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { CakraMark } from "@/components/CakraMark";
 
 type FType = "text" | "email" | "tel" | "textarea" | "choice" | "multi" | "theme" | "domain" | "social";
 type Field = { id: string; label: string; type: FType; ph?: string; optional?: boolean; options?: string[] };
@@ -117,7 +118,10 @@ export default function Onboarding() {
           <div className="photo-scrim" />
         </div>
         <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 22px" }}>
-          <span className="hand on-photo" style={{ fontSize: "1.95rem", fontWeight: 700 }}>cakra</span>
+          <Link href="/" style={{ display: "flex", alignItems: "center", gap: 6, textDecoration: "none" }}>
+            <CakraMark size={38} />
+            <span className="hand on-photo" style={{ fontSize: "2.2rem", fontWeight: 700, lineHeight: 1 }}>cakra</span>
+          </Link>
           <Link href="/" aria-label="Keluar" className="btn btn-on-photo" style={{ width: 40, height: 40, padding: 0, display: "grid", placeItems: "center", borderRadius: 10 }}>✕</Link>
         </div>
         <div style={{ position: "relative", flex: 1, display: "grid", placeItems: "center", padding: "10px 24px 72px", textAlign: "center" }}>
@@ -138,7 +142,10 @@ export default function Onboarding() {
         <div style={{ height: "100%", width: `${showProgress ? ((pageIdx + 1) / PAGES.length) * 100 : 100}%`, background: "var(--brand)", transition: "width .35s" }} />
       </div>
       <div style={{ flex: "none", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 22px" }}>
-        <Link href="/" style={{ textDecoration: "none", color: "var(--ink)" }}><span className="hand" style={{ fontSize: "1.9rem", fontWeight: 700 }}>cakra</span></Link>
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 6, textDecoration: "none", color: "var(--ink)" }}>
+          <CakraMark size={34} />
+          <span className="hand" style={{ fontSize: "2rem", fontWeight: 700, lineHeight: 1 }}>cakra</span>
+        </Link>
         {phase === "form" && <span className="mono" style={{ fontSize: ".8rem", color: "var(--muted)" }}>Langkah {pageIdx + 1}/8 · {page.section}</span>}
         <Link href="/" aria-label="Keluar" style={{ width: 38, height: 38, display: "grid", placeItems: "center", borderRadius: 10, border: "1px solid var(--line-2)", color: "var(--ink)", textDecoration: "none" }}>✕</Link>
       </div>
