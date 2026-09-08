@@ -68,22 +68,28 @@ export function KprCalc({ compact = false }: { compact?: boolean }) {
 export function RentalYield() {
   const [harga, setHarga] = useState(3_000_000_000);
   const [sewa, setSewa] = useState(240_000_000);
-  const yieldPct = harga > 0 ? (sewa / harga) * 100 : 0;
-  const payback = sewa > 0 ? harga / sewa : 0;
+  const [fee, setFee] = useState(10);
+  const netSewa = sewa * (1 - fee / 100);
+  const grossYield = harga > 0 ? (sewa / harga) * 100 : 0;
+  const netYield = harga > 0 ? (netSewa / harga) * 100 : 0;
+  const payback = netSewa > 0 ? harga / netSewa : 0;
   return (
     <div className="card kpr-grid" style={{ padding: "clamp(22px, 3vw, 34px)", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(24px, 4vw, 44px)", alignItems: "center" }}>
       <div style={{ display: "grid", gap: 20 }}>
         <Slider label="Harga properti" display={rpShort(harga)} value={harga} min={500_000_000} max={30_000_000_000} step={100_000_000} onChange={setHarga} />
         <Slider label="Pendapatan sewa / tahun" display={rpShort(sewa)} value={sewa} min={10_000_000} max={2_000_000_000} step={10_000_000} onChange={setSewa} />
+        <Slider label="Biaya manajemen" display={`${fee}% · ${rpShort(sewa * fee / 100)}/thn`} value={fee} min={0} max={30} step={1} onChange={setFee} />
       </div>
       <div style={{ background: "var(--surface-2)", borderRadius: "var(--radius)", padding: "clamp(22px, 3vw, 30px)", textAlign: "center" }}>
-        <div className="muted" style={{ fontSize: ".92rem" }}>Imbal hasil sewa (yield)</div>
-        <div className="display mono" style={{ fontSize: "clamp(1.9rem, 4vw, 2.8rem)", fontWeight: 700, color: "var(--jade)", lineHeight: 1.1, margin: "4px 0 18px" }}>{yieldPct.toFixed(1)}%<span style={{ fontSize: ".9rem", color: "var(--muted)" }}> / thn</span></div>
+        <div className="muted" style={{ fontSize: ".92rem" }}>Imbal hasil bersih (net yield)</div>
+        <div className="display mono" style={{ fontSize: "clamp(1.9rem, 4vw, 2.8rem)", fontWeight: 700, color: "var(--jade)", lineHeight: 1.1, margin: "4px 0 18px" }}>{netYield.toFixed(1)}%<span style={{ fontSize: ".9rem", color: "var(--muted)" }}> / thn</span></div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, textAlign: "left" }}>
+          <div><div className="muted" style={{ fontSize: ".74rem" }}>Gross yield</div><div className="mono" style={{ fontWeight: 600 }}>{grossYield.toFixed(1)}%</div></div>
           <div><div className="muted" style={{ fontSize: ".74rem" }}>Balik modal</div><div className="mono" style={{ fontWeight: 600 }}>{payback.toFixed(1)} tahun</div></div>
-          <div><div className="muted" style={{ fontSize: ".74rem" }}>Sewa / bulan</div><div className="mono" style={{ fontWeight: 600 }}>{rpShort(sewa / 12)}</div></div>
+          <div><div className="muted" style={{ fontSize: ".74rem" }}>Sewa bersih / bulan</div><div className="mono" style={{ fontWeight: 600 }}>{rpShort(netSewa / 12)}</div></div>
+          <div><div className="muted" style={{ fontSize: ".74rem" }}>Biaya manajemen</div><div className="mono" style={{ fontWeight: 600 }}>{rpShort(sewa * fee / 100)}/thn</div></div>
         </div>
-        <p className="muted" style={{ fontSize: ".76rem", marginTop: 14 }}>Gross yield sebelum biaya operasional & pajak.</p>
+        <p className="muted" style={{ fontSize: ".76rem", marginTop: 14 }}>Net setelah biaya manajemen; sebelum pajak & perawatan besar.</p>
       </div>
     </div>
   );
