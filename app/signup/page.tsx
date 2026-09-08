@@ -56,6 +56,7 @@ export default function Signup() {
             </label>
             <Link href="/onboarding" className="btn btn-brand" style={{ justifyContent: "center", padding: ".95rem", fontSize: "1.02rem", marginTop: 4 }}>Buat akun →</Link>
           </form>
+          <p className="muted" style={{ fontSize: ".8rem", textAlign: "center", marginTop: 12 }}>Gratis untuk memulai · tanpa kartu kredit · data Anda milik Anda</p>
           <p className="muted" style={{ fontSize: ".86rem", marginTop: 18, textAlign: "center" }}>
             Sudah punya akun? <Link href="/login" className="gold" style={{ textDecoration: "none" }}>Masuk</Link>
           </p>

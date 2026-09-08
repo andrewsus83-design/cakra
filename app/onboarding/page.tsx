@@ -216,7 +216,7 @@ export default function Onboarding() {
         </div>
         <p className="muted" style={{ margin: "0 auto 24px", maxWidth: "38ch", lineHeight: 1.6 }}>Kami sudah menyiapkan draf website, halaman listing, dan skor kehadiran awal Anda. Langkah berikutnya: tinjau dan terbitkan.</p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <Link href="/login" className="btn btn-brand" style={{ padding: ".9rem 1.7rem", fontSize: "1rem" }}>Masuk ke dashboard</Link>
+          <Link href="/admin" className="btn btn-brand" style={{ padding: ".9rem 1.7rem", fontSize: "1rem" }}>Buka dashboard saya →</Link>
           <Link href="/" className="btn btn-ghost" style={{ padding: ".9rem 1.7rem", fontSize: "1rem" }}>Kembali ke beranda</Link>
         </div>
       </div>,

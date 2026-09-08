@@ -127,6 +127,13 @@ const WHO = [
   ["Solusi untuk tim & skala.", "Developer, agensi, dan tim broker mendapat pendampingan menyeluruh."],
 ];
 
+// Links intentionally left empty ("#") until the real social profiles exist.
+const SOCIALS: [string, string, string][] = [
+  ["Instagram", "#", "M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm5.5-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2ZM7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4Zm0 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7Z"],
+  ["TikTok", "#", "M14 3c.3 2.2 1.7 3.9 4 4.2v2.5c-1.5 0-2.9-.5-4-1.3v5.9a5.3 5.3 0 1 1-5.3-5.3c.3 0 .6 0 .9.1v2.7a2.6 2.6 0 1 0 1.8 2.5V3H14Z"],
+  ["YouTube", "#", "M21.6 7.2a2.6 2.6 0 0 0-1.8-1.8C18 5 12 5 12 5s-6 0-7.8.4A2.6 2.6 0 0 0 2.4 7.2 27 27 0 0 0 2 12a27 27 0 0 0 .4 4.8 2.6 2.6 0 0 0 1.8 1.8C6 19 12 19 12 19s6 0 7.8-.4a2.6 2.6 0 0 0 1.8-1.8A27 27 0 0 0 22 12a27 27 0 0 0-.4-4.8ZM10 15V9l5 3-5 3Z"],
+];
+
 export default function Page() {
   const [sent, setSent] = useState(false);
   const [biz, setBiz] = useState(false);
@@ -189,16 +196,35 @@ export default function Page() {
             <button onClick={() => setBiz(true)} className="btn" style={{ padding: ".85rem 1.5rem", fontSize: "1rem", background: "var(--ink)", color: "var(--bg)" }}>→ Mulai form bisnis</button>
           </div>
         </div>
+
+        {/* connect with us */}
+        <div className="ct-card ct-connect" style={{ marginTop: 24, background: "var(--surface-2)" }}>
+          <div>
+            <h2 className="display" style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0 }}>Terhubung dengan kami</h2>
+            <p className="muted" style={{ fontSize: ".98rem", marginTop: 6, maxWidth: "48ch" }}>Ikuti cakra untuk tips pemasaran properti, update produk, dan inspirasi konten agen.</p>
+          </div>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+            {SOCIALS.map(([label, href, d]) => (
+              <a key={label} href={href} aria-label={label} className="ct-social">
+                <svg viewBox="0 0 24 24" width={20} height={20} fill="currentColor" aria-hidden="true"><path d={d} /></svg>
+                {label}
+              </a>
+            ))}
+          </div>
+        </div>
       </section>
 
       {biz && <BizFlow onClose={() => setBiz(false)} />}
 
       <style>{`
-        .ct-grid{ display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:start; }
+        .ct-grid{ display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:stretch; }
         .ct-card{ padding:clamp(26px, 3.4vw, 42px); border-radius:22px; background:var(--surface);
           border:1.6px solid color-mix(in oklab, var(--ink) 60%, var(--line-2));
           box-shadow:5px 6px 0 rgba(33,26,17,.10), var(--shadow-soft); }
         .ct-label{ display:block; font-family:var(--font-mono), monospace; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+        .ct-connect{ display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap; }
+        .ct-social{ display:inline-flex; align-items:center; gap:9px; padding:.7rem 1.15rem; border-radius:12px; border:1.5px solid var(--line-2); background:var(--surface); color:var(--ink); text-decoration:none; font-weight:600; font-size:.95rem; transition:.15s; }
+        .ct-social:hover{ border-color:var(--brand); color:var(--brand); }
         .hl{ background:color-mix(in oklab, var(--brand) 34%, transparent); border-radius:5px; padding:.02em .2em; box-decoration-break:clone; -webkit-box-decoration-break:clone; }
         @media (max-width: 820px){ .ct-grid{ grid-template-columns:1fr; } }
       `}</style>

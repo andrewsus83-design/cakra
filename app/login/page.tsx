@@ -53,8 +53,9 @@ export default function Login() {
               </div>
               <input className="lg-input" type="password" placeholder="••••••••" />
             </label>
-            <button className="btn btn-brand" style={{ justifyContent: "center", padding: ".95rem", fontSize: "1.02rem", marginTop: 4 }} type="button">Masuk →</button>
+            <Link href="/admin" className="btn btn-brand" style={{ justifyContent: "center", padding: ".95rem", fontSize: "1.02rem", marginTop: 4 }}>Masuk →</Link>
           </form>
+          <p className="muted" style={{ fontSize: ".8rem", textAlign: "center", marginTop: 12 }}>Data Anda milik Anda · aman &amp; tidak dijual</p>
           <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "20px 0" }}>
             <span style={{ flex: 1, height: 1, background: "var(--line)" }} /><span className="muted" style={{ fontSize: ".8rem" }}>atau</span><span style={{ flex: 1, height: 1, background: "var(--line)" }} />
           </div>

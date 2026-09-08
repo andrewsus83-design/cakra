@@ -6,7 +6,7 @@ import { CakraMark } from "./CakraMark";
 const COLS = [
   { title: "Platform", links: [["Website builder", "/#cara-kerja"], ["Listing", "/listing"], ["Kalkulator", "/kalkulator"], ["Harga", "/harga"]] },
   { title: "Perusahaan", links: [["Tentang", "/about"], ["Contoh situs", "/demo"], ["Hub", "/hub"], ["FAQ", "/faq"], ["Kontak", "/contact"]] },
-  { title: "Legal", links: [["Syarat & Ketentuan", "/terms"], ["Privasi", "/privacy"], ["Masuk", "/login"], ["Daftar", "/signup"]] },
+  { title: "Legal", links: [["Syarat & Ketentuan", "/terms"], ["Privasi", "/privacy"], ["Masuk", "/login"], ["Daftar", "/onboarding"]] },
 ];
 
 // Links intentionally left empty ("#") until the real social profiles exist.

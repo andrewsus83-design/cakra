@@ -10,23 +10,21 @@ export const metadata: Metadata = {
   description:
     "Kirana Sutanto — 10+ tahun spesialis vila & properti premium di Bali, untuk jual maupun sewa mulai Rp 3 miliar. Dari kurasi hingga serah terima, ditemani setiap langkah.",
   keywords: ["agen properti Bali", "vila premium Bali", "jual vila Bali", "sewa vila Bali", "investasi properti Bali", "Kirana Sutanto", "properti mewah Bali"],
+  alternates: { canonical: "/demo" },
   openGraph: {
     title: "Kirana — Spesialis Properti Premium Bali",
     description: "Vila & properti premium Bali untuk jual maupun sewa, mulai Rp 3 miliar. 10+ tahun pengalaman bersama Kirana Sutanto.",
     type: "website",
+    url: "https://cakra.xyz/demo",
+    images: [{ url: "/about/transform.jpg", width: 1200, height: 800, alt: "Vila premium Bali" }],
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "RealEstateAgent",
-  name: "Kirana Sutanto",
-  description: "Spesialis vila & properti premium di Bali untuk jual dan sewa, mulai Rp 3 miliar, dengan pengalaman lebih dari 10 tahun.",
-  areaServed: "Bali, Indonesia",
-  knowsAbout: ["vila premium Bali", "investasi properti Bali", "sewa vila Bali", "legalitas properti"],
-  priceRange: "Rp 3.000.000.000+",
-  slogan: "Properti premium Bali, dari tangan yang benar-benar paham.",
-};
+// Pre-filled WhatsApp / email so every generated agent site captures leads out of the box.
+const WA = "6281100000000";
+const WA_MSG = encodeURIComponent("Halo Kirana, saya tertarik dengan properti Anda di Bali. Boleh saya minta info lebih lanjut?");
+const WA_LINK = `https://wa.me/${WA}?text=${WA_MSG}`;
+const EMAIL_LINK = "mailto:halo@kirana.property?subject=" + encodeURIComponent("Pertanyaan properti Bali");
 
 const NAV = [["Beranda", "#top"], ["Tentang", "#tentang"], ["Listing", "#listing"], ["Hub", "#hub"], ["FAQ", "#faq"]];
 
@@ -83,6 +81,34 @@ const FAQS = [
   ["Berapa biaya jasa Anda?", "Transparan sejak awal. Komisi standar dibahas di muka, dengan rencana pemasaran (foto, video, iklan, jaringan) yang jelas."],
 ];
 
+const parsePrice = (s: string) => Math.round(Number(s.replace(/[^0-9,]/g, "").replace(",", ".")) * 1e9);
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "RealEstateAgent",
+  "@id": "https://cakra.xyz/demo#agent",
+  name: "Kirana Sutanto",
+  url: "https://cakra.xyz/demo",
+  image: "https://cakra.xyz/about/transform.jpg",
+  description: "Spesialis vila & properti premium di Bali untuk jual dan sewa, mulai Rp 3 miliar, dengan pengalaman lebih dari 10 tahun.",
+  telephone: "+62-811-0000-000",
+  priceRange: "Rp 3.000.000.000+",
+  slogan: "Properti premium Bali, dari tangan yang benar-benar paham.",
+  knowsAbout: ["vila premium Bali", "investasi properti Bali", "sewa vila Bali", "legalitas properti"],
+  address: { "@type": "PostalAddress", streetAddress: "Jl. Pantai Berawa", addressLocality: "Canggu", addressRegion: "Bali", postalCode: "80361", addressCountry: "ID" },
+  geo: { "@type": "GeoCoordinates", latitude: -8.66, longitude: 115.14 },
+  areaServed: AREAS.map((a) => ({ "@type": "Place", name: `${a}, Bali` })),
+  aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "150", bestRating: "5" },
+  makesOffer: LISTINGS.map((p) => ({
+    "@type": "Offer",
+    name: p.t,
+    priceCurrency: "IDR",
+    price: parsePrice(p.price),
+    availability: "https://schema.org/InStock",
+    areaServed: `${p.loc}, Bali`,
+    itemOffered: { "@type": "SingleFamilyResidence", name: p.t, numberOfRooms: p.beds, floorSize: { "@type": "QuantitativeValue", value: p.size, unitCode: "MTK" } },
+  })),
+};
+
 function Ic({ d, s = 18 }: { d: string; s?: number }) {
   return <svg viewBox="0 0 24 24" width={s} height={s} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={d} /></svg>;
 }
@@ -99,6 +125,9 @@ export default function Demo() {
   return (
     <div className={`${display.variable} ${body.variable} ${script.variable} kir`} id="top">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      {/* DEMO RIBBON — this is a sample site built with cakra */}
+      <a href="/onboarding" className="k-ribbon">✨ Contoh situs agen — dibuat dengan <b>cakra</b> · Buat milik Anda →</a>
 
       {/* NAV */}
       <header className="k-nav">
@@ -291,8 +320,8 @@ export default function Demo() {
           <h2 className="k-h2" style={{ color: "#fff" }}>Siap menemukan properti premium Anda?</h2>
           <p className="k-cta-p">Ceritakan kebutuhan Anda — memiliki vila impian, menyewa untuk musim ini, menyewakan aset, atau berinvestasi. Saya balas cepat, biasanya di hari yang sama.</p>
           <div className="k-row k-center-row">
-            <a href="#" className="k-btn k-btn-gold k-lg"><Ic d="M20 4 3 11l6 2 2 6 3-5 4 3z" /> WhatsApp Kirana</a>
-            <a href="#" className="k-btn k-btn-glass k-lg">halo@kirana.property</a>
+            <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="k-btn k-btn-gold k-lg"><Ic d="M20 4 3 11l6 2 2 6 3-5 4 3z" /> WhatsApp Kirana</a>
+            <a href={EMAIL_LINK} className="k-btn k-btn-glass k-lg">halo@kirana.property</a>
           </div>
           <p className="k-cta-note">Kantor: Jl. Pantai Berawa, Canggu · Sen–Sab, 09.00–19.00 WITA</p>
         </div>
@@ -305,8 +334,13 @@ export default function Demo() {
           <div className="k-muted k-sm">© {new Date().getFullYear()} Kirana · Kirana Sutanto · Spesialis Properti Premium Bali</div>
           <div className="k-foot-links">{NAV.map(([l, h]) => <a key={l} href={h}>{l}</a>)}</div>
         </div>
-        <div className="k-wrap k-madewith">Dibuat dengan <b>cakra</b></div>
+        <div className="k-wrap k-madewith">Dibuat dengan <a href="/onboarding" style={{ color: "var(--k-gold)", fontWeight: 700, textDecoration: "none" }}>cakra</a> — <a href="/onboarding" style={{ color: "rgba(255,255,255,.85)", textDecoration: "underline" }}>buat situs Anda sendiri →</a></div>
       </footer>
+
+      {/* Sticky WhatsApp lead capture — standard on every cakra agent site */}
+      <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="k-fab" aria-label="Chat WhatsApp dengan Kirana">
+        <Ic d="M20 4 3 11l6 2 2 6 3-5 4 3z" s={26} />
+      </a>
 
       <style>{`
         .kir{
@@ -437,6 +471,12 @@ export default function Demo() {
         .k-foot-links a:hover{ color:#fff; }
         .k-madewith{ margin-top:22px; padding-top:20px; border-top:1px solid rgba(255,255,255,.14); color:rgba(255,255,255,.6); font-size:.84rem; }
         .k-madewith b{ color:var(--k-gold); }
+
+        .k-ribbon{ display:block; text-align:center; background:var(--k-emerald-2); color:#fff; text-decoration:none; font-size:.86rem; font-weight:600; padding:9px 16px; letter-spacing:.01em; }
+        .k-ribbon b{ color:var(--k-gold); }
+        .k-ribbon:hover{ background:var(--k-emerald); }
+        .k-fab{ position:fixed; bottom:22px; right:22px; z-index:60; width:60px; height:60px; border-radius:50%; background:#25D366; color:#fff; display:grid; place-items:center; box-shadow:0 12px 28px -8px rgba(0,0,0,.4); transition:transform .15s; }
+        .k-fab:hover{ transform:scale(1.06); }
 
         @media (max-width: 900px){ .k-links, .k-foot-links{ display:none; } .k-stats{ grid-template-columns:1fr 1fr; } .k-stat:nth-child(2){ border-right:none; } .k-stat{ border-bottom:1px solid var(--k-line); } .k-split{ grid-template-columns:1fr; } .k-about-img{ order:-1; } .k-faq-grid{ grid-template-columns:1fr; } }
         @media (max-width: 640px){ .k-wrap{ padding-left:8px; padding-right:8px; } .k-sec{ padding-left:8px; padding-right:8px; } .k-hero-in{ padding-left:8px; padding-right:8px; } }
