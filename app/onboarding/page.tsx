@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CakraMark } from "@/components/CakraMark";
 
-type FType = "text" | "email" | "tel" | "textarea" | "choice" | "multi" | "theme" | "domain" | "social";
+type FType = "text" | "email" | "tel" | "textarea" | "choice" | "multi" | "theme" | "font" | "domain" | "social";
 type Field = { id: string; label: string; type: FType; ph?: string; optional?: boolean; options?: string[] };
 type Page = { section: string; title: string; sub?: string; fields: Field[] };
 
@@ -37,6 +37,7 @@ const PAGES: Page[] = [
     section: "Tampilan website", title: "Pilih gayanya.", sub: "Bisa Anda ubah kapan saja nanti.",
     fields: [
       { id: "theme", label: "Nuansa warna", type: "theme" },
+      { id: "font", label: "Gaya huruf", type: "font" },
       { id: "mood", label: "Mood tampilan", type: "choice", options: ["Elegan & tenang", "Berani & modern", "Hangat & personal"] },
     ],
   },
@@ -75,6 +76,14 @@ const PALETTES = [
   { id: "coastal", name: "Coastal Calm", sw: ["#F2F6F6", "#357482", "#B0812F", "#1E2A2E"] },
   { id: "noir", name: "Modern Noir", sw: ["#17130D", "#CBA35A", "#DACCAE", "#8C6120"] },
   { id: "terracotta", name: "Warm Terracotta", sw: ["#FBF1E8", "#B0503A", "#5E8850", "#3B3020"] },
+  { id: "slate", name: "Slate Modern", sw: ["#EEF1F5", "#2E4A6B", "#7A9CC6", "#1B2430"] },
+  { id: "olive", name: "Olive Grove", sw: ["#F3F2E8", "#5E7346", "#C08A3E", "#2A2A1E"] },
+];
+
+const FONTS = [
+  { id: "elegan", name: "Elegan", pair: "Serif + sans", fam: "var(--font-display), Georgia, serif", weight: 600 },
+  { id: "modern", name: "Modern", pair: "Sans tebal", fam: "var(--font-sans), system-ui, sans-serif", weight: 800 },
+  { id: "klasik", name: "Klasik", pair: "Serif klasik", fam: "Georgia, 'Times New Roman', serif", weight: 700 },
 ];
 
 const GEN_STEPS = ["Menyiapkan website Anda…", "Menata listing & halaman…", "Mengoptimasi SEO & GEO…", "Menyalakan skor kehadiran…"];
@@ -222,6 +231,18 @@ export default function Onboarding() {
               <button key={p.id} type="button" onClick={() => setVal(f.id, p.id)} className="ob-opt" style={{ display: "block", padding: 14, borderColor: v === p.id ? "var(--brand)" : "var(--line-2)" }}>
                 <div style={{ display: "flex", gap: 6, marginBottom: 10 }}>{p.sw.map((c) => <span key={c} style={{ width: 26, height: 26, borderRadius: 7, background: c, border: "1px solid rgba(0,0,0,.08)" }} />)}</div>
                 <div style={{ fontWeight: 600, fontSize: ".98rem" }}>{v === p.id ? "✓ " : ""}{p.name}</div>
+              </button>
+            ))}
+          </div>
+        );
+      case "font":
+        return (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12 }}>
+            {FONTS.map((ft) => (
+              <button key={ft.id} type="button" onClick={() => setVal(f.id, ft.id)} className="ob-opt" style={{ display: "block", padding: 16, borderColor: v === ft.id ? "var(--brand)" : "var(--line-2)" }}>
+                <div style={{ fontFamily: ft.fam, fontWeight: ft.weight, fontSize: "1.9rem", lineHeight: 1, marginBottom: 8, color: "var(--ink)" }}>Rumah Impian</div>
+                <div style={{ fontWeight: 600, fontSize: ".95rem" }}>{v === ft.id ? "✓ " : ""}{ft.name}</div>
+                <div className="muted" style={{ fontSize: ".82rem" }}>{ft.pair}</div>
               </button>
             ))}
           </div>
