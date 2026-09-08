@@ -145,7 +145,7 @@ export default function Page() {
         <div className="ab-split">
           <div className="ab-img" style={{ aspectRatio: "4 / 5" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/about/vision.jpg" alt="Jalan menuju fajar keemasan — masa depan agen properti cerdas" />
+            <img src="/about/vision-hill.jpg" alt="Vila modern di lereng bukit saat fajar keemasan — masa depan agen properti cerdas" />
           </div>
           <div>
             <p className="hand gold" style={{ fontSize: "1.55rem", transform: "rotate(-2deg)", margin: 0 }}>Visi kami</p>
