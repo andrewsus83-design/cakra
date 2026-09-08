@@ -1,12 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CakraMark } from "@/components/CakraMark";
 import { StaffAdmin } from "./StaffAdmin";
 
 type Sec = "home" | "listing" | "editor" | "content" | "assets" | "profile";
 
 const NAV: { id: Sec; label: string; icon: string }[] = [
-  { id: "home", label: "Home", icon: "M12 3 2.5 11H5v10h5v-6h4v6h5V11h2.5z" },
+  { id: "home", label: "Dashboard", icon: "M3 3h8v8H3zM13 3h8v5h-8zM13 10h8v11h-8zM3 13h8v8H3z" },
   { id: "listing", label: "Listing", icon: "M4 5h16v3H4zM4 10.5h16v3H4zM4 16h16v3H4z" },
   { id: "editor", label: "Editor", icon: "M4 4h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Zm6 3v6l5-3z" },
   { id: "content", label: "Content", icon: "M6 2h9l5 5v14.2A.8.8 0 0 1 19.2 22H6a.8.8 0 0 1-.8-.8V2.8A.8.8 0 0 1 6 2Zm2 9h8v1.8H8zm0 4h8v1.8H8z" },
@@ -27,10 +27,10 @@ const VIDEO_HISTORY = [
   { t: "Seminyak Retreat", ar: "9:16", dur: "0:48", date: "19 Agu 2026", poster: "/about/transform.jpg" },
 ];
 const LISTING_HISTORY = [
-  { t: "Vila Tegallalang", date: "1 Sep 2026", st: "Terjual" },
-  { t: "Apartemen Sunset Road", date: "24 Agu 2026", st: "Tersewa" },
-  { t: "Vila Uluwatu Cliff", date: "10 Agu 2026", st: "Harga diperbarui" },
-  { t: "Ruko Sunset", date: "2 Agu 2026", st: "Diarsipkan" },
+  { t: "Vila Tegallalang", date: "1 Sep 2026", st: "Terjual", img: "/about/transform.jpg", price: "Rp 6,2 M", loc: "Ubud, Bali" },
+  { t: "Apartemen Sunset Road", date: "24 Agu 2026", st: "Tersewa", img: "/blog-1.jpg", price: "Rp 180 jt/thn", loc: "Kuta, Bali" },
+  { t: "Vila Pantai Berawa", date: "10 Agu 2026", st: "Terjual", img: "/hero.jpg", price: "Rp 9,8 M", loc: "Canggu, Bali" },
+  { t: "Ruko Sunset Road", date: "2 Agu 2026", st: "Tersewa", img: "/about/invite.jpg", price: "Rp 220 jt/thn", loc: "Denpasar, Bali" },
 ];
 const ASSETS = ["/about/hero.jpg", "/about/transform.jpg", "/hero.jpg", "/about/invite.jpg", "/blog-0.jpg", "/blog-1.jpg", "/about/vision-hill.jpg", "/hero-top.jpg"];
 const FORMATS = [
@@ -78,6 +78,42 @@ const VOICE_STYLES = ["Hangat", "Berwibawa", "Energetik", "Lembut", "Profesional
 
 const SCORE = 76;
 
+const CHANNELS = [
+  { id: "insights", name: "Insights", sub: "3 sorotan baru", icon: "M9 21h6v-1H9v1Zm3-19a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z", accent: "--c-crown" },
+  { id: "web", name: "Web", sub: "Skor 76 · Baik", icon: "M4 4h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-6v2h3v2H7v-2h3v-2H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z", accent: "--c-eye" },
+  { id: "instagram", name: "Instagram", sub: "4.820 pengikut", icon: "M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm5.5-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2ZM7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4Zm0 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7Z", accent: "--c-heart" },
+  { id: "tiktok", name: "TikTok", sub: "12,4k pengikut", icon: "M14 3c.3 2.2 1.7 3.9 4 4.2v2.5c-1.5 0-2.9-.5-4-1.3v5.9a5.3 5.3 0 1 1-5.3-5.3c.3 0 .6 0 .9.1v2.7a2.6 2.6 0 1 0 1.8 2.5V3H14Z", accent: "--c-throat" },
+  { id: "youtube", name: "YouTube", sub: "1.240 subscriber", icon: "M21.6 7.2a2.6 2.6 0 0 0-1.8-1.8C18 5 12 5 12 5s-6 0-7.8.4A2.6 2.6 0 0 0 2.4 7.2 27 27 0 0 0 2 12a27 27 0 0 0 .4 4.8 2.6 2.6 0 0 0 1.8 1.8C6 19 12 19 12 19s6 0 7.8-.4a2.6 2.6 0 0 0 1.8-1.8A27 27 0 0 0 22 12a27 27 0 0 0-.4-4.8ZM10 15V9l5 3-5 3Z", accent: "--c-root" },
+] as const;
+type DashTab = (typeof CHANNELS)[number]["id"];
+const INSIGHTS = [
+  { tag: "Sorotan", tone: "--c-solar", t: "Listing Vila Uluwatu naik 32% minggu ini", b: "Kunjungan halaman melonjak setelah reels tur dipublikasikan. Pertimbangkan promosi berbayar selagi momentum tinggi.", when: "2 jam lalu" },
+  { tag: "Insight", tone: "--c-eye", t: "Pencarian “vila Canggu dekat pantai” meningkat", b: "Volume pencarian area ini +18% bulan ini. Buat konten khusus untuk menangkap minat pembeli.", when: "Kemarin" },
+  { tag: "Peluang", tone: "--c-heart", t: "3 lead belum ditindaklanjuti lebih dari 48 jam", b: "Respon cepat menaikkan konversi hingga 7×. Balas sekarang untuk menjaga peluang tetap hangat.", when: "Kemarin" },
+  { tag: "Sorotan", tone: "--c-throat", t: "Reels Anda menembus 12.400 penayangan", b: "Video pendek jadi kanal pertumbuhan tercepat Anda bulan ini — jadwalkan 2 lagi minggu depan.", when: "3 hari lalu" },
+  { tag: "Insight", tone: "--c-crown", t: "Skor GEO Anda naik ke 66", b: "Mesin pencari AI mulai mengutip profil Anda. Tambahkan FAQ terstruktur untuk mendorong lebih tinggi.", when: "4 hari lalu" },
+];
+const WEB_METRICS = [["Kunjungan / bln", "3.240", "+14%", "--c-eye"], ["Pengunjung unik", "2.180", "+9%", "--c-heart"], ["Rasio pentalan", "38%", "−4%", "--c-throat"], ["Kecepatan (LCP)", "1,8 dtk", "Baik", "--c-solar"], ["Peringkat SEO", "#3", "“vila Canggu”", "--c-root"], ["Skor GEO", "66", "+6", "--c-crown"]] as const;
+const WEB_PAGES = [["/listing/vila-uluwatu-cliff", "1.240"], ["/", "980"], ["/tentang", "410"], ["/listing/canggu-estate", "360"]] as const;
+const WEB_KEYWORDS = [["vila canggu dijual", "#3"], ["properti bali mewah", "#5"], ["vila uluwatu", "#2"], ["agen properti canggu", "#4"]] as const;
+const SOCIAL: Record<string, { metrics: [string, string, string][]; top: [string, string][]; growth: number[] }> = {
+  instagram: {
+    metrics: [["Pengikut", "4.820", "+180"], ["Jangkauan / 30h", "38.400", "+12%"], ["Interaksi", "6,1%", "+0,8%"], ["Kunjungan profil", "2.140", "+15%"]],
+    top: [["Reel: Tur Vila Uluwatu", "12.400 tayangan"], ["Carousel: 5 tips beli vila", "3.200 suka"], ["Foto: Sunset Seminyak", "1.850 suka"]],
+    growth: [30, 42, 38, 55, 60, 72, 80],
+  },
+  tiktok: {
+    metrics: [["Pengikut", "12.400", "+640"], ["Tayangan / 30h", "184.000", "+26%"], ["Interaksi", "9,4%", "+1,2%"], ["Dibagikan", "1.920", "+18%"]],
+    top: [["Tur cepat Vila Canggu", "62.000 tayangan"], ["POV: keliling vila Bali", "41.000 tayangan"], ["Tips harga properti", "22.500 tayangan"]],
+    growth: [20, 35, 30, 48, 66, 74, 92],
+  },
+  youtube: {
+    metrics: [["Subscriber", "1.240", "+58"], ["Jam ditonton", "3.180", "+11%"], ["Tayangan / 30h", "48.900", "+9%"], ["Rata-rata tonton", "2:14", "+8 dtk"]],
+    top: [["Rumah tur sinematik Uluwatu", "18.200 tayangan"], ["Panduan beli properti Bali", "9.400 tayangan"], ["Q&A investasi vila", "5.100 tayangan"]],
+    growth: [40, 44, 50, 52, 58, 63, 70],
+  },
+};
+
 function Ic({ d, s = 18 }: { d: string; s?: number }) {
   return <svg viewBox="0 0 24 24" width={s} height={s} fill="currentColor" aria-hidden="true"><path d={d} /></svg>;
 }
@@ -98,6 +134,7 @@ const arCss = (f: string) => f.replace(":", " / ");
 
 function MemberDashboard() {
   const [sec, setSec] = useState<Sec>("home");
+  const [dashTab, setDashTab] = useState<DashTab>("insights");
   const [collapsed, setCollapsed] = useState(false);
   const [orient, setOrient] = useState<"9:16" | "16:9">("9:16");
   const [assetFmt, setAssetFmt] = useState("1:1");
@@ -107,19 +144,42 @@ function MemberDashboard() {
   const [newStatus, setNewStatus] = useState<"jual" | "sewa">("jual");
   const [listingModal, setListingModal] = useState<number | null>(null);
   const [videoModal, setVideoModal] = useState<number | null>(null);
-  // background video generation — persists across section switches (component stays mounted)
-  const [genState, setGenState] = useState<"idle" | "working" | "done">("idle");
-  const [genPct, setGenPct] = useState(0);
+  const [contentModal, setContentModal] = useState<number | null>(null);
+  const [contentSched, setContentSched] = useState(false);
+  // background video render QUEUE — one renders at a time, the rest wait; persists across section switches
+  type Job = { id: number; label: string; orient: "9:16" | "16:9"; status: "queued" | "rendering" | "done"; pct: number };
+  const jobSeq = useRef(1);
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const rendering = jobs.find((j) => j.status === "rendering") || null;
+  const queued = jobs.filter((j) => j.status === "queued");
+  const lastDone = [...jobs].reverse().find((j) => j.status === "done") || null;
+  const doneCount = jobs.filter((j) => j.status === "done").length;
+  const isRendering = !!rendering;
+  const addJob = () => setJobs((js) => [...js, { id: jobSeq.current++, label: `Video ${orient} · #${js.length + 1}`, orient, status: "queued", pct: 0 }]);
+  const clearFinished = () => setJobs((js) => js.filter((j) => j.status !== "done"));
   // voice creation (ElevenLabs) — 3 slots per client, permanent
   const [voiceGen, setVoiceGen] = useState<"idle" | "working" | "done">("idle");
   const [voiceStyle, setVoiceStyle] = useState("Hangat");
 
+  // promote the next queued job whenever nothing is rendering
   useEffect(() => {
-    if (genState !== "working") return;
-    const id = setInterval(() => setGenPct((p) => Math.min(100, p + 6)), 320);
+    setJobs((js) => {
+      if (js.some((j) => j.status === "rendering")) return js;
+      const idx = js.findIndex((j) => j.status === "queued");
+      if (idx === -1) return js;
+      return js.map((j, i) => (i === idx ? { ...j, status: "rendering", pct: 0 } : j));
+    });
+  }, [jobs]);
+  // tick the active render forward
+  useEffect(() => {
+    if (!isRendering) return;
+    const id = setInterval(() => setJobs((js) => js.map((j) => {
+      if (j.status !== "rendering") return j;
+      const pct = Math.min(100, j.pct + 6);
+      return pct >= 100 ? { ...j, pct: 100, status: "done" } : { ...j, pct };
+    })), 320);
     return () => clearInterval(id);
-  }, [genState]);
-  useEffect(() => { if (genState === "working" && genPct >= 100) setGenState("done"); }, [genPct, genState]);
+  }, [isRendering]);
   useEffect(() => {
     if (voiceGen !== "working") return;
     const id = setTimeout(() => setVoiceGen("done"), 2400);
@@ -128,45 +188,93 @@ function MemberDashboard() {
 
   const r = 52, circ = 2 * Math.PI * r;
 
-  const Home = (
-    <>
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(280px, .8fr) 1.2fr", gap: 18, marginBottom: 18 }} className="adm-2">
-        <Card>
-          <H>Analisa profil</H>
-          <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
-            <svg width="128" height="128" viewBox="0 0 128 128" style={{ flex: "none" }}>
-              <circle cx="64" cy="64" r={r} fill="none" stroke="var(--line)" strokeWidth="11" />
-              <circle cx="64" cy="64" r={r} fill="none" stroke="var(--brand)" strokeWidth="11" strokeLinecap="round" strokeDasharray={circ} strokeDashoffset={circ * (1 - SCORE / 100)} transform="rotate(-90 64 64)" />
-              <text x="64" y="60" textAnchor="middle" className="display" style={{ fontSize: 30, fontWeight: 700, fill: "var(--ink)" }}>{SCORE}</text>
-              <text x="64" y="80" textAnchor="middle" style={{ fontSize: 10, fill: "var(--muted)", letterSpacing: 1 }}>PRESENCE</text>
-            </svg>
-            <div style={{ flex: 1, display: "grid", gap: 7 }}>
-              {CENTERS.map(([n, v, c]) => (
-                <div key={n}>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: ".8rem" }}><span>{n}</span><span className="muted mono">{v}</span></div>
-                  <div style={{ height: 5, borderRadius: 3, background: "var(--line)", marginTop: 2 }}><div style={{ height: "100%", width: `${v}%`, borderRadius: 3, background: `var(${c})` }} /></div>
-                </div>
-              ))}
+  const insightsPanel = (
+    <Card>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+        <H>Insights terbaru</H>
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: ".74rem", fontWeight: 700, color: "var(--good)", background: "color-mix(in oklab, var(--good) 12%, var(--surface))", padding: ".25rem .6rem", borderRadius: 999 }}><span style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--good)" }} /> Diperbarui otomatis</span>
+      </div>
+      <p className="muted" style={{ fontSize: ".84rem", marginTop: -8, marginBottom: 14 }}>Sorotan, peluang, dan tren yang dihasilkan sistem secara berkala.</p>
+      <div style={{ display: "grid", gap: 12 }}>
+        {INSIGHTS.map((it) => (
+          <div key={it.t} style={{ display: "flex", gap: 13, padding: "14px 15px", borderRadius: 12, background: "var(--surface-2)", border: "1px solid var(--line)" }}>
+            <span style={{ width: 6, borderRadius: 3, background: `var(${it.tone})`, flex: "none" }} />
+            <div style={{ minWidth: 0 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5 }}>
+                <span style={{ fontSize: ".64rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: `var(${it.tone})`, background: `color-mix(in oklab, var(${it.tone}) 15%, var(--surface))`, padding: ".2rem .5rem", borderRadius: 999 }}>{it.tag}</span>
+                <span className="muted mono" style={{ fontSize: ".72rem" }}>{it.when}</span>
+              </div>
+              <div style={{ fontWeight: 600, fontSize: ".96rem", lineHeight: 1.3 }}>{it.t}</div>
+              <p className="muted" style={{ fontSize: ".86rem", lineHeight: 1.55, margin: "4px 0 0" }}>{it.b}</p>
             </div>
           </div>
-        </Card>
+        ))}
+      </div>
+    </Card>
+  );
+
+  const webPanel = (
+    <>
+      <Card>
+        <H>Analisa website</H>
+        <div style={{ display: "flex", gap: 22, alignItems: "center", flexWrap: "wrap" }}>
+          <svg width="132" height="132" viewBox="0 0 128 128" style={{ flex: "none" }}>
+            <circle cx="64" cy="64" r={r} fill="none" stroke="var(--line)" strokeWidth="11" />
+            <circle cx="64" cy="64" r={r} fill="none" stroke="var(--brand)" strokeWidth="11" strokeLinecap="round" strokeDasharray={circ} strokeDashoffset={circ * (1 - SCORE / 100)} transform="rotate(-90 64 64)" />
+            <text x="64" y="60" textAnchor="middle" className="display" style={{ fontSize: 30, fontWeight: 700, fill: "var(--ink)" }}>{SCORE}</text>
+            <text x="64" y="80" textAnchor="middle" style={{ fontSize: 10, fill: "var(--muted)", letterSpacing: 1 }}>SKOR WEB</text>
+          </svg>
+          <div style={{ flex: 1, minWidth: 220, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            {WEB_METRICS.map(([l, v, d, c]) => (
+              <div key={l} style={{ padding: "12px 14px", borderRadius: 12, background: "var(--surface-2)" }}>
+                <div className="muted" style={{ fontSize: ".78rem" }}>{l}</div>
+                <div className="display" style={{ fontSize: "1.45rem", fontWeight: 700, color: `var(${c})`, lineHeight: 1.1 }}>{v}</div>
+                <div className="muted" style={{ fontSize: ".74rem" }}>{d}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Card>
+      <div className="adm-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
         <Card>
-          <H>Performa digital</H>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-            {PERF.map(([l, v, d, c]) => (
-              <div key={l} style={{ padding: "14px 16px", borderRadius: 12, background: "var(--surface-2)" }}>
-                <div className="muted" style={{ fontSize: ".82rem" }}>{l}</div>
-                <div className="display" style={{ fontSize: "1.7rem", fontWeight: 700, color: `var(${c})`, lineHeight: 1.1 }}>{v}</div>
-                <div className="muted" style={{ fontSize: ".76rem" }}>{d}</div>
+          <H>Parameter dianalisa</H>
+          <div style={{ display: "grid", gap: 11 }}>
+            {CENTERS.map(([n, v, c]) => (
+              <div key={n}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: ".84rem" }}><span>{n}</span><span className="muted mono">{v}</span></div>
+                <div style={{ height: 6, borderRadius: 3, background: "var(--line)", marginTop: 3 }}><div style={{ height: "100%", width: `${v}%`, borderRadius: 3, background: `var(${c})` }} /></div>
               </div>
             ))}
           </div>
         </Card>
+        <div style={{ display: "grid", gap: 18 }}>
+          <Card>
+            <H>Halaman teratas</H>
+            <div style={{ display: "grid", gap: 9 }}>
+              {WEB_PAGES.map(([p, v]) => (
+                <div key={p} style={{ display: "flex", justifyContent: "space-between", gap: 10, fontSize: ".86rem" }}>
+                  <span className="mono" style={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p}</span>
+                  <span className="muted" style={{ flex: "none" }}>{v}×</span>
+                </div>
+              ))}
+            </div>
+          </Card>
+          <Card>
+            <H>Kata kunci</H>
+            <div style={{ display: "grid", gap: 9 }}>
+              {WEB_KEYWORDS.map(([k, rk]) => (
+                <div key={k} style={{ display: "flex", justifyContent: "space-between", gap: 10, fontSize: ".86rem" }}>
+                  <span>{k}</span><span className="mono" style={{ color: "var(--brand)", fontWeight: 700, flex: "none" }}>{rk}</span>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </div>
       </div>
       <Card>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
           <H>Preview website</H>
-          <button style={btn("brand")} onClick={() => setSec("home")}>Edit website</button>
+          <button style={btn("brand")}>Edit website</button>
         </div>
         <div style={{ borderRadius: 14, overflow: "hidden", border: "1px solid var(--line)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 12px", background: "var(--surface-2)", borderBottom: "1px solid var(--line)" }}>
@@ -175,62 +283,84 @@ function MemberDashboard() {
             <span style={{ marginLeft: "auto", fontSize: ".74rem", fontWeight: 700, color: "var(--good)", background: "color-mix(in oklab, var(--good) 14%, var(--surface))", padding: ".2rem .5rem", borderRadius: 999 }}>Skor {SCORE} · Baik</span>
           </div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/hero.jpg" alt="Preview website member" style={{ width: "100%", display: "block", maxHeight: 260, objectFit: "cover" }} />
+          <img src="/hero.jpg" alt="Preview website member" style={{ width: "100%", display: "block", maxHeight: 240, objectFit: "cover" }} />
         </div>
         <p className="muted" style={{ fontSize: ".88rem", marginTop: 12 }}>Analisa: SEO & GEO kuat, tingkatkan konten sosial dan reputasi untuk menembus skor 85+.</p>
       </Card>
     </>
   );
 
+  const socialPanel = (id: string) => {
+    const ch = CHANNELS.find((c) => c.id === id)!;
+    const d = SOCIAL[id];
+    const maxG = Math.max(...d.growth);
+    return (
+      <>
+        <Card>
+          <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
+            <span style={{ width: 48, height: 48, borderRadius: 13, flex: "none", display: "grid", placeItems: "center", background: `color-mix(in oklab, var(${ch.accent}) 18%, var(--surface))`, color: `var(${ch.accent})` }}><Ic d={ch.icon} s={26} /></span>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div className="display" style={{ fontSize: "1.2rem", fontWeight: 700 }}>{ch.name}</div>
+              <div className="muted" style={{ fontSize: ".84rem" }}>{ch.sub} · 30 hari terakhir</div>
+            </div>
+            <div style={{ display: "flex", alignItems: "flex-end", gap: 3, height: 46, flex: "none" }} aria-hidden="true">
+              {d.growth.map((g, i) => <span key={i} style={{ width: 8, height: `${(g / maxG) * 100}%`, borderRadius: 2, background: i === d.growth.length - 1 ? `var(${ch.accent})` : "var(--line-2)" }} />)}
+            </div>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 16 }}>
+            {d.metrics.map(([l, v, dd]) => (
+              <div key={l} style={{ padding: "13px 15px", borderRadius: 12, background: "var(--surface-2)" }}>
+                <div className="muted" style={{ fontSize: ".8rem" }}>{l}</div>
+                <div className="display" style={{ fontSize: "1.5rem", fontWeight: 700, lineHeight: 1.1 }}>{v}</div>
+                <div style={{ fontSize: ".76rem", color: "var(--good)", fontWeight: 600 }}>{dd}</div>
+              </div>
+            ))}
+          </div>
+        </Card>
+        <Card>
+          <H>Konten teratas</H>
+          <div style={{ display: "grid", gap: 8 }}>
+            {d.top.map(([t, m], i) => (
+              <div key={t} style={{ display: "flex", alignItems: "center", gap: 12, padding: "11px 13px", borderRadius: 10, background: "var(--surface-2)" }}>
+                <span className="mono" style={{ width: 26, height: 26, borderRadius: 8, flex: "none", display: "grid", placeItems: "center", background: `var(${ch.accent})`, color: "#fff", fontWeight: 700, fontSize: ".82rem" }}>{i + 1}</span>
+                <span style={{ flex: 1, minWidth: 0, fontWeight: 600, fontSize: ".9rem" }}>{t}</span>
+                <span className="muted mono" style={{ fontSize: ".78rem", flex: "none" }}>{m}</span>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </>
+    );
+  };
+
+  const Dashboard = (
+    <div style={{ display: "grid", gridTemplateColumns: "300px 1fr", gap: 18, alignItems: "start" }} className="adm-2">
+      <div style={{ display: "grid", gap: 10 }}>
+        {CHANNELS.map((c) => {
+          const on = dashTab === c.id;
+          return (
+            <button key={c.id} onClick={() => setDashTab(c.id)} className="adm-thumb" style={{ display: "flex", alignItems: "center", gap: 13, padding: "14px 15px", borderRadius: 14, cursor: "pointer", font: "inherit", textAlign: "left", border: `1px solid ${on ? "var(--brand)" : "var(--line)"}`, background: on ? "color-mix(in oklab, var(--brand) 9%, var(--surface))" : "var(--surface)", transition: ".15s" }}>
+              <span style={{ width: 42, height: 42, borderRadius: 11, flex: "none", display: "grid", placeItems: "center", background: `color-mix(in oklab, var(${c.accent}) 18%, var(--surface))`, color: `var(${c.accent})` }}><Ic d={c.icon} s={22} /></span>
+              <span style={{ minWidth: 0, flex: 1 }}>
+                <span style={{ display: "block", fontWeight: 600, fontSize: ".98rem" }}>{c.name}</span>
+                <span className="muted" style={{ fontSize: ".8rem" }}>{c.sub}</span>
+              </span>
+              <span style={{ color: on ? "var(--brand)" : "var(--muted)", flex: "none" }}><Ic d="M10 17l5-5-5-5z" s={16} /></span>
+            </button>
+          );
+        })}
+      </div>
+      <div style={{ display: "grid", gap: 18, minWidth: 0 }}>
+        {dashTab === "insights" ? insightsPanel : dashTab === "web" ? webPanel : socialPanel(dashTab)}
+      </div>
+    </div>
+  );
+
   const inp: React.CSSProperties = { width: "100%", background: "var(--surface-2)", border: "1px solid var(--line-2)", borderRadius: 10, padding: ".72rem 1rem", font: "inherit", fontSize: ".92rem", color: "var(--ink)" };
   const lbl: React.CSSProperties = { fontSize: ".82rem", fontWeight: 600, display: "block", marginBottom: 6, color: "var(--ink-2)" };
   const Listing = (
-    <div style={{ display: "grid", gridTemplateColumns: "1.05fr .95fr", gap: 18 }} className="adm-2">
-      {/* LEFT: live (top) + history (bottom) */}
-      <Card>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <H>Listing live</H>
-          <span style={{ fontSize: ".78rem", color: "var(--good)", fontWeight: 600 }}>● {LISTINGS.length} tayang</span>
-        </div>
-        <p className="muted" style={{ fontSize: ".86rem", marginTop: -8, marginBottom: 12 }}>Properti yang sedang tayang — klik untuk lihat detail.</p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 12 }}>
-          {LISTINGS.map((l, i) => (
-            <button key={l.t} onClick={() => setListingModal(i)} style={{ display: "block", textAlign: "left", padding: 0, border: "1px solid var(--line)", borderRadius: 13, overflow: "hidden", background: "var(--surface)", cursor: "pointer", font: "inherit" }} className="adm-thumb">
-              <div style={{ position: "relative", aspectRatio: "4 / 3" }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={l.img} alt={l.t} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-                <span style={{ position: "absolute", top: 8, left: 8, fontSize: ".64rem", fontWeight: 700, letterSpacing: ".05em", padding: ".22rem .55rem", borderRadius: 999, color: "#fff", background: l.st === "Dijual" ? "var(--brand)" : "var(--jade)" }}>{l.st.toUpperCase()}</span>
-                <span style={{ position: "absolute", top: 8, right: 8, fontSize: ".64rem", fontWeight: 700, padding: ".22rem .5rem", borderRadius: 999, color: "var(--ink)", background: "rgba(255,255,255,.9)" }}>★ {l.rating}</span>
-              </div>
-              <div style={{ padding: "10px 12px" }}>
-                <div style={{ fontWeight: 600, fontSize: ".9rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{l.t}</div>
-                <div className="muted" style={{ fontSize: ".76rem", marginTop: 1 }}>{l.loc}</div>
-                <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 8, marginTop: 6 }}>
-                  <span className="mono" style={{ fontWeight: 700, fontSize: ".88rem", color: "var(--brand)" }}>{l.price}</span>
-                  <span className="muted" style={{ fontSize: ".72rem" }}>{l.views}× dilihat</span>
-                </div>
-              </div>
-            </button>
-          ))}
-        </div>
-        <h3 className="display" style={{ fontSize: "1.05rem", fontWeight: 600, margin: "22px 0 4px" }}>Riwayat</h3>
-        <p className="muted" style={{ fontSize: ".82rem", marginBottom: 12 }}>Listing yang sudah selesai atau diarsipkan.</p>
-        <div style={{ display: "grid", gap: 8 }}>
-          {LISTING_HISTORY.map((h) => {
-            const done = h.st === "Terjual" || h.st === "Tersewa";
-            return (
-              <div key={h.t + h.date} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, padding: "10px 14px", borderRadius: 10, background: "var(--surface-2)" }}>
-                <span style={{ fontWeight: 600, fontSize: ".9rem" }}>{h.t}</span>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, flex: "none" }}>
-                  <span style={{ fontSize: ".7rem", fontWeight: 700, padding: ".22rem .55rem", borderRadius: 999, color: done ? "var(--good)" : "var(--muted)", background: done ? "color-mix(in oklab, var(--good) 15%, var(--surface))" : "var(--surface)", border: done ? "none" : "1px solid var(--line)" }}>{h.st}</span>
-                  <span className="muted mono" style={{ fontSize: ".76rem", whiteSpace: "nowrap" }}>{h.date}</span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </Card>
-      {/* RIGHT: create new listing */}
+    <div style={{ display: "grid", gridTemplateColumns: ".82fr 1.18fr", gap: 18, alignItems: "start" }} className="adm-2">
+      {/* LEFT: create new listing */}
       <Card>
         <H>Buat listing baru</H>
         <div style={{ display: "grid", gap: 14 }}>
@@ -250,15 +380,70 @@ function MemberDashboard() {
             <div><label style={lbl}>Kamar mandi</label><input type="number" placeholder="3" style={inp} /></div>
             <div><label style={lbl}>Luas (m²)</label><input type="number" placeholder="320" style={inp} /></div>
           </div>
-          <div><label style={lbl}>Foto properti</label><div style={drop}><Ic d="M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm2.5 3a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3ZM5 17h14l-4.5-6-3.5 4.5-2-2.5L5 17Z" s={22} /><div style={{ fontSize: ".82rem", marginTop: 6 }}>Tarik &amp; letakkan foto, atau klik untuk unggah</div></div></div>
+          <div><label style={lbl}>Foto properti <span style={{ fontWeight: 500, color: "var(--muted)" }}>(maks. 8)</span></label><div style={drop}><Ic d="M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm2.5 3a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3ZM5 17h14l-4.5-6-3.5 4.5-2-2.5L5 17Z" s={22} /><div style={{ fontSize: ".82rem", marginTop: 6 }}>Tarik &amp; letakkan foto, atau klik untuk unggah</div><div className="mono" style={{ fontSize: ".72rem", marginTop: 4, color: "var(--muted)" }}>Maks. 8 foto · 5 MB per foto · JPG/PNG</div></div></div>
           <div><label style={lbl}>Deskripsi</label><textarea rows={3} placeholder="Ceritakan keunggulan properti…" style={{ ...inp, resize: "vertical" }} /></div>
           <div style={{ display: "flex", gap: 10 }}><button style={btn("brand")}>Terbitkan listing</button><button style={btn("ghost")}>Simpan draf</button></div>
+        </div>
+      </Card>
+      {/* RIGHT: live (top) + history (bottom) */}
+      <Card>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <H>Listing live</H>
+          <span style={{ fontSize: ".78rem", color: "var(--good)", fontWeight: 600 }}>● {LISTINGS.length} tayang</span>
+        </div>
+        <p className="muted" style={{ fontSize: ".86rem", marginTop: -8, marginBottom: 12 }}>Properti yang sedang tayang — klik untuk lihat detail.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(190px, 1fr))", gap: 12 }}>
+          {LISTINGS.map((l, i) => (
+            <button key={l.t} onClick={() => setListingModal(i)} style={{ display: "block", textAlign: "left", padding: 0, border: "1px solid var(--line)", borderRadius: 13, overflow: "hidden", background: "var(--surface)", cursor: "pointer", font: "inherit" }} className="adm-thumb">
+              <div style={{ position: "relative", aspectRatio: "4 / 3" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={l.img} alt={l.t} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                <span style={{ position: "absolute", top: 8, left: 8, fontSize: ".64rem", fontWeight: 700, letterSpacing: ".05em", padding: ".22rem .55rem", borderRadius: 999, color: "#fff", background: l.st === "Dijual" ? "var(--brand)" : "var(--jade)" }}>{l.st.toUpperCase()}</span>
+                <span style={{ position: "absolute", top: 8, right: 8, fontSize: ".64rem", fontWeight: 700, padding: ".22rem .5rem", borderRadius: 999, color: "var(--ink)", background: "rgba(255,255,255,.9)" }}>★ {l.rating}</span>
+              </div>
+              <div style={{ padding: "10px 12px" }}>
+                <div style={{ fontWeight: 600, fontSize: ".9rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{l.t}</div>
+                <div className="muted" style={{ fontSize: ".76rem", marginTop: 1 }}>{l.loc}</div>
+                <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 8, marginTop: 6 }}>
+                  <span className="mono" style={{ fontWeight: 700, fontSize: ".88rem", color: "var(--brand)" }}>{l.price}</span>
+                  <span className="muted" style={{ fontSize: ".72rem" }}>{l.views}× dilihat</span>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+        <h3 className="display" style={{ fontSize: "1.05rem", fontWeight: 600, margin: "24px 0 4px" }}>Riwayat</h3>
+        <p className="muted" style={{ fontSize: ".82rem", marginBottom: 12 }}>Properti yang sudah terjual atau tersewa.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(190px, 1fr))", gap: 12 }}>
+          {LISTING_HISTORY.map((h) => {
+            const rented = h.st === "Tersewa";
+            const col = rented ? "var(--jade)" : "var(--brand)";
+            return (
+              <div key={h.t + h.date} style={{ border: "1px solid var(--line)", borderRadius: 13, overflow: "hidden", background: "var(--surface)" }}>
+                <div style={{ position: "relative", aspectRatio: "4 / 3" }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={h.img} alt={h.t} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "grayscale(.28)" }} />
+                  <span style={{ position: "absolute", inset: 0, background: "rgba(20,15,9,.34)" }} />
+                  <span style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center" }}>
+                    <span style={{ transform: "rotate(-8deg)", border: `3px solid ${col}`, color: "#fff", background: `color-mix(in oklab, ${col} 78%, transparent)`, fontWeight: 800, fontSize: "1.15rem", letterSpacing: ".08em", textTransform: "uppercase", padding: ".3rem 1rem", borderRadius: 8, boxShadow: "0 6px 18px rgba(0,0,0,.32)" }}>{h.st}</span>
+                  </span>
+                </div>
+                <div style={{ padding: "10px 12px" }}>
+                  <div style={{ fontWeight: 600, fontSize: ".9rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{h.t}</div>
+                  <div className="muted" style={{ fontSize: ".76rem", marginTop: 1 }}>{h.loc}</div>
+                  <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 8, marginTop: 6 }}>
+                    <span className="mono" style={{ fontWeight: 700, fontSize: ".86rem", color: "var(--ink-2)" }}>{h.price}</span>
+                    <span className="muted mono" style={{ fontSize: ".72rem" }}>{h.date}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </Card>
     </div>
   );
 
-  const posterImg = orient === "9:16" ? "/hero.jpg" : "/about/hero.jpg";
   const Editor = (
     <div style={{ display: "grid", gridTemplateColumns: "1.2fr .8fr", gap: 18, alignItems: "stretch" }} className="adm-2">
       {/* LEFT column: create (top) + history (bottom) */}
@@ -279,8 +464,8 @@ function MemberDashboard() {
           <label className="muted" style={{ fontSize: ".82rem", fontWeight: 600 }}>Deskripsi properti</label>
           <textarea rows={3} placeholder="Vila 4 kamar di Canggu, dekat pantai Berawa…" style={{ width: "100%", marginTop: 6, background: "var(--surface-2)", border: "1px solid var(--line-2)", borderRadius: 10, padding: 12, font: "inherit", fontSize: ".92rem", color: "var(--ink)", resize: "vertical" }} />
           <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 14, flexWrap: "wrap" }}>
-            <button style={{ ...btn("brand"), opacity: genState === "working" ? .6 : 1 }} disabled={genState === "working"} onClick={() => { setGenPct(0); setGenState("working"); }}>✨ Generate video otomatis</button>
-            <span className="muted" style={{ fontSize: ".84rem" }}>Durasi otomatis 45–90 detik, dirangkai oleh mesin.</span>
+            <button style={btn("brand")} onClick={addJob}>✨ Generate video otomatis</button>
+            <span className="muted" style={{ fontSize: ".84rem" }}>{isRendering ? `Sedang merender${queued.length ? ` · ${queued.length} menunggu di antrean` : ""} — Anda bisa langsung menambah video lain.` : "Durasi otomatis 45–90 detik, dirangkai oleh mesin."}</span>
           </div>
         </Card>
         <Card>
@@ -308,35 +493,45 @@ function MemberDashboard() {
         </Card>
       </div>
 
-      {/* RIGHT column: player */}
+      {/* RIGHT column: player + render queue */}
       <Card style={{ position: "sticky", top: 78, alignSelf: "start", display: "flex", flexDirection: "column" }}>
-        <H>Player</H>
-        <div style={{ borderRadius: 14, overflow: "hidden", border: "1px solid var(--line)", background: "var(--ink)", position: "relative", aspectRatio: arCss(orient), maxHeight: 420, margin: "0 auto", width: orient === "9:16" ? "min(100%, 260px)" : "100%" }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={posterImg} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: genState === "done" ? 1 : .38 }} />
-          {genState === "done" ? (
-            <button aria-label="Putar" style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", border: "none", background: "rgba(20,15,9,.15)", cursor: "pointer" }}>
-              <span style={{ width: 62, height: 62, borderRadius: "50%", background: "rgba(255,255,255,.92)", color: "var(--ink)", display: "grid", placeItems: "center", boxShadow: "0 8px 24px rgba(0,0,0,.3)" }}><Ic d="M8 5v14l11-7z" s={26} /></span>
-            </button>
-          ) : genState === "working" ? (
-            <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", padding: 20 }}>
-              <div style={{ textAlign: "center", color: "#fff" }}>
-                <svg width="72" height="72" viewBox="0 0 72 72" style={{ transform: "rotate(-90deg)" }}>
-                  <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,.25)" strokeWidth="6" />
-                  <circle cx="36" cy="36" r="30" fill="none" stroke="#fff" strokeWidth="6" strokeLinecap="round" strokeDasharray={2 * Math.PI * 30} strokeDashoffset={2 * Math.PI * 30 * (1 - genPct / 100)} style={{ transition: "stroke-dashoffset .3s" }} />
-                </svg>
-                <div className="mono" style={{ fontWeight: 700, fontSize: "1.1rem", marginTop: 8 }}>{genPct}%</div>
-                <div style={{ fontSize: ".8rem", opacity: .85, marginTop: 2 }}>Merender…</div>
-              </div>
-            </div>
-          ) : (
-            <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", color: "rgba(255,255,255,.75)", textAlign: "center", padding: 24 }}>
-              <div><Ic d="M8 5v14l11-7z" s={30} /><div style={{ fontSize: ".84rem", marginTop: 6 }}>Video akan tampil di sini<br />setelah dibuat.</div></div>
-            </div>
-          )}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+          <H>Player</H>
+          {jobs.length > 0 && <span className="muted" style={{ fontSize: ".76rem" }}>{doneCount} selesai · {queued.length} antre</span>}
         </div>
+        {(() => {
+          const focus = rendering || lastDone;
+          const fo = focus ? focus.orient : orient;
+          const fPoster = fo === "9:16" ? "/hero.jpg" : "/about/hero.jpg";
+          return (
+            <div style={{ borderRadius: 14, overflow: "hidden", border: "1px solid var(--line)", background: "var(--ink)", position: "relative", aspectRatio: arCss(fo), maxHeight: 400, margin: "0 auto", width: fo === "9:16" ? "min(100%, 250px)" : "100%" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={fPoster} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: !rendering && lastDone ? 1 : .38 }} />
+              {rendering ? (
+                <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", padding: 20 }}>
+                  <div style={{ textAlign: "center", color: "#fff" }}>
+                    <svg width="72" height="72" viewBox="0 0 72 72" style={{ transform: "rotate(-90deg)" }}>
+                      <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,.25)" strokeWidth="6" />
+                      <circle cx="36" cy="36" r="30" fill="none" stroke="#fff" strokeWidth="6" strokeLinecap="round" strokeDasharray={2 * Math.PI * 30} strokeDashoffset={2 * Math.PI * 30 * (1 - rendering.pct / 100)} style={{ transition: "stroke-dashoffset .3s" }} />
+                    </svg>
+                    <div className="mono" style={{ fontWeight: 700, fontSize: "1.1rem", marginTop: 8 }}>{rendering.pct}%</div>
+                    <div style={{ fontSize: ".8rem", opacity: .85, marginTop: 2 }}>Merender…</div>
+                  </div>
+                </div>
+              ) : lastDone ? (
+                <button aria-label="Putar" style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", border: "none", background: "rgba(20,15,9,.15)", cursor: "pointer" }}>
+                  <span style={{ width: 62, height: 62, borderRadius: "50%", background: "rgba(255,255,255,.92)", color: "var(--ink)", display: "grid", placeItems: "center", boxShadow: "0 8px 24px rgba(0,0,0,.3)" }}><Ic d="M8 5v14l11-7z" s={26} /></span>
+                </button>
+              ) : (
+                <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", color: "rgba(255,255,255,.75)", textAlign: "center", padding: 24 }}>
+                  <div><Ic d="M8 5v14l11-7z" s={30} /><div style={{ fontSize: ".84rem", marginTop: 6 }}>Video akan tampil di sini<br />setelah dibuat.</div></div>
+                </div>
+              )}
+            </div>
+          );
+        })()}
 
-        {genState === "done" && (
+        {!rendering && lastDone && (
           <>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 14 }}>
               <Ic d="M8 5v14l11-7z" s={14} />
@@ -347,19 +542,39 @@ function MemberDashboard() {
               <button style={{ ...btn("brand"), flex: 1, justifyContent: "center", display: "flex" }}>Unduh</button>
               <button style={{ ...btn("ghost"), flex: 1, justifyContent: "center", display: "flex" }}>Bagikan</button>
             </div>
-            <div style={{ marginTop: 12, fontSize: ".82rem", color: "var(--good)", fontWeight: 600, textAlign: "center" }}>✓ Video 1:02 selesai dibuat</div>
-            <button onClick={() => { setGenState("idle"); setGenPct(0); }} style={{ ...btn("ghost"), marginTop: 10, width: "100%", justifyContent: "center", display: "flex", fontSize: ".84rem" }}>Buat video lain</button>
+            <div style={{ marginTop: 12, fontSize: ".82rem", color: "var(--good)", fontWeight: 600, textAlign: "center" }}>✓ Video {lastDone.orient} selesai dibuat</div>
           </>
         )}
-        {genState === "working" && (
+        {rendering && (
           <div style={{ marginTop: 14, padding: "12px 14px", borderRadius: 10, background: "color-mix(in oklab, var(--brand) 8%, var(--surface-2))", border: "1px solid color-mix(in oklab, var(--brand) 22%, var(--line))" }}>
             <div style={{ fontWeight: 700, fontSize: ".86rem", color: "var(--brand)", marginBottom: 4 }}>Berjalan di latar belakang</div>
-            <p className="muted" style={{ fontSize: ".82rem", margin: 0, lineHeight: 1.5 }}>Anda boleh berpindah menu atau menutup halaman — video tetap dirender. Kami beri tahu saat selesai.</p>
-            <button onClick={() => { setGenState("idle"); setGenPct(0); }} style={{ ...btn("ghost"), marginTop: 10, padding: ".4rem .8rem", fontSize: ".8rem" }}>Batalkan</button>
+            <p className="muted" style={{ fontSize: ".82rem", margin: 0, lineHeight: 1.5 }}>Anda boleh berpindah menu atau menutup halaman — render tetap berjalan{queued.length ? `, dan ${queued.length} video lain menunggu di antrean` : ""}. Kami beri tahu saat selesai.</p>
           </div>
         )}
-        {genState === "idle" && (
-          <p className="muted" style={{ fontSize: ".82rem", marginTop: 14, lineHeight: 1.5 }}>Unggah materi di kiri lalu tekan <strong style={{ color: "var(--ink)" }}>Generate</strong>. Proses berjalan di latar belakang, jadi Anda bebas melanjutkan pekerjaan lain.</p>
+        {!rendering && !lastDone && (
+          <p className="muted" style={{ fontSize: ".82rem", marginTop: 14, lineHeight: 1.5 }}>Unggah materi di kiri lalu tekan <strong style={{ color: "var(--ink)" }}>Generate</strong>. Anda bisa mengantre beberapa video sekaligus — dirender satu per satu di latar belakang.</p>
+        )}
+
+        {jobs.length > 0 && (
+          <div style={{ marginTop: 16 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+              <span className="muted" style={{ fontSize: ".76rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em" }}>Antrean render</span>
+              {doneCount > 0 && <button onClick={clearFinished} style={{ ...btn("ghost"), padding: ".25rem .6rem", fontSize: ".74rem" }}>Bersihkan selesai</button>}
+            </div>
+            <div style={{ display: "grid", gap: 7 }}>
+              {jobs.map((j) => (
+                <div key={j.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 11px", borderRadius: 9, background: "var(--surface-2)", border: "1px solid var(--line)" }}>
+                  <span style={{ width: 26, height: 26, borderRadius: 7, flex: "none", display: "grid", placeItems: "center", background: j.status === "done" ? "var(--good)" : j.status === "rendering" ? "var(--brand)" : "var(--line-2)", color: "#fff" }}>
+                    {j.status === "done" ? <Ic d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.42z" s={13} /> : <Ic d="M8 5v14l11-7z" s={12} />}
+                  </span>
+                  <span style={{ flex: 1, minWidth: 0, fontSize: ".84rem", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{j.label}</span>
+                  <span className="mono" style={{ flex: "none", fontSize: ".74rem", fontWeight: 700, color: j.status === "done" ? "var(--good)" : j.status === "rendering" ? "var(--brand)" : "var(--muted)" }}>
+                    {j.status === "done" ? "Selesai" : j.status === "rendering" ? `${j.pct}%` : `Antre #${queued.findIndex((q) => q.id === j.id) + 1}`}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         )}
       </Card>
     </div>
@@ -367,57 +582,8 @@ function MemberDashboard() {
 
   const platFmt = PLATFORMS.find((p) => p.id === platform)?.fmt ?? "1:1";
   const Content = (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }} className="adm-2">
-      {/* LEFT: ready + history */}
-      <Card>
-        <H>Konten siap dari sistem</H>
-        <p className="muted" style={{ fontSize: ".86rem", marginTop: -8, marginBottom: 12 }}>Siap pakai berdasarkan properti & pasar Anda.</p>
-        <div style={{ display: "grid", gap: 12 }}>
-          {READY_CONTENT.map((it) => (
-            <div key={it.t} style={{ display: "flex", gap: 12, padding: 10, borderRadius: 12, background: "var(--surface-2)", border: "1px solid var(--line)" }}>
-              <div style={{ width: 92, height: 92, borderRadius: 9, overflow: "hidden", flex: "none" }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={it.img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-              </div>
-              <div style={{ minWidth: 0, flex: 1, display: "flex", flexDirection: "column" }}>
-                <div style={{ fontSize: ".66rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: ".05em" }}>{it.c}</div>
-                <div style={{ fontWeight: 600, fontSize: ".94rem", lineHeight: 1.28, margin: "3px 0 4px" }}>{it.t}</div>
-                <div className="muted mono" style={{ fontSize: ".74rem" }}>{it.meta}</div>
-                <div style={{ marginTop: "auto", display: "flex", gap: 8, paddingTop: 8 }}>
-                  <button style={{ ...btn("brand"), padding: ".38rem .8rem", fontSize: ".8rem" }}>Pakai konten</button>
-                  <button style={{ ...btn("ghost"), padding: ".38rem .8rem", fontSize: ".8rem" }}>Pratinjau</button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        <h3 className="display" style={{ fontSize: "1.05rem", fontWeight: 600, margin: "24px 0 4px" }}>Riwayat</h3>
-        <p className="muted" style={{ fontSize: ".82rem", marginBottom: 12 }}>Kapan dipost ke blog & status bagikan/unduh.</p>
-        <div style={{ display: "grid", gap: 12 }}>
-          {CONTENT_HISTORY.map((h) => (
-            <div key={h.t} style={{ display: "flex", gap: 12, padding: 10, borderRadius: 12, background: "var(--surface-2)", border: "1px solid var(--line)" }}>
-              <div style={{ width: 92, height: 92, borderRadius: 9, overflow: "hidden", flex: "none", position: "relative" }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={h.img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", filter: h.posted ? "none" : "grayscale(.5)" }} />
-                {!h.posted && <span style={{ position: "absolute", inset: 0, background: "rgba(20,15,9,.35)", color: "#fff", display: "grid", placeItems: "center", fontSize: ".68rem", fontWeight: 700 }}>DRAF</span>}
-              </div>
-              <div style={{ minWidth: 0, flex: 1 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "baseline" }}>
-                  <span style={{ fontSize: ".66rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: ".05em" }}>{h.c}</span>
-                  <span className="muted mono" style={{ fontSize: ".74rem", whiteSpace: "nowrap" }}>{h.posted ? h.date : "Belum dipost"}</span>
-                </div>
-                <div style={{ fontWeight: 600, fontSize: ".94rem", lineHeight: 1.28, margin: "2px 0 8px" }}>{h.t}</div>
-                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                  <span style={tag(h.posted)}>{h.posted ? "Dipost ke blog" : "Belum dipost"}</span>
-                  <span style={tag(h.shared)}>{h.shared ? "Dibagikan" : "Belum dibagikan"}</span>
-                  <span style={tag(h.down)}>{h.down ? "Diunduh" : "Belum diunduh"}</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </Card>
-      {/* RIGHT: write */}
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18, alignItems: "start" }} className="adm-2">
+      {/* LEFT: write */}
       <Card>
         <H>Tulis konten</H>
         <input placeholder="Judul konten" style={{ width: "100%", marginBottom: 10, background: "var(--surface-2)", border: "1px solid var(--line-2)", borderRadius: 10, padding: ".7rem 1rem", font: "inherit", color: "var(--ink)" }} />
@@ -445,6 +611,55 @@ function MemberDashboard() {
           </ul>
         </div>
         <div style={{ display: "flex", gap: 10, marginTop: 14 }}><button style={btn("brand")}>✨ Buat draf AI</button><button style={btn("ghost")}>Terbitkan</button></div>
+      </Card>
+      {/* RIGHT: konten siap + riwayat */}
+      <Card>
+        <H>Konten siap</H>
+        <p className="muted" style={{ fontSize: ".86rem", marginTop: -8, marginBottom: 12 }}>Draf dari sistem maupun buatan Anda yang belum diterbitkan — klik untuk kelola.</p>
+        <div style={{ display: "grid", gap: 12 }}>
+          {READY_CONTENT.map((it, i) => (
+            <button key={it.t} onClick={() => { setContentModal(i); setContentSched(false); }} className="adm-thumb" style={{ display: "flex", gap: 12, padding: 10, borderRadius: 12, background: "var(--surface-2)", border: "1px solid var(--line)", cursor: "pointer", font: "inherit", textAlign: "left", width: "100%" }}>
+              <div style={{ width: 92, height: 92, borderRadius: 9, overflow: "hidden", flex: "none" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={it.img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              </div>
+              <div style={{ minWidth: 0, flex: 1, display: "flex", flexDirection: "column" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "baseline" }}>
+                  <span style={{ fontSize: ".66rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: ".05em" }}>{it.c}</span>
+                  <span style={{ fontSize: ".62rem", fontWeight: 700, color: "var(--warn)", background: "color-mix(in oklab, var(--warn) 14%, var(--surface))", padding: ".18rem .5rem", borderRadius: 999 }}>Menunggu</span>
+                </div>
+                <div style={{ fontWeight: 600, fontSize: ".94rem", lineHeight: 1.28, margin: "3px 0 4px" }}>{it.t}</div>
+                <div className="muted mono" style={{ fontSize: ".74rem" }}>{it.meta}</div>
+                <div style={{ marginTop: "auto", paddingTop: 8, fontSize: ".8rem", fontWeight: 600, color: "var(--brand)" }}>Kelola — publish, jadwalkan, tolak →</div>
+              </div>
+            </button>
+          ))}
+        </div>
+        <h3 className="display" style={{ fontSize: "1.05rem", fontWeight: 600, margin: "24px 0 4px" }}>Riwayat</h3>
+        <p className="muted" style={{ fontSize: ".82rem", marginBottom: 12 }}>Kapan dipost ke blog & status bagikan/unduh.</p>
+        <div style={{ display: "grid", gap: 12 }}>
+          {CONTENT_HISTORY.map((h) => (
+            <div key={h.t} style={{ display: "flex", gap: 12, padding: 10, borderRadius: 12, background: "var(--surface-2)", border: "1px solid var(--line)" }}>
+              <div style={{ width: 92, height: 92, borderRadius: 9, overflow: "hidden", flex: "none", position: "relative" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={h.img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", filter: h.posted ? "none" : "grayscale(.5)" }} />
+                {!h.posted && <span style={{ position: "absolute", inset: 0, background: "rgba(20,15,9,.35)", color: "#fff", display: "grid", placeItems: "center", fontSize: ".68rem", fontWeight: 700 }}>DRAF</span>}
+              </div>
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "baseline" }}>
+                  <span style={{ fontSize: ".66rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: ".05em" }}>{h.c}</span>
+                  <span className="muted mono" style={{ fontSize: ".74rem", whiteSpace: "nowrap" }}>{h.posted ? h.date : "Belum dipost"}</span>
+                </div>
+                <div style={{ fontWeight: 600, fontSize: ".94rem", lineHeight: 1.28, margin: "2px 0 8px" }}>{h.t}</div>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                  <span style={tag(h.posted)}>{h.posted ? "Dipost ke blog" : "Belum dipost"}</span>
+                  <span style={tag(h.shared)}>{h.shared ? "Dibagikan" : "Belum dibagikan"}</span>
+                  <span style={tag(h.down)}>{h.down ? "Diunduh" : "Belum diunduh"}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </Card>
     </div>
   );
@@ -639,14 +854,14 @@ function MemberDashboard() {
   );
 
   const titles: Record<Sec, [string, string]> = {
-    home: ["Home", "Analisa, performa, dan preview website Anda."],
+    home: ["Dashboard", "Pilih kanal di kiri untuk melihat insight & analisanya."],
     listing: ["Listing", "Kelola properti Anda — buat, ubah, hapus, riwayat."],
     editor: ["Editor", "Buat video listing otomatis dan unggah materi."],
     content: ["Content", "Ide dari sistem, lalu tulis dan terbitkan."],
     assets: ["Assets", "Pustaka aset cakra untuk semua member."],
     profile: ["Profil & pengaturan", "Koneksi, tagihan, keamanan, dan legal."],
   };
-  const body = { home: Home, listing: Listing, editor: Editor, content: Content, assets: Assets, profile: Profile }[sec];
+  const body = { home: Dashboard, listing: Listing, editor: Editor, content: Content, assets: Assets, profile: Profile }[sec];
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg)" }}>
@@ -676,10 +891,10 @@ function MemberDashboard() {
             <span style={{ fontSize: ".82rem", color: "var(--warn)", fontWeight: 600, whiteSpace: "nowrap" }} className="adm-openmode">● Mode terbuka · tanpa autentikasi</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
-            {genState === "working" && (
-              <button onClick={() => setSec("editor")} title="Lihat proses" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: ".38rem .7rem", borderRadius: 999, border: "1px solid color-mix(in oklab, var(--brand) 30%, var(--line))", background: "color-mix(in oklab, var(--brand) 10%, var(--surface))", color: "var(--brand)", cursor: "pointer", font: "inherit", fontSize: ".78rem", fontWeight: 700, flex: "none" }}>
+            {rendering && (
+              <button onClick={() => setSec("editor")} title="Lihat proses render" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: ".38rem .7rem", borderRadius: 999, border: "1px solid color-mix(in oklab, var(--brand) 30%, var(--line))", background: "color-mix(in oklab, var(--brand) 10%, var(--surface))", color: "var(--brand)", cursor: "pointer", font: "inherit", fontSize: ".78rem", fontWeight: 700, flex: "none" }}>
                 <span className="adm-spin" style={{ width: 12, height: 12, borderRadius: "50%", border: "2px solid color-mix(in oklab, var(--brand) 30%, transparent)", borderTopColor: "var(--brand)", flex: "none" }} />
-                Merender video {genPct}%
+                Merender {rendering.pct}%{queued.length ? ` · +${queued.length}` : ""}
               </button>
             )}
             <a href="https://kirana.cakra.site" className="mono adm-hosturl" style={{ fontSize: ".82rem", color: "var(--muted)", textDecoration: "none", whiteSpace: "nowrap" }}>kirana.cakra.site ↗</a>
@@ -759,6 +974,48 @@ function MemberDashboard() {
                     <button style={{ ...btn("ghost"), padding: ".5rem 1rem", fontSize: ".84rem" }}>Bagikan</button>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {contentModal !== null && (() => {
+        const it = READY_CONTENT[contentModal];
+        return (
+          <div onClick={() => setContentModal(null)} style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(20,15,9,.55)", backdropFilter: "blur(3px)", display: "grid", placeItems: "center", padding: 20 }}>
+            <div onClick={(e) => e.stopPropagation()} style={{ width: "min(480px, 94vw)", maxHeight: "90vh", overflow: "auto", background: "var(--surface)", borderRadius: 18, border: "1px solid var(--line)", boxShadow: "0 40px 100px rgba(20,15,9,.4)" }}>
+              <div style={{ position: "relative", aspectRatio: "16 / 9" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={it.img} alt={it.t} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", borderRadius: "18px 18px 0 0" }} />
+                <span style={{ position: "absolute", top: 12, left: 12, fontSize: ".64rem", fontWeight: 700, letterSpacing: ".05em", textTransform: "uppercase", padding: ".24rem .6rem", borderRadius: 999, color: "#fff", background: "var(--brand)" }}>{it.c}</span>
+                <button onClick={() => setContentModal(null)} aria-label="Tutup" style={{ position: "absolute", top: 12, right: 12, width: 34, height: 34, borderRadius: "50%", border: "none", cursor: "pointer", background: "rgba(255,255,255,.92)", color: "var(--ink)", fontSize: "1rem", display: "grid", placeItems: "center" }}>✕</button>
+              </div>
+              <div style={{ padding: 22 }}>
+                <div className="muted mono" style={{ fontSize: ".74rem" }}>{it.meta}</div>
+                <h3 className="display" style={{ fontSize: "1.25rem", fontWeight: 700, margin: "4px 0 0" }}>{it.t}</h3>
+                {!contentSched ? (
+                  <>
+                    <p className="muted" style={{ fontSize: ".9rem", margin: "10px 0 16px", lineHeight: 1.55 }}>Konten ini siap diterbitkan. Pilih tindakan.</p>
+                    <div style={{ display: "grid", gap: 10 }}>
+                      <button onClick={() => setContentModal(null)} style={{ ...btn("brand"), justifyContent: "center", display: "flex", padding: ".85rem", fontSize: ".95rem" }}>Publish sekarang</button>
+                      <button onClick={() => setContentSched(true)} style={{ ...btn("ghost"), justifyContent: "center", display: "flex", padding: ".85rem", fontSize: ".95rem" }}>Jadwalkan…</button>
+                      <button onClick={() => setContentModal(null)} style={{ ...btn("ghost"), justifyContent: "center", display: "flex", padding: ".85rem", fontSize: ".95rem", color: "var(--crit)", borderColor: "color-mix(in oklab, var(--crit) 40%, var(--line-2))" }}>Tolak konten</button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p className="muted" style={{ fontSize: ".9rem", margin: "10px 0 16px", lineHeight: 1.55 }}>Pilih tanggal &amp; waktu penerbitan otomatis.</p>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                      <div><label style={lbl}>Tanggal</label><input type="date" style={inp} /></div>
+                      <div><label style={lbl}>Waktu</label><input type="time" style={inp} /></div>
+                    </div>
+                    <div style={{ display: "flex", gap: 10, marginTop: 16 }}>
+                      <button onClick={() => setContentModal(null)} style={{ ...btn("brand"), flex: 1, justifyContent: "center", display: "flex" }}>Konfirmasi jadwal</button>
+                      <button onClick={() => setContentSched(false)} style={btn("ghost")}>Kembali</button>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
