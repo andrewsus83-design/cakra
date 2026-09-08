@@ -4,9 +4,8 @@ import { usePathname } from "next/navigation";
 import { CakraMark } from "./CakraMark";
 
 const COLS = [
-  { title: "Fitur", links: [["Listing", "/listing"], ["Hub", "/hub"], ["Kalkulator", "/kalkulator"]] },
-  { title: "Platform", links: [["Website builder", "/#cara-kerja"], ["Contoh situs", "/demo"], ["Harga", "/harga"]] },
-  { title: "Perusahaan", links: [["Tentang", "/about"], ["FAQ", "/faq"], ["Kontak", "/contact"]] },
+  { title: "Platform", links: [["Website builder", "/#cara-kerja"], ["Listing", "/listing"], ["Kalkulator", "/kalkulator"], ["Harga", "/harga"]] },
+  { title: "Perusahaan", links: [["Tentang", "/about"], ["Contoh situs", "/demo"], ["Hub", "/hub"], ["FAQ", "/faq"], ["Kontak", "/contact"]] },
   { title: "Legal", links: [["Syarat & Ketentuan", "/terms"], ["Privasi", "/privacy"], ["Masuk", "/login"], ["Daftar", "/onboarding"]] },
 ];
 
@@ -24,7 +23,7 @@ export function SiteFooter() {
   return (
     <footer style={{ borderTop: "1px solid var(--line)", background: "var(--surface-2)" }}>
       <div className="wrap" style={{ padding: "30px 0 22px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1.4fr repeat(4, 1fr)", gap: "20px 24px" }} className="cakra-foot-grid">
+        <div style={{ display: "grid", gridTemplateColumns: "1.5fr repeat(3, 1fr)", gap: "20px 24px" }} className="cakra-foot-grid">
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <CakraMark size={30} />
