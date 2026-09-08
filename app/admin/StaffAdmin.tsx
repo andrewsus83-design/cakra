@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { CakraMark } from "@/components/CakraMark";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 type Section = "dashboard" | "member" | "assets" | "listing" | "hub" | "editor" | "llm" | "setting";
 
@@ -142,6 +143,7 @@ export function StaffAdmin() {
           <span style={{ fontSize: ".82rem", color: "var(--warn)", fontWeight: 600 }}>● Backend · mode terbuka tanpa autentikasi</span>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <input placeholder="Cari member, listing…" style={{ background: "var(--surface)", border: "1px solid var(--line-2)", borderRadius: 999, padding: ".5rem 1rem", font: "inherit", fontSize: ".88rem", color: "var(--ink)", width: 220, maxWidth: "40vw" }} />
+            <ThemeToggle size={34} />
             <span style={{ width: 34, height: 34, borderRadius: "50%", background: "var(--ink)", color: "var(--bg)", display: "grid", placeItems: "center", fontWeight: 700, fontSize: ".85rem" }}>A</span>
           </div>
         </header>

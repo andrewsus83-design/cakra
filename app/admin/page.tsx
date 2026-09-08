@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { CakraMark } from "@/components/CakraMark";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { StaffAdmin } from "./StaffAdmin";
 
 type Sec = "home" | "prospek" | "listing" | "editor" | "content" | "assets" | "profile";
@@ -1013,6 +1014,7 @@ function MemberDashboard() {
               </button>
             )}
             <a href="https://kirana.cakra.xyz" className="mono adm-hosturl" style={{ fontSize: ".82rem", color: "var(--muted)", textDecoration: "none", whiteSpace: "nowrap" }}>kirana.cakra.xyz ↗</a>
+            <ThemeToggle size={36} />
           </div>
         </header>
         <main className="adm-main" style={{ padding: "clamp(20px,3vw,34px)", maxWidth: 1400 }}>
