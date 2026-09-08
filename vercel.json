@@ -5,8 +5,8 @@
   "framework": null,
   "cleanUrls": true,
   "trailingSlash": false,
-  "rewrites": [
-    { "source": "/", "has": [{ "type": "host", "value": "sample.cakra.xyz" }], "destination": "/demo" },
-    { "source": "/", "has": [{ "type": "host", "value": "member.cakra.xyz" }], "destination": "/admin" }
+  "redirects": [
+    { "source": "/", "has": [{ "type": "host", "value": "sample.cakra.xyz" }], "destination": "/demo", "permanent": false },
+    { "source": "/", "has": [{ "type": "host", "value": "member.cakra.xyz" }], "destination": "/admin", "permanent": false }
   ]
 }
