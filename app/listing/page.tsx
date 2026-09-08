@@ -8,18 +8,18 @@ type Listing = {
 };
 
 const LISTINGS: Listing[] = [
-  { id: 1, title: "Vila Puri Senja", area: "Canggu", city: "Bali", status: "jual", price: 8_500_000_000, beds: 4, baths: 4, size: 320, img: "/about/hero.jpg", agent: "Andi Pratama", featured: true },
-  { id: 2, title: "Rumah Modern Dago", area: "Dago", city: "Bandung", status: "jual", price: 4_200_000_000, beds: 4, baths: 3, size: 260, img: "/hero.jpg", agent: "Sarah Wijaya" },
-  { id: 3, title: "Apartemen SCBD Suites", area: "SCBD", city: "Jakarta", status: "sewa", price: 180_000_000, beds: 2, baths: 2, size: 96, img: "/about/invite.jpg", agent: "Budi Santoso" },
-  { id: 4, title: "Townhouse Kemang", area: "Kemang", city: "Jakarta", status: "jual", price: 6_800_000_000, beds: 3, baths: 3, size: 210, img: "/punch.jpg", agent: "Andi Pratama", featured: true },
-  { id: 5, title: "Vila Ubud Retreat", area: "Ubud", city: "Bali", status: "jual", price: 12_000_000_000, beds: 5, baths: 5, size: 480, img: "/about/transform.jpg", agent: "Made Surya", featured: true },
-  { id: 6, title: "Rumah Cluster BSD", area: "BSD City", city: "Tangerang", status: "jual", price: 2_400_000_000, beds: 3, baths: 2, size: 140, img: "/blog-0.jpg", agent: "Sarah Wijaya" },
-  { id: 7, title: "Loft Menteng", area: "Menteng", city: "Jakarta", status: "sewa", price: 240_000_000, beds: 2, baths: 2, size: 120, img: "/blog-1.jpg", agent: "Budi Santoso" },
-  { id: 8, title: "Vila Jimbaran Bay", area: "Jimbaran", city: "Bali", status: "jual", price: 9_300_000_000, beds: 4, baths: 4, size: 360, img: "/hero-top.jpg", agent: "Made Surya", featured: true },
-  { id: 9, title: "Rumah Sentul City", area: "Sentul", city: "Bogor", status: "jual", price: 1_800_000_000, beds: 3, baths: 2, size: 130, img: "/blog-2.jpg", agent: "Sarah Wijaya" },
-  { id: 10, title: "Penthouse Thamrin", area: "Thamrin", city: "Jakarta", status: "sewa", price: 480_000_000, beds: 3, baths: 3, size: 180, img: "/about/vision.jpg", agent: "Budi Santoso" },
-  { id: 11, title: "Rumah Sanur Garden", area: "Sanur", city: "Bali", status: "jual", price: 5_600_000_000, beds: 4, baths: 3, size: 300, img: "/blog-1.jpg", agent: "Made Surya" },
-  { id: 12, title: "Cluster Summarecon", area: "Summarecon", city: "Bekasi", status: "jual", price: 1_500_000_000, beds: 2, baths: 2, size: 98, img: "/hero.jpg", agent: "Andi Pratama" },
+  { id: 1, title: "Vila Puri Senja", area: "Canggu", city: "Bali", status: "jual", price: 8_500_000_000, beds: 4, baths: 4, size: 320, img: "/about/hero.webp", agent: "Andi Pratama", featured: true },
+  { id: 2, title: "Rumah Modern Dago", area: "Dago", city: "Bandung", status: "jual", price: 4_200_000_000, beds: 4, baths: 3, size: 260, img: "/hero.webp", agent: "Sarah Wijaya" },
+  { id: 3, title: "Apartemen SCBD Suites", area: "SCBD", city: "Jakarta", status: "sewa", price: 180_000_000, beds: 2, baths: 2, size: 96, img: "/about/invite.webp", agent: "Budi Santoso" },
+  { id: 4, title: "Townhouse Kemang", area: "Kemang", city: "Jakarta", status: "jual", price: 6_800_000_000, beds: 3, baths: 3, size: 210, img: "/punch.webp", agent: "Andi Pratama", featured: true },
+  { id: 5, title: "Vila Ubud Retreat", area: "Ubud", city: "Bali", status: "jual", price: 12_000_000_000, beds: 5, baths: 5, size: 480, img: "/about/transform.webp", agent: "Made Surya", featured: true },
+  { id: 6, title: "Rumah Cluster BSD", area: "BSD City", city: "Tangerang", status: "jual", price: 2_400_000_000, beds: 3, baths: 2, size: 140, img: "/blog-0.webp", agent: "Sarah Wijaya" },
+  { id: 7, title: "Loft Menteng", area: "Menteng", city: "Jakarta", status: "sewa", price: 240_000_000, beds: 2, baths: 2, size: 120, img: "/blog-1.webp", agent: "Budi Santoso" },
+  { id: 8, title: "Vila Jimbaran Bay", area: "Jimbaran", city: "Bali", status: "jual", price: 9_300_000_000, beds: 4, baths: 4, size: 360, img: "/hero-top.webp", agent: "Made Surya", featured: true },
+  { id: 9, title: "Rumah Sentul City", area: "Sentul", city: "Bogor", status: "jual", price: 1_800_000_000, beds: 3, baths: 2, size: 130, img: "/blog-2.webp", agent: "Sarah Wijaya" },
+  { id: 10, title: "Penthouse Thamrin", area: "Thamrin", city: "Jakarta", status: "sewa", price: 480_000_000, beds: 3, baths: 3, size: 180, img: "/about/vision.webp", agent: "Budi Santoso" },
+  { id: 11, title: "Rumah Sanur Garden", area: "Sanur", city: "Bali", status: "jual", price: 5_600_000_000, beds: 4, baths: 3, size: 300, img: "/blog-1.webp", agent: "Made Surya" },
+  { id: 12, title: "Cluster Summarecon", area: "Summarecon", city: "Bekasi", status: "jual", price: 1_500_000_000, beds: 2, baths: 2, size: 98, img: "/hero.webp", agent: "Andi Pratama" },
 ];
 
 const CITIES = ["Semua", ...Array.from(new Set(LISTINGS.map((l) => l.city)))];

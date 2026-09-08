@@ -139,7 +139,7 @@ export default function Onboarding() {
       <div style={{ position: "fixed", inset: 0, zIndex: 100, overflow: "hidden", display: "flex", flexDirection: "column" }}>
         <div style={{ position: "absolute", inset: 0 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/hero-top.jpg" alt="Vila properti mewah saat golden hour" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+          <img src="/hero-top.webp" alt="Vila properti mewah saat golden hour" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
           <div className="photo-scrim" />
         </div>
         <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 22px" }}>

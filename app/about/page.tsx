@@ -48,7 +48,7 @@ export default function Page() {
       <section style={{ position: "relative", minHeight: "90vh", display: "flex", alignItems: "flex-end", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0, WebkitMaskImage: MASK_BOTTOM, maskImage: MASK_BOTTOM }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/about/hero.jpg" alt="Vila mewah tropis Indonesia saat golden hour — kehadiran yang membangun kepercayaan" style={coverAbs} />
+          <img src="/about/hero.webp" alt="Vila mewah tropis Indonesia saat golden hour — kehadiran yang membangun kepercayaan" style={coverAbs} />
           <div className="photo-scrim" />
         </div>
         <div className="wrap" style={{ position: "relative", paddingTop: 128, paddingBottom: "clamp(104px, 14vh, 168px)" }}>
@@ -86,7 +86,7 @@ export default function Page() {
           </div>
           <div className="ab-img" style={{ aspectRatio: "3 / 2" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/about/shift-ai.jpg" alt="Tangan memegang ponsel yang menampilkan pencarian properti lewat asisten AI — era pencarian baru" />
+            <img src="/about/shift-ai.webp" alt="Tangan memegang ponsel yang menampilkan pencarian properti lewat asisten AI — era pencarian baru" />
           </div>
         </div>
       </section>
@@ -96,7 +96,7 @@ export default function Page() {
         <div className="ab-split ab-reverse">
           <div className="ab-img" style={{ aspectRatio: "3 / 2" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/about/origin.jpg" alt="Meja kerja agen properti earthy-lux — cakra dibuat oleh sesama agen" />
+            <img src="/about/origin.webp" alt="Meja kerja agen properti earthy-lux — cakra dibuat oleh sesama agen" />
           </div>
           <div>
             <div className="eyebrow" style={{ marginBottom: 14 }}>Siapa di balik cakra</div>
@@ -120,7 +120,7 @@ export default function Page() {
       <section style={{ position: "relative", overflow: "hidden", minHeight: "78vh", display: "flex", alignItems: "center" }}>
         <div style={{ position: "absolute", inset: 0, WebkitMaskImage: MASK_BAND, maskImage: MASK_BAND }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/about/transform.jpg" alt="Satu rumah dengan pintu bercahaya hangat di ujung jalan — agen yang menjadi rujukan" style={coverAbs} />
+          <img src="/about/transform.webp" alt="Satu rumah dengan pintu bercahaya hangat di ujung jalan — agen yang menjadi rujukan" style={coverAbs} />
           <div className="photo-scrim" />
         </div>
         <div className="wrap" style={{ position: "relative", textAlign: "center", padding: "90px 0" }}>
@@ -145,7 +145,7 @@ export default function Page() {
         <div className="ab-split">
           <div className="ab-img" style={{ aspectRatio: "4 / 5" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/about/vision-hill.jpg" alt="Vila modern di lereng bukit saat fajar keemasan — masa depan agen properti cerdas" />
+            <img src="/about/vision-hill.webp" alt="Vila modern di lereng bukit saat fajar keemasan — masa depan agen properti cerdas" />
           </div>
           <div>
             <p className="hand gold" style={{ fontSize: "1.55rem", transform: "rotate(-2deg)", margin: 0 }}>Visi kami</p>
@@ -169,7 +169,7 @@ export default function Page() {
       <section style={{ position: "relative", overflow: "hidden", minHeight: "72vh", display: "flex", alignItems: "center" }}>
         <div style={{ position: "absolute", inset: 0, WebkitMaskImage: MASK_BAND, maskImage: MASK_BAND }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/about/invite.jpg" alt="Ambang pintu rumah Indonesia terbuka saat golden hour — undangan untuk melangkah masuk" style={coverAbs} />
+          <img src="/about/invite.webp" alt="Ambang pintu rumah Indonesia terbuka saat golden hour — undangan untuk melangkah masuk" style={coverAbs} />
           <div className="photo-scrim" />
         </div>
         <div className="wrap" style={{ position: "relative", textAlign: "center", padding: "90px 0" }}>

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     description: "Vila & properti premium Bali untuk jual maupun sewa, mulai Rp 3 miliar. 10+ tahun pengalaman bersama Kirana Sutanto.",
     type: "website",
     url: "https://cakra.xyz/demo",
-    images: [{ url: "/about/transform.jpg", width: 1200, height: 800, alt: "Vila premium Bali" }],
+    images: [{ url: "/about/transform.webp", width: 1200, height: 800, alt: "Vila premium Bali" }],
   },
 };
 
@@ -43,12 +43,12 @@ const LAYANAN = [
 ];
 
 const LISTINGS = [
-  { t: "Vila Uluwatu Cliff", loc: "Uluwatu", tag: "Dijual", price: "Rp 14 M", beds: 5, baths: 5, size: 480, img: "/about/transform.jpg" },
-  { t: "Vila Canggu Estate", loc: "Canggu", tag: "Dijual", price: "Rp 8,5 M", beds: 4, baths: 4, size: 320, img: "/about/hero.jpg" },
-  { t: "Vila Seminyak Retreat", loc: "Seminyak", tag: "Disewa", price: "Rp 3,2 M", per: "/thn", beds: 3, baths: 3, size: 210, img: "/hero.jpg" },
-  { t: "Vila Ubud Valley", loc: "Ubud", tag: "Dijual", price: "Rp 11 M", beds: 4, baths: 4, size: 360, img: "/about/vision-hill.jpg" },
-  { t: "Vila Sanur Garden", loc: "Sanur", tag: "Disewa", price: "Rp 3,8 M", per: "/thn", beds: 4, baths: 3, size: 300, img: "/hero-top.jpg" },
-  { t: "Vila Jimbaran Bay", loc: "Jimbaran", tag: "Dijual", price: "Rp 9,3 M", beds: 4, baths: 4, size: 340, img: "/about/invite.jpg" },
+  { t: "Vila Uluwatu Cliff", loc: "Uluwatu", tag: "Dijual", price: "Rp 14 M", beds: 5, baths: 5, size: 480, img: "/about/transform.webp" },
+  { t: "Vila Canggu Estate", loc: "Canggu", tag: "Dijual", price: "Rp 8,5 M", beds: 4, baths: 4, size: 320, img: "/about/hero.webp" },
+  { t: "Vila Seminyak Retreat", loc: "Seminyak", tag: "Disewa", price: "Rp 3,2 M", per: "/thn", beds: 3, baths: 3, size: 210, img: "/hero.webp" },
+  { t: "Vila Ubud Valley", loc: "Ubud", tag: "Dijual", price: "Rp 11 M", beds: 4, baths: 4, size: 360, img: "/about/vision-hill.webp" },
+  { t: "Vila Sanur Garden", loc: "Sanur", tag: "Disewa", price: "Rp 3,8 M", per: "/thn", beds: 4, baths: 3, size: 300, img: "/hero-top.webp" },
+  { t: "Vila Jimbaran Bay", loc: "Jimbaran", tag: "Dijual", price: "Rp 9,3 M", beds: 4, baths: 4, size: 340, img: "/about/invite.webp" },
 ];
 
 const AREAS = ["Canggu", "Seminyak", "Uluwatu", "Ubud", "Sanur", "Jimbaran", "Pererenan", "Nusa Dua"];
@@ -67,9 +67,9 @@ const TESTI = [
 ];
 
 const ARTICLES = [
-  { c: "Pasar", t: "Panduan harga vila Canggu 2026", e: "Ke mana arah harga tanah & vila di koridor Berawa–Pererenan.", img: "/blog-0.jpg" },
-  { c: "Investasi", t: "ROI vila sewa: angka yang realistis", e: "Cara menghitung imbal hasil sewa tanpa asumsi berlebihan.", img: "/blog-1.jpg" },
-  { c: "Legal", t: "Hak pakai vs PT PMA untuk pembeli asing", e: "Struktur kepemilikan yang aman sebelum membeli di Bali.", img: "/blog-2.jpg" },
+  { c: "Pasar", t: "Panduan harga vila Canggu 2026", e: "Ke mana arah harga tanah & vila di koridor Berawa–Pererenan.", img: "/blog-0.webp" },
+  { c: "Investasi", t: "ROI vila sewa: angka yang realistis", e: "Cara menghitung imbal hasil sewa tanpa asumsi berlebihan.", img: "/blog-1.webp" },
+  { c: "Legal", t: "Hak pakai vs PT PMA untuk pembeli asing", e: "Struktur kepemilikan yang aman sebelum membeli di Bali.", img: "/blog-2.webp" },
 ];
 
 const FAQS = [
@@ -88,7 +88,7 @@ const jsonLd = {
   "@id": "https://cakra.xyz/demo#agent",
   name: "Kirana Sutanto",
   url: "https://cakra.xyz/demo",
-  image: "https://cakra.xyz/about/transform.jpg",
+  image: "https://cakra.xyz/about/transform.webp",
   description: "Spesialis vila & properti premium di Bali untuk jual dan sewa, mulai Rp 3 miliar, dengan pengalaman lebih dari 10 tahun.",
   telephone: "+62-811-0000-000",
   priceRange: "Rp 3.000.000.000+",
@@ -143,7 +143,7 @@ export default function Demo() {
       {/* HERO */}
       <section className="k-hero">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/hero-top.jpg" alt="Vila premium Bali saat golden hour" className="k-hero-img" />
+        <img src="/hero-top.webp" alt="Vila premium Bali saat golden hour" className="k-hero-img" />
         <div className="k-hero-scrim" />
         <div className="k-wrap k-hero-in">
           <span className="k-kick k-kick-light">spesialis properti bali</span>
@@ -226,7 +226,7 @@ export default function Demo() {
         <div className="k-wrap k-split">
           <div className="k-about-img">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/about/origin.jpg" alt="Ruang kerja Kirana Sutanto" />
+            <img src="/about/origin.webp" alt="Ruang kerja Kirana Sutanto" />
           </div>
           <div>
             <span className="k-kick">tentang kirana</span>

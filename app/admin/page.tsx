@@ -33,23 +33,23 @@ const COMING: { label: string; icon: string }[] = [
 const CENTERS = [["Website", 88, "--c-crown"], ["Listing", 74, "--c-eye"], ["Konten", 70, "--c-throat"], ["SEO", 72, "--c-heart"], ["GEO", 66, "--c-solar"], ["Social", 61, "--c-sacral"], ["Reputasi", 80, "--c-root"]] as const;
 const PERF = [["Kunjungan / bln", "3.240", "+14%", "--c-eye"], ["Lead masuk", "48", "+9", "--c-heart"], ["Listing aktif", "12", "2 baru", "--c-throat"], ["Peringkat SEO", "#3", "“vila Canggu”", "--c-solar"]] as const;
 const LISTINGS = [
-  { t: "Vila Uluwatu Cliff", st: "Dijual", price: "Rp 14 M", views: 320, img: "/about/hero.jpg", loc: "Uluwatu, Bali", kt: 5, km: 5, luas: 450, rating: 4.9, desc: "Vila tebing menghadap Samudra Hindia, kolam infinity, dan sunset privat." },
-  { t: "Vila Canggu Estate", st: "Dijual", price: "Rp 8,5 M", views: 210, img: "/hero.jpg", loc: "Canggu, Bali", kt: 4, km: 4, luas: 320, rating: 4.8, desc: "Vila modern-tropis dekat pantai Berawa, taman luas, dan area hiburan." },
-  { t: "Vila Seminyak Retreat", st: "Disewa", price: "Rp 3,2 M/thn", views: 180, img: "/about/transform.jpg", loc: "Seminyak, Bali", kt: 3, km: 3, luas: 260, rating: 4.7, desc: "Retreat tenang di jantung Seminyak, cocok untuk sewa jangka panjang." },
-  { t: "Townhouse Sanur", st: "Dijual", price: "Rp 4,8 M", views: 96, img: "/about/invite.jpg", loc: "Sanur, Bali", kt: 3, km: 2, luas: 180, rating: 4.6, desc: "Townhouse elegan dekat pantai Sanur, desain fungsional untuk keluarga." },
+  { t: "Vila Uluwatu Cliff", st: "Dijual", price: "Rp 14 M", views: 320, img: "/about/hero.webp", loc: "Uluwatu, Bali", kt: 5, km: 5, luas: 450, rating: 4.9, desc: "Vila tebing menghadap Samudra Hindia, kolam infinity, dan sunset privat." },
+  { t: "Vila Canggu Estate", st: "Dijual", price: "Rp 8,5 M", views: 210, img: "/hero.webp", loc: "Canggu, Bali", kt: 4, km: 4, luas: 320, rating: 4.8, desc: "Vila modern-tropis dekat pantai Berawa, taman luas, dan area hiburan." },
+  { t: "Vila Seminyak Retreat", st: "Disewa", price: "Rp 3,2 M/thn", views: 180, img: "/about/transform.webp", loc: "Seminyak, Bali", kt: 3, km: 3, luas: 260, rating: 4.7, desc: "Retreat tenang di jantung Seminyak, cocok untuk sewa jangka panjang." },
+  { t: "Townhouse Sanur", st: "Dijual", price: "Rp 4,8 M", views: 96, img: "/about/invite.webp", loc: "Sanur, Bali", kt: 3, km: 2, luas: 180, rating: 4.6, desc: "Townhouse elegan dekat pantai Sanur, desain fungsional untuk keluarga." },
 ];
 const VIDEO_HISTORY = [
-  { t: "Vila Uluwatu Cliff", ar: "9:16", dur: "1:02", date: "2 Sep 2026", poster: "/hero.jpg" },
-  { t: "Canggu Estate", ar: "16:9", dur: "1:15", date: "27 Agu 2026", poster: "/about/hero.jpg" },
-  { t: "Seminyak Retreat", ar: "9:16", dur: "0:48", date: "19 Agu 2026", poster: "/about/transform.jpg" },
+  { t: "Vila Uluwatu Cliff", ar: "9:16", dur: "1:02", date: "2 Sep 2026", poster: "/hero.webp" },
+  { t: "Canggu Estate", ar: "16:9", dur: "1:15", date: "27 Agu 2026", poster: "/about/hero.webp" },
+  { t: "Seminyak Retreat", ar: "9:16", dur: "0:48", date: "19 Agu 2026", poster: "/about/transform.webp" },
 ];
 const LISTING_HISTORY = [
-  { t: "Vila Tegallalang", date: "1 Sep 2026", st: "Terjual", img: "/about/transform.jpg", price: "Rp 6,2 M", loc: "Ubud, Bali" },
-  { t: "Apartemen Sunset Road", date: "24 Agu 2026", st: "Tersewa", img: "/blog-1.jpg", price: "Rp 180 jt/thn", loc: "Kuta, Bali" },
-  { t: "Vila Pantai Berawa", date: "10 Agu 2026", st: "Terjual", img: "/hero.jpg", price: "Rp 9,8 M", loc: "Canggu, Bali" },
-  { t: "Ruko Sunset Road", date: "2 Agu 2026", st: "Tersewa", img: "/about/invite.jpg", price: "Rp 220 jt/thn", loc: "Denpasar, Bali" },
+  { t: "Vila Tegallalang", date: "1 Sep 2026", st: "Terjual", img: "/about/transform.webp", price: "Rp 6,2 M", loc: "Ubud, Bali" },
+  { t: "Apartemen Sunset Road", date: "24 Agu 2026", st: "Tersewa", img: "/blog-1.webp", price: "Rp 180 jt/thn", loc: "Kuta, Bali" },
+  { t: "Vila Pantai Berawa", date: "10 Agu 2026", st: "Terjual", img: "/hero.webp", price: "Rp 9,8 M", loc: "Canggu, Bali" },
+  { t: "Ruko Sunset Road", date: "2 Agu 2026", st: "Tersewa", img: "/about/invite.webp", price: "Rp 220 jt/thn", loc: "Denpasar, Bali" },
 ];
-const ASSETS = ["/about/hero.jpg", "/about/transform.jpg", "/hero.jpg", "/about/invite.jpg", "/blog-0.jpg", "/blog-1.jpg", "/about/vision-hill.jpg", "/hero-top.jpg"];
+const ASSETS = ["/about/hero.webp", "/about/transform.webp", "/hero.webp", "/about/invite.webp", "/blog-0.webp", "/blog-1.webp", "/about/vision-hill.webp", "/hero-top.webp"];
 const FORMATS = [
   { id: "1:1", label: "Post — Instagram & Facebook" },
   { id: "9:16", label: "Reels / TikTok / Shorts" },
@@ -60,16 +60,16 @@ const PLATFORMS = [
   { id: "TikTok", fmt: "9:16" }, { id: "YouTube", fmt: "16:9" }, { id: "Presentasi", fmt: "16:9" },
 ];
 const READY_CONTENT = [
-  { t: "Panduan harga vila Canggu 2026", c: "Artikel", img: "/blog-0.jpg", meta: "6 mnt baca · SEO", body: "Harga vila di Canggu terus menguat sepanjang 2026, didorong permintaan sewa jangka panjang dan pembeli asing lewat skema hak pakai.\n\nUntuk vila 3–4 kamar dengan kolam pribadi, kisaran harga kini Rp 6–12 miliar tergantung jarak ke pantai Berawa dan Pererenan. Area yang sedang naik daun seperti Nyanyi dan Cemagi menawarkan harga 15–20% lebih rendah dengan potensi apresiasi tinggi.\n\nTips: bandingkan harga per meter persegi tanah, bukan hanya harga total — ini ukuran paling jujur untuk menilai apakah sebuah listing wajar." },
-  { t: "Reels: Tur 60 detik Vila Uluwatu", c: "Reels", img: "/about/hero.jpg", meta: "9:16 · 60 dtk", body: "Naskah reels (0–60 dtk):\n\n0–5 dtk — Drone melintas tebing, teks: “Bangun di atas Samudra Hindia.”\n5–35 dtk — Sapuan interior: ruang tamu terbuka, dapur granit, kamar utama berbalkon.\n35–50 dtk — Kolam infinity saat golden hour, sorot detail kayu jati & batu alam.\n50–60 dtk — Ajakan: “DM untuk jadwal viewing privat minggu ini.”\n\nCaption: Vila 5 kamar di Uluwatu — Rp 14 M. Hak milik. #propertibali #villauluwatu" },
-  { t: "Carousel: 5 tips beli vila di Bali", c: "Post", img: "/blog-1.jpg", meta: "1:1 · 5 slide", body: "5 tips sebelum membeli vila di Bali:\n\n1. Pastikan status tanah — Hak Milik, Hak Pakai, atau leasehold — dan sisa masa berlakunya.\n2. Cek zonasi (ITR/PKKPR); tidak semua area boleh untuk vila komersial.\n3. Hitung yield bersih setelah biaya manajemen, pajak, dan perawatan — bukan hanya yield kotor.\n4. Verifikasi IMB/PBG dan pastikan bangunan sesuai izin.\n5. Gunakan notaris & agen tepercaya; jangan transfer sebelum due diligence selesai.\n\nSimpan & bagikan ke teman yang sedang cari vila!" },
-  { t: "Video: Investasi properti Bali", c: "YouTube", img: "/about/transform.jpg", meta: "16:9 · 3 mnt", body: "Deskripsi video:\n\nKita bahas mengapa Bali tetap jadi salah satu pasar properti paling menarik di Asia Tenggara pada 2026 — dari pertumbuhan pariwisata, permintaan sewa harian, hingga skema kepemilikan untuk WNA.\n\nAgenda:\n• Tren harga per area (Canggu, Uluwatu, Ubud)\n• Perbandingan sewa harian vs tahunan\n• Struktur legal yang aman untuk pembeli asing\n• Studi kasus: ROI sebuah vila 3 kamar\n\nHubungi Kirana untuk konsultasi gratis 15 menit." },
+  { t: "Panduan harga vila Canggu 2026", c: "Artikel", img: "/blog-0.webp", meta: "6 mnt baca · SEO", body: "Harga vila di Canggu terus menguat sepanjang 2026, didorong permintaan sewa jangka panjang dan pembeli asing lewat skema hak pakai.\n\nUntuk vila 3–4 kamar dengan kolam pribadi, kisaran harga kini Rp 6–12 miliar tergantung jarak ke pantai Berawa dan Pererenan. Area yang sedang naik daun seperti Nyanyi dan Cemagi menawarkan harga 15–20% lebih rendah dengan potensi apresiasi tinggi.\n\nTips: bandingkan harga per meter persegi tanah, bukan hanya harga total — ini ukuran paling jujur untuk menilai apakah sebuah listing wajar." },
+  { t: "Reels: Tur 60 detik Vila Uluwatu", c: "Reels", img: "/about/hero.webp", meta: "9:16 · 60 dtk", body: "Naskah reels (0–60 dtk):\n\n0–5 dtk — Drone melintas tebing, teks: “Bangun di atas Samudra Hindia.”\n5–35 dtk — Sapuan interior: ruang tamu terbuka, dapur granit, kamar utama berbalkon.\n35–50 dtk — Kolam infinity saat golden hour, sorot detail kayu jati & batu alam.\n50–60 dtk — Ajakan: “DM untuk jadwal viewing privat minggu ini.”\n\nCaption: Vila 5 kamar di Uluwatu — Rp 14 M. Hak milik. #propertibali #villauluwatu" },
+  { t: "Carousel: 5 tips beli vila di Bali", c: "Post", img: "/blog-1.webp", meta: "1:1 · 5 slide", body: "5 tips sebelum membeli vila di Bali:\n\n1. Pastikan status tanah — Hak Milik, Hak Pakai, atau leasehold — dan sisa masa berlakunya.\n2. Cek zonasi (ITR/PKKPR); tidak semua area boleh untuk vila komersial.\n3. Hitung yield bersih setelah biaya manajemen, pajak, dan perawatan — bukan hanya yield kotor.\n4. Verifikasi IMB/PBG dan pastikan bangunan sesuai izin.\n5. Gunakan notaris & agen tepercaya; jangan transfer sebelum due diligence selesai.\n\nSimpan & bagikan ke teman yang sedang cari vila!" },
+  { t: "Video: Investasi properti Bali", c: "YouTube", img: "/about/transform.webp", meta: "16:9 · 3 mnt", body: "Deskripsi video:\n\nKita bahas mengapa Bali tetap jadi salah satu pasar properti paling menarik di Asia Tenggara pada 2026 — dari pertumbuhan pariwisata, permintaan sewa harian, hingga skema kepemilikan untuk WNA.\n\nAgenda:\n• Tren harga per area (Canggu, Uluwatu, Ubud)\n• Perbandingan sewa harian vs tahunan\n• Struktur legal yang aman untuk pembeli asing\n• Studi kasus: ROI sebuah vila 3 kamar\n\nHubungi Kirana untuk konsultasi gratis 15 menit." },
 ];
 const CONTENT_HISTORY = [
-  { t: "5 alasan investasi Uluwatu", c: "Artikel", img: "/about/invite.jpg", date: "2 Sep 2026", posted: true, shared: true, down: false },
-  { t: "Panduan KPR pembeli pertama", c: "Artikel", img: "/blog-2.jpg", date: "28 Agu 2026", posted: true, shared: false, down: true },
-  { t: "Tur Vila Seminyak Retreat", c: "Reels", img: "/hero.jpg", date: "20 Agu 2026", posted: true, shared: true, down: true },
-  { t: "Harga tanah Pererenan", c: "Artikel", img: "/about/vision-hill.jpg", date: "—", posted: false, shared: false, down: false },
+  { t: "5 alasan investasi Uluwatu", c: "Artikel", img: "/about/invite.webp", date: "2 Sep 2026", posted: true, shared: true, down: false },
+  { t: "Panduan KPR pembeli pertama", c: "Artikel", img: "/blog-2.webp", date: "28 Agu 2026", posted: true, shared: false, down: true },
+  { t: "Tur Vila Seminyak Retreat", c: "Reels", img: "/hero.webp", date: "20 Agu 2026", posted: true, shared: true, down: true },
+  { t: "Harga tanah Pererenan", c: "Artikel", img: "/about/vision-hill.webp", date: "—", posted: false, shared: false, down: false },
 ];
 const CONTENT_TIPS = [
   "Pembeli sering mencari “vila dekat pantai Canggu” — buat konten khusus area itu.",
@@ -303,7 +303,7 @@ function MemberDashboard() {
             <span style={{ marginLeft: "auto", fontSize: ".74rem", fontWeight: 700, color: "var(--good)", background: "color-mix(in oklab, var(--good) 14%, var(--surface))", padding: ".2rem .5rem", borderRadius: 999 }}>Skor {SCORE} · Baik</span>
           </div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/hero.jpg" alt="Preview website member" style={{ width: "100%", display: "block", maxHeight: 240, objectFit: "cover" }} />
+          <img src="/hero.webp" alt="Preview website member" style={{ width: "100%", display: "block", maxHeight: 240, objectFit: "cover" }} />
         </div>
         <p className="muted" style={{ fontSize: ".88rem", marginTop: 12 }}>Analisa: SEO & GEO kuat, tingkatkan konten sosial dan reputasi untuk menembus skor 85+.</p>
       </Card>
@@ -581,7 +581,7 @@ function MemberDashboard() {
         {(() => {
           const focus = rendering || lastDone;
           const fo = focus ? focus.orient : orient;
-          const fPoster = fo === "9:16" ? "/hero.jpg" : "/about/hero.jpg";
+          const fPoster = fo === "9:16" ? "/hero.webp" : "/about/hero.webp";
           return (
             <div style={{ borderRadius: 14, overflow: "hidden", border: "1px solid var(--line)", background: "var(--ink)", position: "relative", aspectRatio: arCss(fo), maxHeight: 400, margin: "0 auto", width: fo === "9:16" ? "min(100%, 250px)" : "100%" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}

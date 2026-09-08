@@ -43,9 +43,9 @@ const CENTRES = [
 ];
 
 const POSTS = [
-  { cat: "Pasar", title: "Panduan harga properti Kedungu 2026", ex: "Tren harga tanah dan vila di kawasan pertumbuhan baru Bali — dan apa artinya bagi pembeli Anda.", read: "8 menit", img: "/blog-0.jpg" },
-  { cat: "Tips", title: "5 cara video listing menaikkan closing", ex: "Mengapa satu video 60 detik mengalahkan 20 foto — dan cara membuatnya dalam hitungan menit dengan AI.", read: "5 menit", img: "/blog-1.jpg" },
-  { cat: "Ditemukan", title: "SEO lokal & pencarian AI untuk agen", ex: "Agar nama Anda muncul saat calon pembeli mencari “agen properti di area Anda” — di Google dan AI.", read: "6 menit", img: "/blog-2.jpg" },
+  { cat: "Pasar", title: "Panduan harga properti Kedungu 2026", ex: "Tren harga tanah dan vila di kawasan pertumbuhan baru Bali — dan apa artinya bagi pembeli Anda.", read: "8 menit", img: "/blog-0.webp" },
+  { cat: "Tips", title: "5 cara video listing menaikkan closing", ex: "Mengapa satu video 60 detik mengalahkan 20 foto — dan cara membuatnya dalam hitungan menit dengan AI.", read: "5 menit", img: "/blog-1.webp" },
+  { cat: "Ditemukan", title: "SEO lokal & pencarian AI untuk agen", ex: "Agar nama Anda muncul saat calon pembeli mencari “agen properti di area Anda” — di Google dan AI.", read: "6 menit", img: "/blog-2.webp" },
 ];
 
 const TESTI = [
@@ -61,7 +61,7 @@ export default function Home() {
       <section style={{ position: "relative", minHeight: "100svh", display: "grid", placeItems: "center", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0, WebkitMaskImage: "linear-gradient(180deg, #000 70%, transparent 100%)", maskImage: "linear-gradient(180deg, #000 70%, transparent 100%)" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/hero-top.jpg" alt="Vila properti mewah saat golden hour" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+          <img src="/hero-top.webp" alt="Vila properti mewah saat golden hour" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
           <div className="photo-scrim" />
         </div>
         <div className="wrap" style={{ position: "relative", zIndex: 1, textAlign: "center", padding: "110px 0 96px" }}>
@@ -95,7 +95,7 @@ export default function Home() {
               <div key={t} className="jnode">
                 <div className="jicon">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={`/icons/val-${i}.png`} alt="" width={58} height={58} />
+                  <img src={`/icons/val-${i}.webp`} alt="" width={58} height={58} />
                 </div>
                 <div style={{ fontWeight: 600, fontSize: "1.12rem", marginTop: 16 }}>{t}</div>
                 <div className="muted" style={{ fontSize: ".95rem", marginTop: 5 }}>{d}</div>
@@ -132,7 +132,7 @@ export default function Home() {
           </div>
           <div style={{ position: "relative", minHeight: 360 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/punch.jpg" alt="Vila properti premium di Indonesia saat golden hour — kehadiran yang membangun kepercayaan" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+            <img src="/punch.webp" alt="Vila properti premium di Indonesia saat golden hour — kehadiran yang membangun kepercayaan" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
           </div>
         </div>
       </section>
@@ -166,7 +166,7 @@ export default function Home() {
           </div>
           <div style={{ position: "relative", aspectRatio: "16 / 7.6", background: "var(--surface-2)" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/hero.jpg" alt="Contoh website agen properti Kirana Sutanto yang dibuat dengan cakra" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <img src="/hero.webp" alt="Contoh website agen properti Kirana Sutanto yang dibuat dengan cakra" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, color-mix(in oklab, #1a130a 62%, transparent), transparent 60%)" }} />
             <div style={{ position: "absolute", left: "6%", bottom: "13%", maxWidth: "46ch", color: "#fff" }}>
               <span className="eyebrow" style={{ color: "#f0e6cf" }}>Kirana Sutanto · Spesialis Vila Bali</span>
@@ -340,7 +340,7 @@ export default function Home() {
         <div className="card" data-sub style={{ overflow: "hidden", display: "grid", gridTemplateColumns: ".82fr 1.18fr", background: "var(--surface-2)", borderColor: "color-mix(in oklab, var(--brand) 22%, var(--line))" }}>
           <div style={{ position: "relative", minHeight: 300 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/subscribe.jpg" alt="Amplop krem dengan segel lilin kuningan dan kopi — buletin cakra untuk agen properti" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+            <img src="/subscribe.webp" alt="Amplop krem dengan segel lilin kuningan dan kopi — buletin cakra untuk agen properti" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
           </div>
           <div style={{ padding: "clamp(32px, 4.5vw, 60px)", display: "flex", flexDirection: "column", justifyContent: "center" }}>
             <span className="hand gold" style={{ fontSize: "1.8rem", display: "inline-block", transform: "rotate(-2deg)" }}>tetap relevan</span>
