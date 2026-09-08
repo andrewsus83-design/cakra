@@ -22,35 +22,31 @@ export function SiteFooter() {
   if (pathname === "/demo" || pathname.startsWith("/demo/") || pathname === "/admin" || pathname.startsWith("/admin/") || pathname === "/login" || pathname === "/signup" || pathname === "/onboarding") return null;
   return (
     <footer style={{ borderTop: "1px solid var(--line)", background: "var(--surface-2)" }}>
-      <div className="wrap" style={{ padding: "48px 0 40px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1.4fr repeat(3, 1fr)", gap: 32 }} className="cakra-foot-grid">
+      <div className="wrap" style={{ padding: "30px 0 22px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1.5fr repeat(3, 1fr)", gap: "20px 24px" }} className="cakra-foot-grid">
           <div>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <CakraMark size={42} />
-              <span className="hand" style={{ fontSize: "2.1rem", fontWeight: 700, lineHeight: 1 }}>cakra</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <CakraMark size={30} />
+              <span className="hand" style={{ fontSize: "1.6rem", fontWeight: 700, lineHeight: 1 }}>cakra</span>
             </div>
-            <p className="muted" style={{ maxWidth: "34ch", marginTop: 12, fontSize: ".92rem" }}>
-              Roda kehadiran untuk agen properti cerdas. Punya website, selalu update, kredibel, dan mudah ditemukan.
+            <p className="muted" style={{ maxWidth: "38ch", marginTop: 8, fontSize: ".85rem", lineHeight: 1.5 }}>
+              Roda kehadiran untuk agen properti cerdas — punya website, selalu update, kredibel, dan mudah ditemukan.
             </p>
-            <p className="hand gold" style={{ fontSize: "1.35rem", marginTop: 14, marginBottom: 2 }}>
-              be the agent AI can&apos;t ignore
-            </p>
-            <p className="muted" style={{ fontSize: ".9rem", margin: 0 }}>Jadi agen yang tak bisa diabaikan AI.</p>
-            <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
+            <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
               {SOCIALS.map(([label, href, d]) => (
-                <a key={label} href={href} aria-label={label} style={{ width: 38, height: 38, borderRadius: 10, border: "1px solid var(--line-2)", display: "grid", placeItems: "center", color: "var(--ink-2)", background: "var(--surface)" }}>
-                  <svg viewBox="0 0 24 24" width={18} height={18} fill="currentColor" aria-hidden="true"><path d={d} /></svg>
+                <a key={label} href={href} aria-label={label} style={{ width: 32, height: 32, borderRadius: 9, border: "1px solid var(--line-2)", display: "grid", placeItems: "center", color: "var(--ink-2)", background: "var(--surface)" }}>
+                  <svg viewBox="0 0 24 24" width={16} height={16} fill="currentColor" aria-hidden="true"><path d={d} /></svg>
                 </a>
               ))}
             </div>
           </div>
           {COLS.map((c) => (
             <div key={c.title}>
-              <div className="eyebrow" style={{ marginBottom: 14 }}>{c.title}</div>
-              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 9 }}>
+              <div className="eyebrow" style={{ marginBottom: 10, fontSize: ".76rem" }}>{c.title}</div>
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 7 }}>
                 {c.links.map(([label, href]) => (
                   <li key={label}>
-                    <Link href={href} className="muted" style={{ textDecoration: "none", fontSize: ".9rem" }}>
+                    <Link href={href} className="muted" style={{ textDecoration: "none", fontSize: ".86rem" }}>
                       {label}
                     </Link>
                   </li>
@@ -59,8 +55,8 @@ export function SiteFooter() {
             </div>
           ))}
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 12, marginTop: 40, paddingTop: 22, borderTop: "1px solid var(--line)", color: "var(--muted)", fontSize: ".82rem" }}>
-          <span>© {new Date().getFullYear()} cakra · Indonesia — Situs milik Anda. Selalu terbarui. Mudah ditemukan. Tetap relevan.</span>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8, marginTop: 22, paddingTop: 14, borderTop: "1px solid var(--line)", color: "var(--muted)", fontSize: ".78rem" }}>
+          <span>© {new Date().getFullYear()} cakra · Indonesia — <span className="hand gold" style={{ fontSize: "1rem" }}>be the agent AI can&apos;t ignore</span></span>
           <span className="mono">SEO · GEO · Social</span>
         </div>
       </div>
