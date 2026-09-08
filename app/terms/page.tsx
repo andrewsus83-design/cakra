@@ -24,7 +24,7 @@ export default function Page() {
           "Anda bertanggung jawab menjaga kerahasiaan kredensial akun dan atas semua aktivitas di dalamnya. Anda setuju memberikan informasi yang akurat dan memperbaruinya bila berubah.",
         ] },
         { h: "Langganan & pembayaran", body: [
-          "cakra menawarkan paket Gratis dan paket berbayar Pro seharga Rp 300.000 per bulan. Rincian dan cakupan tiap paket tersedia di halaman Harga.",
+          "cakra menawarkan paket Pro seharga Rp 300.000 per bulan. Paket Business (segera hadir) dan Studio/Agensi tersedia sesuai kebutuhan. Rincian dan cakupan tiap paket ada di halaman Harga.",
           "Langganan berbayar diperpanjang otomatis setiap periode hingga Anda membatalkannya. Anda dapat berhenti kapan saja tanpa penalti; akses berbayar berlaku hingga akhir periode yang telah dibayar.",
           "Harga dapat berubah sewaktu-waktu, dengan pemberitahuan sebelumnya. Pajak yang berlaku dapat ditambahkan sesuai ketentuan.",
         ] },

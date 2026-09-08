@@ -51,9 +51,9 @@ const FAQ_SECTIONS: { title: string; items: { q: string; a: string }[] }[] = [
   {
     title: "Harga & Langganan",
     items: [
-      { q: "Berapa biayanya?", a: "cakra bisa dimulai gratis. Paket Pro Rp 300.000/bulan membuka semua alat: publish + domain sendiri, listing tak terbatas, studio video & konten AI, dan GEO penuh. Rincian lengkap ada di halaman Harga." },
-      { q: "Apakah harganya sepadan?", a: "Rp 300.000/bulan setara kurang dari 0,1% komisi dari satu vila Rp 3 M. Satu listing tambahan yang closing sudah menutup biaya cakra untuk setahun penuh." },
-      { q: "Apakah ada masa coba gratis?", a: "Ya. Mulai gratis tanpa kartu kredit — bangun situs & Skor Cakra Anda, rasakan hasilnya, lalu upgrade ke Pro saat Anda siap." },
+      { q: "Berapa biayanya?", a: "Paket Pro Rp 300.000/bulan membuka semua alat: website + domain sendiri, listing tak terbatas, studio video & konten AI, dan GEO penuh. Paket Business — otomasi media sosial, analitik mendalam, integrasi WhatsApp, dan manajemen iklan — segera hadir. Rincian ada di halaman Harga." },
+      { q: "Apakah harganya sepadan?", a: "Untuk agen yang menutup transaksi miliaran rupiah tiap bulan, Rp 300.000 adalah bagian kecil dari nilai satu listing tambahan yang closing — sementara cakra bekerja membangun kehadiran Anda setiap hari." },
+      { q: "Apakah saya bisa mencoba sebelum membayar?", a: "Anda bisa menjelajah contoh situs nyata yang dibuat cakra (kirana.cakra.xyz) kapan saja, dan memulai onboarding tanpa kartu kredit. Langganan bulanan, berhenti kapan saja tanpa penalti." },
       { q: "Bisakah saya berhenti kapan saja?", a: "Bisa. Langganan bulanan tanpa kontrak jangka panjang — berhenti kapan saja, tanpa penalti. Website, domain, konten, dan lead tetap milik Anda." },
     ],
   },
@@ -123,7 +123,7 @@ export default function Page() {
           <p className="muted" style={{ margin: "10px auto 22px", maxWidth: "44ch", fontSize: "1.05rem" }}>Tim kami — sesama orang properti — siap membantu Anda memulai.</p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <Link href="/harga" className="btn btn-ghost" style={{ fontSize: "1rem", padding: ".85rem 1.6rem" }}>Lihat harga</Link>
-            <Link href="/onboarding" className="btn btn-brand" style={{ fontSize: "1rem", padding: ".85rem 1.6rem" }}>Mulai gratis</Link>
+            <Link href="/onboarding" className="btn btn-brand" style={{ fontSize: "1rem", padding: ".85rem 1.6rem" }}>Mulai sekarang</Link>
           </div>
         </div>
       </section>

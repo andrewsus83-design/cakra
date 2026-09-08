@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Daftar gratis",
+  title: "Daftar",
   description: "Buat akun cakra dan mulai bangun kehadiran digital Anda.",
   robots: { index: false, follow: false },
 };

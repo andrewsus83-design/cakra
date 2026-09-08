@@ -24,7 +24,7 @@ const FEATURES = [
   ["Manajemen listing", "Tambah, ubah status, dan kelola listing. Setiap unit punya halaman dan skor pencarian lokal (GEO)-nya sendiri."],
   ["Video listing AI", "Ubah foto dan deskripsi menjadi film properti 45–90 detik. ~20% animasi sinematik Kling 3, 80% editorial natural — ken burns, pan, dan zoom."],
   ["Konten & blog otomatis", "Artikel pasar dan panduan area yang relevan dengan properti Anda — dari riset AI, siap terbit untuk menarik pembeli."],
-  ["Pustaka aset gratis", "Ribuan gambar dan audio siap pakai untuk video dan konten — tanpa biaya lisensi tambahan."],
+  ["Pustaka aset bebas royalti", "Ribuan gambar dan audio siap pakai untuk video dan konten — tanpa biaya lisensi tambahan."],
   ["Skor kehadiran", "Pantau SEO, GEO, dan social search dalam satu roda cakra. Tahu persis langkah berikutnya untuk bertumbuh."],
 ];
 
@@ -70,7 +70,7 @@ export default function Home() {
             mudah ditemukan di Google, pencarian AI, dan media sosial — agar Anda jadi agen yang tak bisa diabaikan.
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 36, justifyContent: "center" }}>
-            <Link href="/onboarding" className="btn btn-brand" style={{ fontSize: "1.05rem", padding: ".95rem 1.8rem" }}>Mulai gratis</Link>
+            <Link href="/onboarding" className="btn btn-brand" style={{ fontSize: "1.05rem", padding: ".95rem 1.8rem" }}>Mulai sekarang</Link>
             <Link href="/demo" className="btn btn-on-photo" style={{ fontSize: "1.05rem", padding: ".95rem 1.8rem" }}>Lihat contoh website →</Link>
           </div>
           <p className="on-photo-soft" style={{ marginTop: 26, fontSize: ".98rem" }}>
@@ -224,26 +224,27 @@ export default function Home() {
       <section className="wrap" style={{ padding: "56px 0 24px" }}>
         <SectionTitle hand="harga jujur" max="24ch">Satu harga, semua alat kehadiran Anda.</SectionTitle>
         <p className="lead" style={{ textAlign: "center", margin: "-30px auto 40px", maxWidth: "60ch" }}>
-          Rp 300rb/bulan — kurang dari 0,1% komisi dari satu vila Rp 3 M. Satu listing tambahan yang closing menutup biaya cakra setahun penuh.
+          Rp 300rb/bulan untuk website, listing, studio video & konten AI, dan Skor Cakra. Business — otomasi, analitik, WhatsApp & ads — segera hadir.
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20, alignItems: "stretch" }}>
           {[
-            { name: "Gratis", price: "Rp 0", per: "", note: "untuk memulai", feats: ["Situs draf di subdomain cakra", "Skor Cakra", "Hingga 3 listing"], cta: "Mulai gratis", href: "/onboarding", hi: false },
-            { name: "Pro", price: "Rp 300rb", per: "/bulan", note: "paling populer", feats: ["Publish + domain sendiri", "Listing tak terbatas", "Studio video & konten AI", "GEO penuh + jadwal otomatis"], cta: "Pilih Pro", href: "/harga", hi: true },
-            { name: "Studio / Agensi", price: "Hubungi kami", per: "", note: "untuk tim & brand", feats: ["Multi-seat & peran tim", "Pustaka brand & aset bersama", "Analitik tim"], cta: "Bicara dengan kami", href: "/contact", hi: false },
+            { name: "Pro", price: "Rp 300rb", per: "/bulan", note: "paling populer", feats: ["Website + domain sendiri", "Listing tak terbatas", "Studio video & konten AI", "GEO penuh + jadwal otomatis"], cta: "Mulai sekarang", href: "/onboarding", hi: true, soon: false },
+            { name: "Business", price: "Segera hadir", per: "", note: "coming soon", feats: ["Otomasi media sosial", "Analitik mendalam", "Integrasi WhatsApp", "Manajemen & analitik ads"], cta: "Beri tahu saya", href: "/contact", hi: false, soon: true },
+            { name: "Studio / Agensi", price: "Hubungi kami", per: "", note: "untuk tim & brand", feats: ["Multi-seat & peran tim", "Pustaka brand & aset bersama", "Analitik tim"], cta: "Bicara dengan kami", href: "/contact", hi: false, soon: false },
           ].map((t) => (
-            <div key={t.name} className="card" style={{ padding: "28px 26px", display: "flex", flexDirection: "column", position: "relative", borderColor: t.hi ? "var(--brand)" : "var(--line)", borderWidth: t.hi ? 2 : 1, background: t.hi ? "color-mix(in oklab, var(--brand) 6%, var(--surface))" : "var(--surface)" }}>
+            <div key={t.name} className="card" style={{ padding: "28px 26px", display: "flex", flexDirection: "column", position: "relative", borderColor: t.hi ? "var(--brand)" : "var(--line)", borderWidth: t.hi ? 2 : 1, background: t.hi ? "color-mix(in oklab, var(--brand) 6%, var(--surface))" : "var(--surface)", opacity: t.soon ? 0.92 : 1 }}>
               {t.hi && <span className="pill" style={{ position: "absolute", top: -12, left: "50%", transform: "translateX(-50%)", background: "var(--brand)", color: "#fff", fontSize: ".72rem", fontWeight: 700 }}>Paling populer</span>}
+              {t.soon && <span className="pill" style={{ position: "absolute", top: -12, left: "50%", transform: "translateX(-50%)", background: "var(--ink)", color: "var(--bg)", fontSize: ".72rem", fontWeight: 700 }}>Coming soon</span>}
               <div className="eyebrow" style={{ color: t.hi ? "var(--brand)" : "var(--muted)" }}>{t.name}</div>
               <div style={{ display: "flex", alignItems: "baseline", gap: 4, margin: "8px 0 2px" }}>
-                <span className="display" style={{ fontSize: "2rem", fontWeight: 700 }}>{t.price}</span>
+                <span className="display" style={{ fontSize: t.soon ? "1.5rem" : "2rem", fontWeight: 700 }}>{t.price}</span>
                 {t.per && <span className="muted mono" style={{ fontSize: ".9rem" }}>{t.per}</span>}
               </div>
               <div className="muted" style={{ fontSize: ".85rem", marginBottom: 16 }}>{t.note}</div>
               <ul style={{ listStyle: "none", padding: 0, margin: "0 0 22px", display: "grid", gap: 9 }}>
                 {t.feats.map((f) => (
                   <li key={f} style={{ display: "flex", gap: 9, fontSize: ".95rem", alignItems: "flex-start" }}>
-                    <span style={{ color: "var(--good)", flex: "none", marginTop: 2 }} aria-hidden="true">
+                    <span style={{ color: t.soon ? "var(--muted)" : "var(--good)", flex: "none", marginTop: 2 }} aria-hidden="true">
                       <svg viewBox="0 0 24 24" width={16} height={16} fill="currentColor"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.42z" /></svg>
                     </span>
                     {f}
@@ -271,11 +272,11 @@ export default function Home() {
               Siap menjadi agen yang tak terlewatkan?
             </h2>
             <p style={{ color: "color-mix(in oklab, var(--bg) 78%, transparent)", maxWidth: "52ch", margin: "18px auto 30px", fontSize: "1.18rem" }}>
-              Mulai dari onboarding singkat — cakra yang membangun kehadiran digital Anda. Gratis untuk memulai.
+              Mulai dari onboarding singkat — cakra yang membangun kehadiran digital Anda. Tanpa kartu kredit.
             </p>
-            <Link href="/signup" className="btn btn-brand" style={{ fontSize: "1.08rem", padding: ".95rem 1.9rem" }}>Mulai gratis sekarang</Link>
+            <Link href="/onboarding" className="btn btn-brand" style={{ fontSize: "1.08rem", padding: ".95rem 1.9rem" }}>Mulai sekarang</Link>
             <p style={{ color: "color-mix(in oklab, var(--bg) 62%, transparent)", margin: "20px auto 0", fontSize: ".92rem" }}>
-              Website, domain, konten, dan lead selalu milik Anda — bawa pergi kapan saja. Tanpa kartu kredit.
+              Website, domain, konten, dan lead selalu milik Anda — bawa pergi kapan saja.
             </p>
           </div>
         </div>

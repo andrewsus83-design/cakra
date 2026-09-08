@@ -3,15 +3,25 @@ import { useEffect, useRef, useState } from "react";
 import { CakraMark } from "@/components/CakraMark";
 import { StaffAdmin } from "./StaffAdmin";
 
-type Sec = "home" | "listing" | "editor" | "content" | "assets" | "profile";
+type Sec = "home" | "prospek" | "listing" | "editor" | "content" | "assets" | "profile";
 
 const NAV: { id: Sec; label: string; icon: string }[] = [
   { id: "home", label: "Dashboard", icon: "M3 3h8v8H3zM13 3h8v5h-8zM13 10h8v11h-8zM3 13h8v8H3z" },
+  { id: "prospek", label: "Prospek", icon: "M4 4h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Zm0 10v5h16v-5h-4a3 3 0 0 1-6 0H4Z" },
   { id: "listing", label: "Listing", icon: "M4 5h16v3H4zM4 10.5h16v3H4zM4 16h16v3H4z" },
   { id: "editor", label: "Editor", icon: "M4 4h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Zm6 3v6l5-3z" },
-  { id: "content", label: "Content", icon: "M6 2h9l5 5v14.2A.8.8 0 0 1 19.2 22H6a.8.8 0 0 1-.8-.8V2.8A.8.8 0 0 1 6 2Zm2 9h8v1.8H8zm0 4h8v1.8H8z" },
-  { id: "assets", label: "Assets", icon: "M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm2.5 3a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3ZM5 17h14l-4.5-6-3.5 4.5-2-2.5L5 17Z" },
+  { id: "content", label: "Konten", icon: "M6 2h9l5 5v14.2A.8.8 0 0 1 19.2 22H6a.8.8 0 0 1-.8-.8V2.8A.8.8 0 0 1 6 2Zm2 9h8v1.8H8zm0 4h8v1.8H8z" },
+  { id: "assets", label: "Aset", icon: "M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm2.5 3a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3ZM5 17h14l-4.5-6-3.5 4.5-2-2.5L5 17Z" },
 ];
+const LEADS = [
+  { name: "Budi Santoso", src: "WhatsApp", listing: "Vila Uluwatu Cliff", msg: "Halo, apakah vila Uluwatu masih tersedia? Saya tertarik untuk viewing akhir pekan ini.", age: "18 menit lalu", status: "Baru", wa: "6281234567890" },
+  { name: "Sarah Wijaya", src: "Form situs", listing: "Vila Canggu Estate", msg: "Mohon info harga terbaik dan skema pembayaran untuk Vila Canggu Estate.", age: "2 jam lalu", status: "Baru", wa: "6281322221111" },
+  { name: "David Lim", src: "Instagram", listing: "Vila Seminyak Retreat", msg: "Interested in a long-term rental. Is it available from next month?", age: "Kemarin", status: "Dihubungi", wa: "6581234567" },
+  { name: "Maria Tan", src: "WhatsApp", listing: "Townhouse Sanur", msg: "Sudah lihat videonya, bagus sekali. Bisa jadwalkan viewing minggu depan?", age: "Kemarin", status: "Viewing", wa: "6281199990000" },
+  { name: "Rangga P.", src: "Form situs", listing: "Vila Uluwatu Cliff", msg: "Apakah harga masih bisa nego? Saya serius dan siap DP.", age: "2 hari lalu", status: "Nego", wa: "6281277778888" },
+];
+const LEAD_STATUSES = ["Semua", "Baru", "Dihubungi", "Viewing", "Nego"] as const;
+const LEAD_TONE: Record<string, string> = { Baru: "--c-heart", Dihubungi: "--c-eye", Viewing: "--c-throat", Nego: "--c-solar", Closing: "--c-sacral" };
 
 const CENTERS = [["Website", 88, "--c-crown"], ["Listing", 74, "--c-eye"], ["Konten", 70, "--c-throat"], ["SEO", 72, "--c-heart"], ["GEO", 66, "--c-solar"], ["Social", 61, "--c-sacral"], ["Reputasi", 80, "--c-root"]] as const;
 const PERF = [["Kunjungan / bln", "3.240", "+14%", "--c-eye"], ["Lead masuk", "48", "+9", "--c-heart"], ["Listing aktif", "12", "2 baru", "--c-throat"], ["Peringkat SEO", "#3", "“vila Canggu”", "--c-solar"]] as const;
@@ -86,12 +96,12 @@ const CHANNELS = [
   { id: "youtube", name: "YouTube", sub: "1.240 subscriber", icon: "M21.6 7.2a2.6 2.6 0 0 0-1.8-1.8C18 5 12 5 12 5s-6 0-7.8.4A2.6 2.6 0 0 0 2.4 7.2 27 27 0 0 0 2 12a27 27 0 0 0 .4 4.8 2.6 2.6 0 0 0 1.8 1.8C6 19 12 19 12 19s6 0 7.8-.4a2.6 2.6 0 0 0 1.8-1.8A27 27 0 0 0 22 12a27 27 0 0 0-.4-4.8ZM10 15V9l5 3-5 3Z", accent: "--c-root" },
 ] as const;
 type DashTab = (typeof CHANNELS)[number]["id"];
-const INSIGHTS = [
-  { tag: "Sorotan", tone: "--c-solar", t: "Listing Vila Uluwatu naik 32% minggu ini", b: "Kunjungan halaman melonjak setelah reels tur dipublikasikan. Pertimbangkan promosi berbayar selagi momentum tinggi.", when: "2 jam lalu" },
-  { tag: "Insight", tone: "--c-eye", t: "Pencarian “vila Canggu dekat pantai” meningkat", b: "Volume pencarian area ini +18% bulan ini. Buat konten khusus untuk menangkap minat pembeli.", when: "Kemarin" },
-  { tag: "Peluang", tone: "--c-heart", t: "3 lead belum ditindaklanjuti lebih dari 48 jam", b: "Respon cepat menaikkan konversi hingga 7×. Balas sekarang untuk menjaga peluang tetap hangat.", when: "Kemarin" },
-  { tag: "Sorotan", tone: "--c-throat", t: "Reels Anda menembus 12.400 penayangan", b: "Video pendek jadi kanal pertumbuhan tercepat Anda bulan ini — jadwalkan 2 lagi minggu depan.", when: "3 hari lalu" },
-  { tag: "Insight", tone: "--c-crown", t: "Skor GEO Anda naik ke 66", b: "Mesin pencari AI mulai mengutip profil Anda. Tambahkan FAQ terstruktur untuk mendorong lebih tinggi.", when: "4 hari lalu" },
+const INSIGHTS: { tag: string; tone: string; t: string; b: string; when: string; act: [string, Sec] }[] = [
+  { tag: "Peluang", tone: "--c-heart", t: "3 prospek belum ditindaklanjuti lebih dari 48 jam", b: "Respon cepat menaikkan konversi hingga 7×. Balas sekarang untuk menjaga peluang tetap hangat.", when: "Kemarin", act: ["Balas prospek →", "prospek"] },
+  { tag: "Sorotan", tone: "--c-solar", t: "Listing Vila Uluwatu naik 32% minggu ini", b: "Kunjungan halaman melonjak setelah reels tur dipublikasikan. Pertimbangkan promosi berbayar selagi momentum tinggi.", when: "2 jam lalu", act: ["Lihat listing →", "listing"] },
+  { tag: "Insight", tone: "--c-eye", t: "Pencarian “vila Canggu dekat pantai” meningkat", b: "Volume pencarian area ini +18% bulan ini. Buat konten khusus untuk menangkap minat pembeli.", when: "Kemarin", act: ["Buat konten →", "content"] },
+  { tag: "Sorotan", tone: "--c-throat", t: "Reels Anda menembus 12.400 penayangan", b: "Video pendek jadi kanal pertumbuhan tercepat Anda bulan ini — jadwalkan 2 lagi minggu depan.", when: "3 hari lalu", act: ["Buat reels →", "editor"] },
+  { tag: "Insight", tone: "--c-crown", t: "Skor GEO Anda naik ke 66", b: "Mesin pencari AI mulai mengutip profil Anda. Tambahkan FAQ terstruktur untuk mendorong lebih tinggi.", when: "4 hari lalu", act: ["Lihat analisa Web →", "home"] },
 ];
 const WEB_METRICS = [["Kunjungan / bln", "3.240", "+14%", "--c-eye"], ["Pengunjung unik", "2.180", "+9%", "--c-heart"], ["Rasio pentalan", "38%", "−4%", "--c-throat"], ["Kecepatan (LCP)", "1,8 dtk", "Baik", "--c-solar"], ["Peringkat SEO", "#3", "“vila Canggu”", "--c-root"], ["Skor GEO", "66", "+6", "--c-crown"]] as const;
 const WEB_PAGES = [["/listing/vila-uluwatu-cliff", "1.240"], ["/", "980"], ["/tentang", "410"], ["/listing/canggu-estate", "360"]] as const;
@@ -136,6 +146,8 @@ function MemberDashboard() {
   const [sec, setSec] = useState<Sec>("home");
   const [dashTab, setDashTab] = useState<DashTab>("insights");
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileNav, setMobileNav] = useState(false);
+  const [leadFilter, setLeadFilter] = useState<string>("Semua");
   const [orient, setOrient] = useState<"9:16" | "16:9">("9:16");
   const [assetFmt, setAssetFmt] = useState("1:1");
   const [assetTab, setAssetTab] = useState<"gambar" | "bgm" | "voice">("gambar");
@@ -205,7 +217,8 @@ function MemberDashboard() {
                 <span className="muted mono" style={{ fontSize: ".72rem" }}>{it.when}</span>
               </div>
               <div style={{ fontWeight: 600, fontSize: ".96rem", lineHeight: 1.3 }}>{it.t}</div>
-              <p className="muted" style={{ fontSize: ".86rem", lineHeight: 1.55, margin: "4px 0 0" }}>{it.b}</p>
+              <p className="muted" style={{ fontSize: ".86rem", lineHeight: 1.55, margin: "4px 0 10px" }}>{it.b}</p>
+              <button onClick={() => { setSec(it.act[1]); if (it.act[1] === "home") setDashTab("web"); }} style={{ ...btn("ghost"), padding: ".38rem .8rem", fontSize: ".8rem", color: `var(${it.tone})`, borderColor: `color-mix(in oklab, var(${it.tone}) 40%, var(--line-2))` }}>{it.act[0]}</button>
             </div>
           </div>
         ))}
@@ -279,7 +292,7 @@ function MemberDashboard() {
         <div style={{ borderRadius: 14, overflow: "hidden", border: "1px solid var(--line)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 12px", background: "var(--surface-2)", borderBottom: "1px solid var(--line)" }}>
             <span style={{ width: 9, height: 9, borderRadius: "50%", background: "var(--line-2)" }} /><span style={{ width: 9, height: 9, borderRadius: "50%", background: "var(--line-2)" }} /><span style={{ width: 9, height: 9, borderRadius: "50%", background: "var(--line-2)" }} />
-            <span className="mono" style={{ marginLeft: 10, fontSize: ".8rem", color: "var(--muted)" }}>kirana.cakra.site</span>
+            <span className="mono" style={{ marginLeft: 10, fontSize: ".8rem", color: "var(--muted)" }}>kirana.cakra.xyz</span>
             <span style={{ marginLeft: "auto", fontSize: ".74rem", fontWeight: 700, color: "var(--good)", background: "color-mix(in oklab, var(--good) 14%, var(--surface))", padding: ".2rem .5rem", borderRadius: 999 }}>Skor {SCORE} · Baik</span>
           </div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -334,7 +347,20 @@ function MemberDashboard() {
   };
 
   const Dashboard = (
-    <div style={{ display: "grid", gridTemplateColumns: "300px 1fr", gap: 18, alignItems: "start" }} className="adm-2">
+    <>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(158px, 1fr))", gap: 12, marginBottom: 18 }} className="adm-kpi">
+        {PERF.map(([l, v, d, c], i) => {
+          const target: Sec = i === 1 ? "prospek" : i === 2 ? "listing" : "home";
+          return (
+            <button key={l} onClick={() => { setSec(target); if (target === "home") setDashTab("web"); }} className="adm-thumb" style={{ textAlign: "left", padding: "14px 16px", borderRadius: 14, border: "1px solid var(--line)", background: "var(--surface)", cursor: "pointer", font: "inherit" }}>
+              <div className="muted" style={{ fontSize: ".8rem" }}>{l}</div>
+              <div className="display" style={{ fontSize: "1.7rem", fontWeight: 700, color: `var(${c})`, lineHeight: 1.1 }}>{v}</div>
+              <div className="muted" style={{ fontSize: ".74rem" }}>{d}</div>
+            </button>
+          );
+        })}
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "300px 1fr", gap: 18, alignItems: "start" }} className="adm-2">
       <div style={{ display: "grid", gap: 10 }}>
         {CHANNELS.map((c) => {
           const on = dashTab === c.id;
@@ -353,7 +379,53 @@ function MemberDashboard() {
       <div style={{ display: "grid", gap: 18, minWidth: 0 }}>
         {dashTab === "insights" ? insightsPanel : dashTab === "web" ? webPanel : socialPanel(dashTab)}
       </div>
-    </div>
+      </div>
+    </>
+  );
+
+  const filteredLeads = leadFilter === "Semua" ? LEADS : LEADS.filter((l) => l.status === leadFilter);
+  const Prospek = (
+    <Card>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
+        <H>Kotak masuk prospek</H>
+        <span style={{ fontSize: ".78rem", color: "var(--c-heart)", fontWeight: 700 }}>● {LEADS.filter((l) => l.status === "Baru").length} baru</span>
+      </div>
+      <p className="muted" style={{ fontSize: ".86rem", marginTop: -8, marginBottom: 14 }}>Lead dari website, WhatsApp, dan media sosial — balas cepat untuk menang. (Contoh data)</p>
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 16 }}>
+        {LEAD_STATUSES.map((s) => {
+          const on = leadFilter === s;
+          const count = s === "Semua" ? LEADS.length : LEADS.filter((l) => l.status === s).length;
+          return (
+            <button key={s} onClick={() => setLeadFilter(s)} style={{ font: "inherit", fontSize: ".82rem", fontWeight: 600, cursor: "pointer", padding: ".4rem .85rem", borderRadius: 999, border: `1px solid ${on ? "var(--brand)" : "var(--line-2)"}`, background: on ? "color-mix(in oklab, var(--brand) 12%, var(--surface))" : "transparent", color: on ? "var(--brand)" : "var(--ink-2)" }}>{s} <span className="mono" style={{ opacity: .6 }}>{count}</span></button>
+          );
+        })}
+      </div>
+      <div style={{ display: "grid", gap: 12 }}>
+        {filteredLeads.map((l) => {
+          const tone = LEAD_TONE[l.status] || "--c-eye";
+          return (
+            <div key={l.name + l.age} style={{ display: "flex", gap: 14, padding: "14px 16px", borderRadius: 12, background: "var(--surface-2)", border: "1px solid var(--line)" }}>
+              <span style={{ width: 44, height: 44, borderRadius: "50%", flex: "none", display: "grid", placeItems: "center", background: `var(${tone})`, color: "#fff", fontWeight: 700, fontSize: "1.05rem" }}>{l.name.charAt(0)}</span>
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
+                  <span style={{ fontWeight: 600, fontSize: ".98rem" }}>{l.name}</span>
+                  <span className="muted mono" style={{ fontSize: ".74rem" }}>{l.age}</span>
+                </div>
+                <div style={{ display: "flex", gap: 8, alignItems: "center", margin: "3px 0 8px", flexWrap: "wrap" }}>
+                  <span style={{ fontSize: ".68rem", fontWeight: 700, padding: ".18rem .5rem", borderRadius: 999, color: `var(${tone})`, background: `color-mix(in oklab, var(${tone}) 14%, var(--surface))` }}>{l.status}</span>
+                  <span className="muted" style={{ fontSize: ".78rem" }}>via {l.src} · {l.listing}</span>
+                </div>
+                <p className="muted" style={{ fontSize: ".9rem", lineHeight: 1.5, margin: "0 0 12px" }}>{l.msg}</p>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  <a href={`https://wa.me/${l.wa}`} target="_blank" rel="noopener noreferrer" style={{ ...btn("brand"), textDecoration: "none", padding: ".45rem .9rem", fontSize: ".82rem", display: "inline-flex", alignItems: "center", gap: 6 }}><Ic d="M20 4 3 11l6 2 2 6 3-5 4 3z" s={14} /> Balas via WhatsApp</a>
+                  <button style={{ ...btn("ghost"), padding: ".45rem .9rem", fontSize: ".82rem" }}>Ubah status</button>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </Card>
   );
 
   const inp: React.CSSProperties = { width: "100%", background: "var(--surface-2)", border: "1px solid var(--line-2)", borderRadius: 10, padding: ".72rem 1rem", font: "inherit", fontSize: ".92rem", color: "var(--ink)" };
@@ -819,7 +891,7 @@ function MemberDashboard() {
     <div style={{ display: "grid", gap: 18, maxWidth: 720 }}>
       <Card>
         <H>Koneksi akun</H>
-        {[["Email", "kirana@email.com", true], ["Domain", "kirana.cakra.site", true], ["WhatsApp", "+62 812-0000-0000", true], ["Instagram", "Belum terhubung", false], ["TikTok", "Belum terhubung", false]].map(([k, v, on]) => (
+        {[["Email", "kirana@email.com", true], ["Domain", "kirana.cakra.xyz", true], ["WhatsApp", "+62 812-0000-0000", true], ["Instagram", "@kirana.property", true], ["TikTok", "@kiranaproperty", true], ["YouTube", "Kirana Property", true]].map(([k, v, on]) => (
           <div key={k as string} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0", borderBottom: "1px solid var(--line)" }}>
             <div><div style={{ fontWeight: 600, fontSize: ".92rem" }}>{k}</div><div className="muted" style={{ fontSize: ".84rem" }}>{v}</div></div>
             {on ? <span style={{ color: "var(--good)", fontSize: ".85rem", fontWeight: 600 }}>✓ Terhubung</span> : <button style={{ ...btn("ghost"), padding: ".4rem .9rem", fontSize: ".84rem" }}>Hubungkan</button>}
@@ -830,7 +902,7 @@ function MemberDashboard() {
         <Card>
           <H>Tagihan</H>
           <div style={{ fontWeight: 700, fontSize: "1.1rem" }}>Paket Pro</div>
-          <div className="muted" style={{ fontSize: ".9rem" }}>Rp 299.000 / bulan · perpanjang 1 Okt 2026</div>
+          <div className="muted" style={{ fontSize: ".9rem" }}>Rp 300.000 / bulan · perpanjang 1 Okt 2026</div>
           <div className="mono" style={{ fontSize: ".86rem", marginTop: 8 }}>Kartu •••• 4242</div>
           <button style={{ ...btn("ghost"), marginTop: 12 }}>Kelola tagihan</button>
         </Card>
@@ -854,14 +926,15 @@ function MemberDashboard() {
   );
 
   const titles: Record<Sec, [string, string]> = {
-    home: ["Dashboard", "Pilih kanal di kiri untuk melihat insight & analisanya."],
+    home: ["Dashboard", "Ringkasan performa Anda — pilih kanal untuk insight & analisanya."],
+    prospek: ["Prospek", "Balas dan kelola calon pembeli dari semua kanal."],
     listing: ["Listing", "Kelola properti Anda — buat, ubah, hapus, riwayat."],
     editor: ["Editor", "Buat video listing otomatis dan unggah materi."],
-    content: ["Content", "Ide dari sistem, lalu tulis dan terbitkan."],
-    assets: ["Assets", "Pustaka aset cakra untuk semua member."],
+    content: ["Konten", "Tulis konten, atau pakai yang siap dari sistem."],
+    assets: ["Aset", "Pustaka aset cakra untuk semua member."],
     profile: ["Profil & pengaturan", "Koneksi, tagihan, keamanan, dan legal."],
   };
-  const body = { home: Dashboard, listing: Listing, editor: Editor, content: Content, assets: Assets, profile: Profile }[sec];
+  const body = { home: Dashboard, prospek: Prospek, listing: Listing, editor: Editor, content: Content, assets: Assets, profile: Profile }[sec];
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg)" }}>
@@ -882,10 +955,34 @@ function MemberDashboard() {
         </button>
       </aside>
 
+      {mobileNav && (
+        <div onClick={() => setMobileNav(false)} style={{ position: "fixed", inset: 0, zIndex: 70, background: "rgba(20,15,9,.5)", backdropFilter: "blur(2px)" }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ position: "absolute", top: 0, left: 0, bottom: 0, width: 264, maxWidth: "82vw", background: "var(--surface)", borderRight: "1px solid var(--line)", padding: "18px 14px", display: "flex", flexDirection: "column", boxShadow: "0 20px 60px rgba(20,15,9,.35)", overflowY: "auto" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "6px 6px 20px" }}>
+              <span style={{ display: "flex", alignItems: "center", gap: 7 }}><CakraMark size={30} /><span className="hand" style={{ fontSize: "1.7rem", fontWeight: 700, lineHeight: 1 }}>cakra</span></span>
+              <button onClick={() => setMobileNav(false)} aria-label="Tutup" style={{ width: 34, height: 34, borderRadius: 9, border: "1px solid var(--line-2)", background: "transparent", color: "var(--ink)", cursor: "pointer" }}>✕</button>
+            </div>
+            <nav style={{ display: "grid", gap: 3 }}>
+              {NAV.map((n) => (
+                <button key={n.id} onClick={() => { setSec(n.id); setMobileNav(false); }} style={{ display: "flex", alignItems: "center", gap: 11, padding: ".72rem .7rem", borderRadius: 10, border: "none", cursor: "pointer", font: "inherit", fontSize: "1rem", fontWeight: sec === n.id ? 600 : 500, textAlign: "left", background: sec === n.id ? "color-mix(in oklab, var(--brand) 12%, var(--surface))" : "transparent", color: sec === n.id ? "var(--brand)" : "var(--ink-2)" }}>
+                  <Ic d={n.icon} />{n.label}
+                </button>
+              ))}
+              <button onClick={() => { setSec("profile"); setMobileNav(false); }} style={{ display: "flex", alignItems: "center", gap: 11, padding: ".72rem .7rem", borderRadius: 10, border: "none", cursor: "pointer", font: "inherit", fontSize: "1rem", fontWeight: sec === "profile" ? 600 : 500, textAlign: "left", background: sec === "profile" ? "color-mix(in oklab, var(--brand) 12%, var(--surface))" : "transparent", color: sec === "profile" ? "var(--brand)" : "var(--ink-2)" }}>
+                <Ic d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-5 0-9 2.5-9 6v2h18v-2c0-3.5-4-6-9-6Z" />Profil
+              </button>
+            </nav>
+          </div>
+        </div>
+      )}
+
       <div style={{ flex: 1, minWidth: 0 }}>
         <header style={{ height: 60, borderBottom: "1px solid var(--line)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, padding: "0 clamp(14px,3vw,28px)", background: "color-mix(in oklab, var(--bg) 86%, transparent)", backdropFilter: "blur(8px)", position: "sticky", top: 0, zIndex: 5 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
-            <button onClick={() => setCollapsed((c) => !c)} aria-label={collapsed ? "Buka menu" : "Sembunyikan menu"} title={collapsed ? "Buka menu" : "Sembunyikan menu"} style={{ display: "grid", placeItems: "center", width: 38, height: 38, borderRadius: 10, border: "1px solid var(--line-2)", background: "transparent", color: "var(--ink)", cursor: "pointer", flex: "none" }}>
+            <button onClick={() => setMobileNav(true)} aria-label="Menu" className="adm-mobile-btn" style={{ placeItems: "center", width: 38, height: 38, borderRadius: 10, border: "1px solid var(--line-2)", background: "transparent", color: "var(--ink)", cursor: "pointer", flex: "none" }}>
+              <Ic d="M4 6h16v2H4zM4 11h16v2H4zM4 16h16v2H4z" s={18} />
+            </button>
+            <button onClick={() => setCollapsed((c) => !c)} aria-label={collapsed ? "Buka menu" : "Sembunyikan menu"} title={collapsed ? "Buka menu" : "Sembunyikan menu"} className="adm-collapse-btn" style={{ display: "grid", placeItems: "center", width: 38, height: 38, borderRadius: 10, border: "1px solid var(--line-2)", background: "transparent", color: "var(--ink)", cursor: "pointer", flex: "none" }}>
               <Ic d="M4 6h16v2H4zM4 11h16v2H4zM4 16h16v2H4z" s={18} />
             </button>
             <span style={{ fontSize: ".82rem", color: "var(--warn)", fontWeight: 600, whiteSpace: "nowrap" }} className="adm-openmode">● Mode terbuka · tanpa autentikasi</span>
@@ -897,7 +994,7 @@ function MemberDashboard() {
                 Merender {rendering.pct}%{queued.length ? ` · +${queued.length}` : ""}
               </button>
             )}
-            <a href="https://kirana.cakra.site" className="mono adm-hosturl" style={{ fontSize: ".82rem", color: "var(--muted)", textDecoration: "none", whiteSpace: "nowrap" }}>kirana.cakra.site ↗</a>
+            <a href="https://kirana.cakra.xyz" className="mono adm-hosturl" style={{ fontSize: ".82rem", color: "var(--muted)", textDecoration: "none", whiteSpace: "nowrap" }}>kirana.cakra.xyz ↗</a>
           </div>
         </header>
         <main className="adm-main" style={{ padding: "clamp(20px,3vw,34px)", maxWidth: 1400 }}>
@@ -1034,8 +1131,9 @@ function MemberDashboard() {
         @keyframes admSpin{ to{ transform:rotate(360deg) } }
         .adm-spin{ animation: admSpin .8s linear infinite; }
         @media (max-width: 860px){ .adm-2{ grid-template-columns:1fr !important; } }
+        .adm-mobile-btn{ display:none !important; }
         @media (max-width: 640px){ .adm-openmode{ display:none !important; } .adm-hosturl{ display:none !important; } }
-        @media (max-width: 720px){ .adm-side{ display:none !important; } }
+        @media (max-width: 720px){ .adm-side{ display:none !important; } .adm-collapse-btn{ display:none !important; } .adm-mobile-btn{ display:grid !important; } }
         @media (prefers-reduced-motion: reduce){ .adm-eq.on span, .adm-spin{ animation:none !important; } }
       `}</style>
     </div>

@@ -59,9 +59,9 @@ export default function Login() {
           <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "20px 0" }}>
             <span style={{ flex: 1, height: 1, background: "var(--line)" }} /><span className="muted" style={{ fontSize: ".8rem" }}>atau</span><span style={{ flex: 1, height: 1, background: "var(--line)" }} />
           </div>
-          <Link href="/onboarding" className="btn btn-ghost" style={{ width: "100%", justifyContent: "center", padding: ".85rem" }}>Mulai gratis dengan onboarding</Link>
+          <Link href="/onboarding" className="btn btn-ghost" style={{ width: "100%", justifyContent: "center", padding: ".85rem" }}>Mulai dengan onboarding</Link>
           <p className="muted" style={{ fontSize: ".86rem", marginTop: 18, textAlign: "center" }}>
-            Belum punya akun? <Link href="/signup" className="gold" style={{ textDecoration: "none" }}>Daftar gratis</Link>
+            Belum punya akun? <Link href="/signup" className="gold" style={{ textDecoration: "none" }}>Daftar</Link>
           </p>
         </div>
       </div>

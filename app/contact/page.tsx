@@ -159,7 +159,7 @@ export default function Page() {
               <div style={{ textAlign: "center", padding: "40px 10px" }}>
                 <div style={{ width: 60, height: 60, margin: "0 auto 18px", borderRadius: "50%", display: "grid", placeItems: "center", background: "color-mix(in oklab, var(--good) 18%, var(--surface))", color: "var(--good)", fontSize: "1.7rem" }}>✓</div>
                 <h2 className="display" style={{ fontSize: "1.7rem", fontWeight: 700, margin: 0 }}>Pesan terkirim!</h2>
-                <p className="muted" style={{ margin: "10px auto 0", maxWidth: "36ch" }}>Kami balas dalam 2 hari kerja. Sementara itu, Anda bisa langsung mulai gratis.</p>
+                <p className="muted" style={{ margin: "10px auto 0", maxWidth: "36ch" }}>Kami balas dalam 2 hari kerja. Sementara itu, Anda bisa langsung mulai.</p>
                 <button onClick={() => setSent(false)} className="btn btn-ghost" style={{ marginTop: 20, padding: ".7rem 1.4rem" }}>Kirim lagi</button>
               </div>
             ) : (

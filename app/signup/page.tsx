@@ -38,7 +38,7 @@ export default function Signup() {
 
       <div style={{ position: "relative", flex: 1, display: "grid", placeItems: "center", padding: "10px 24px 60px" }}>
         <div className="card" style={{ padding: "clamp(26px,4vw,40px)", width: "min(440px, 94vw)", boxShadow: "0 30px 80px rgba(20,15,9,.28)" }}>
-          <p className="hand" style={{ color: "var(--brand)", fontSize: "1.7rem", transform: "rotate(-2deg)", margin: 0 }}>mulai gratis hari ini</p>
+          <p className="hand" style={{ color: "var(--brand)", fontSize: "1.7rem", transform: "rotate(-2deg)", margin: 0 }}>mulai hari ini</p>
           <h1 className="display" style={{ fontSize: "clamp(1.8rem,4vw,2.3rem)", fontWeight: 700, lineHeight: 1.1, margin: "4px 0 6px" }}>Buat akun cakra</h1>
           <p className="muted" style={{ fontSize: ".95rem", margin: "0 0 22px" }}>Daftar, lalu isi onboarding untuk membangun kehadiran Anda.</p>
           <form style={{ display: "grid", gap: 16 }}>
@@ -56,7 +56,7 @@ export default function Signup() {
             </label>
             <Link href="/onboarding" className="btn btn-brand" style={{ justifyContent: "center", padding: ".95rem", fontSize: "1.02rem", marginTop: 4 }}>Buat akun →</Link>
           </form>
-          <p className="muted" style={{ fontSize: ".8rem", textAlign: "center", marginTop: 12 }}>Gratis untuk memulai · tanpa kartu kredit · data Anda milik Anda</p>
+          <p className="muted" style={{ fontSize: ".8rem", textAlign: "center", marginTop: 12 }}>Tanpa kartu kredit untuk memulai · data Anda milik Anda</p>
           <p className="muted" style={{ fontSize: ".86rem", marginTop: 18, textAlign: "center" }}>
             Sudah punya akun? <Link href="/login" className="gold" style={{ textDecoration: "none" }}>Masuk</Link>
           </p>

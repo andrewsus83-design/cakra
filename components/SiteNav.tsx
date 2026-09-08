@@ -9,7 +9,6 @@ const LINKS = [
   { href: "/about", label: "Tentang" },
   { href: "/harga", label: "Harga" },
   { href: "/listing", label: "Listing" },
-  { href: "/demo", label: "Contoh" },
   { href: "/hub", label: "Hub" },
   { href: "/faq", label: "FAQ" },
   { href: "/contact", label: "Kontak" },
@@ -94,7 +93,7 @@ export function SiteNav() {
                 <Link href="/login" className="btn" style={{ padding: ".62rem 1.2rem", fontSize: "1rem", background: "transparent", color: txt, border: `1px solid ${heroBorder}`, transition: "all .3s" }}>
                   Masuk
                 </Link>
-                <Link href="/onboarding" className="btn btn-brand" style={{ padding: ".62rem 1.3rem", fontSize: "1rem" }}>Mulai gratis</Link>
+                <Link href="/onboarding" className="btn btn-brand" style={{ padding: ".62rem 1.3rem", fontSize: "1rem" }}>Mulai sekarang</Link>
               </div>
               {themeBtn}
               <button type="button" className="cakra-burger" onClick={() => setMobileOpen((o) => !o)} aria-label="Menu" aria-expanded={mobileOpen} style={{ display: "none", placeItems: "center", width: 44, height: 44, borderRadius: 11, background: "transparent", color: txt, border: `1px solid ${heroBorder}`, cursor: "pointer" }}>
@@ -115,7 +114,7 @@ export function SiteNav() {
               ))}
               <div style={{ display: "flex", gap: 12, marginTop: 16 }}>
                 <Link href="/login" onClick={() => setMobileOpen(false)} className="btn btn-ghost" style={{ flex: 1, justifyContent: "center", fontSize: "1rem", padding: ".85rem" }}>Masuk</Link>
-                <Link href="/onboarding" onClick={() => setMobileOpen(false)} className="btn btn-brand" style={{ flex: 1, justifyContent: "center", fontSize: "1rem", padding: ".85rem" }}>Mulai gratis</Link>
+                <Link href="/onboarding" onClick={() => setMobileOpen(false)} className="btn btn-brand" style={{ flex: 1, justifyContent: "center", fontSize: "1rem", padding: ".85rem" }}>Mulai sekarang</Link>
               </div>
             </div>
           </div>

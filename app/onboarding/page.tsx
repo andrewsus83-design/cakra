@@ -42,7 +42,7 @@ const PAGES: Page[] = [
     ],
   },
   {
-    section: "Alamat & bahasa", title: "Alamat website Anda.", sub: "Gratis di subdomain cakra — bisa pakai domain sendiri nanti.",
+    section: "Alamat & bahasa", title: "Alamat website Anda.", sub: "Di subdomain cakra — bisa pakai domain sendiri nanti.",
     fields: [
       { id: "domain", label: "Alamat website", type: "domain", ph: "namaanda" },
       { id: "bahasa", label: "Bahasa utama website", type: "choice", options: ["Indonesia", "English", "Keduanya"] },
@@ -158,7 +158,7 @@ export default function Onboarding() {
             <h1 className="display on-photo" style={{ fontSize: "clamp(2.4rem, 6vw, 4.2rem)", fontWeight: 700, lineHeight: 1.06, margin: "6px 0 0" }}>Bangun presence Anda<br />dalam beberapa menit.</h1>
             <p className="on-photo-soft" style={{ fontSize: "1.15rem", margin: "18px auto 28px", lineHeight: 1.6, maxWidth: "46ch" }}>Isi 8 langkah singkat — kami rangkai website, listing, dan skor kehadiran Anda secara otomatis.</p>
             <button onClick={() => { setPhase("form"); setPageIdx(0); }} className="btn btn-brand" style={{ fontSize: "1.08rem", padding: "1rem 2.1rem" }}>Mulai →</button>
-            <p className="on-photo-soft" style={{ fontSize: ".85rem", marginTop: 16 }}>± 3 menit · gratis · tanpa kartu kredit</p>
+            <p className="on-photo-soft" style={{ fontSize: ".85rem", marginTop: 16 }}>± 3 menit · tanpa kartu kredit · situs Anda langsung jadi</p>
           </div>
         </div>
       </div>
