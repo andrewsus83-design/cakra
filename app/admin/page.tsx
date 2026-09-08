@@ -21,6 +21,12 @@ const LISTINGS = [
   { t: "Vila Seminyak Retreat", st: "Disewa", price: "Rp 3,2 M/thn", views: 180 },
   { t: "Townhouse Sanur", st: "Dijual", price: "Rp 4,8 M", views: 96 },
 ];
+const LISTING_HISTORY = [
+  { t: "Vila Tegallalang", date: "1 Sep 2026", st: "Terjual" },
+  { t: "Apartemen Sunset Road", date: "24 Agu 2026", st: "Tersewa" },
+  { t: "Vila Uluwatu Cliff", date: "10 Agu 2026", st: "Harga diperbarui" },
+  { t: "Ruko Sunset", date: "2 Agu 2026", st: "Diarsipkan" },
+];
 const ASSETS = ["/about/hero.jpg", "/about/transform.jpg", "/hero.jpg", "/about/invite.jpg", "/blog-0.jpg", "/blog-1.jpg", "/about/vision-hill.jpg", "/hero-top.jpg"];
 const FORMATS = [
   { id: "1:1", label: "Post — Instagram & Facebook" },
@@ -31,17 +37,17 @@ const PLATFORMS = [
   { id: "Instagram Post", fmt: "1:1" }, { id: "Facebook", fmt: "1:1" }, { id: "Instagram Reels", fmt: "9:16" },
   { id: "TikTok", fmt: "9:16" }, { id: "YouTube", fmt: "16:9" }, { id: "Presentasi", fmt: "16:9" },
 ];
-const READY_CONTENT: [string, string][] = [
-  ["Panduan harga vila Canggu 2026", "Artikel"],
-  ["Reels: Tur 60 detik Vila Uluwatu", "Reels"],
-  ["Carousel: 5 tips beli vila di Bali", "Post"],
-  ["Video: Investasi properti Bali", "YouTube"],
+const READY_CONTENT = [
+  { t: "Panduan harga vila Canggu 2026", c: "Artikel", img: "/blog-0.jpg", meta: "6 mnt baca · SEO" },
+  { t: "Reels: Tur 60 detik Vila Uluwatu", c: "Reels", img: "/about/hero.jpg", meta: "9:16 · 60 dtk" },
+  { t: "Carousel: 5 tips beli vila di Bali", c: "Post", img: "/blog-1.jpg", meta: "1:1 · 5 slide" },
+  { t: "Video: Investasi properti Bali", c: "YouTube", img: "/about/transform.jpg", meta: "16:9 · 3 mnt" },
 ];
 const CONTENT_HISTORY = [
-  { t: "5 alasan investasi Uluwatu", date: "2 Sep 2026", posted: true, shared: true, down: false },
-  { t: "Panduan KPR pembeli pertama", date: "28 Agu 2026", posted: true, shared: false, down: true },
-  { t: "Tur Vila Seminyak Retreat", date: "20 Agu 2026", posted: true, shared: true, down: true },
-  { t: "Harga tanah Pererenan", date: "—", posted: false, shared: false, down: false },
+  { t: "5 alasan investasi Uluwatu", c: "Artikel", img: "/about/invite.jpg", date: "2 Sep 2026", posted: true, shared: true, down: false },
+  { t: "Panduan KPR pembeli pertama", c: "Artikel", img: "/blog-2.jpg", date: "28 Agu 2026", posted: true, shared: false, down: true },
+  { t: "Tur Vila Seminyak Retreat", c: "Reels", img: "/hero.jpg", date: "20 Agu 2026", posted: true, shared: true, down: true },
+  { t: "Harga tanah Pererenan", c: "Artikel", img: "/about/vision-hill.jpg", date: "—", posted: false, shared: false, down: false },
 ];
 const CONTENT_TIPS = [
   "Pembeli sering mencari “vila dekat pantai Canggu” — buat konten khusus area itu.",
@@ -49,6 +55,21 @@ const CONTENT_TIPS = [
   "Sisipkan simulasi cicilan agar calon pembeli lebih percaya diri.",
   "Posting konsisten 2–3× seminggu lebih kuat daripada sesekali menumpuk.",
 ];
+const BGM = [
+  { t: "Golden Hour", mood: "Hangat · Sinematik", dur: "1:20", c: "--c-solar" },
+  { t: "Island Drift", mood: "Santai · Tropis", dur: "2:05", c: "--c-throat" },
+  { t: "Uptown Deal", mood: "Enerjik · Modern", dur: "1:45", c: "--c-heart" },
+  { t: "Quiet Luxury", mood: "Elegan · Lembut", dur: "2:30", c: "--c-crown" },
+  { t: "Sunset Cruise", mood: "Ceria · Upbeat", dur: "1:58", c: "--c-sacral" },
+  { t: "Deep Blue", mood: "Tenang · Ambient", dur: "3:10", c: "--c-eye" },
+];
+type Voice = { name: string; desc: string; wave: number[] } | null;
+const VOICES: Voice[] = [
+  { name: "Ayu — Hangat", desc: "Perempuan · ramah, keibuan", wave: [5, 9, 14, 8, 12, 6, 15, 10, 7, 13, 8, 11] },
+  { name: "Bima — Berwibawa", desc: "Laki-laki · dalam, meyakinkan", wave: [8, 13, 7, 15, 9, 12, 6, 14, 10, 8, 13, 7] },
+  null,
+];
+const VOICE_STYLES = ["Hangat", "Berwibawa", "Energetik", "Lembut", "Profesional", "Ceria"];
 
 const SCORE = 76;
 
@@ -72,10 +93,31 @@ const arCss = (f: string) => f.replace(":", " / ");
 
 function MemberDashboard() {
   const [sec, setSec] = useState<Sec>("home");
+  const [collapsed, setCollapsed] = useState(false);
   const [orient, setOrient] = useState<"9:16" | "16:9">("9:16");
-  const [gen, setGen] = useState<string | null>(null);
   const [assetFmt, setAssetFmt] = useState("1:1");
+  const [assetTab, setAssetTab] = useState<"gambar" | "bgm" | "voice">("gambar");
+  const [bgmOn, setBgmOn] = useState<string | null>(null);
   const [platform, setPlatform] = useState("Instagram Post");
+  const [newStatus, setNewStatus] = useState<"jual" | "sewa">("jual");
+  // background video generation — persists across section switches (component stays mounted)
+  const [genState, setGenState] = useState<"idle" | "working" | "done">("idle");
+  const [genPct, setGenPct] = useState(0);
+  // voice creation (ElevenLabs) — 3 slots per client, permanent
+  const [voiceGen, setVoiceGen] = useState<"idle" | "working" | "done">("idle");
+  const [voiceStyle, setVoiceStyle] = useState("Hangat");
+
+  useEffect(() => {
+    if (genState !== "working") return;
+    const id = setInterval(() => setGenPct((p) => Math.min(100, p + 6)), 320);
+    return () => clearInterval(id);
+  }, [genState]);
+  useEffect(() => { if (genState === "working" && genPct >= 100) setGenState("done"); }, [genPct, genState]);
+  useEffect(() => {
+    if (voiceGen !== "working") return;
+    const id = setTimeout(() => setVoiceGen("done"), 2400);
+    return () => clearTimeout(id);
+  }, [voiceGen]);
 
   const r = 52, circ = 2 * Math.PI * r;
 
@@ -133,69 +175,178 @@ function MemberDashboard() {
     </>
   );
 
+  const inp: React.CSSProperties = { width: "100%", background: "var(--surface-2)", border: "1px solid var(--line-2)", borderRadius: 10, padding: ".72rem 1rem", font: "inherit", fontSize: ".92rem", color: "var(--ink)" };
+  const lbl: React.CSSProperties = { fontSize: ".82rem", fontWeight: 600, display: "block", marginBottom: 6, color: "var(--ink-2)" };
   const Listing = (
-    <>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, flexWrap: "wrap", gap: 12 }}>
-        <div style={{ display: "flex", gap: 8 }}><span className="pill">Semua</span><span className="pill" style={{ opacity: .6 }}>Riwayat</span></div>
-        <button style={btn("brand")}>+ Tambah listing</button>
-      </div>
-      <Card style={{ padding: 0, overflow: "hidden" }}>
-        <div style={{ overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: ".92rem", minWidth: 640 }}>
-            <thead><tr style={{ textAlign: "left", color: "var(--muted)", fontSize: ".76rem", textTransform: "uppercase", letterSpacing: ".05em" }}>{["Properti", "Status", "Harga", "Dilihat", ""].map((h) => <th key={h} style={{ padding: "14px 18px", borderBottom: "1px solid var(--line)" }}>{h}</th>)}</tr></thead>
-            <tbody>
-              {LISTINGS.map((l) => (
-                <tr key={l.t}>
-                  <td style={{ padding: "14px 18px", borderBottom: "1px solid var(--line)", fontWeight: 600 }}>{l.t}</td>
-                  <td style={{ padding: "14px 18px", borderBottom: "1px solid var(--line)" }}><span style={{ color: l.st === "Dijual" ? "var(--brand)" : "var(--jade)", fontWeight: 600, fontSize: ".85rem" }}>{l.st}</span></td>
-                  <td style={{ padding: "14px 18px", borderBottom: "1px solid var(--line)" }} className="mono">{l.price}</td>
-                  <td style={{ padding: "14px 18px", borderBottom: "1px solid var(--line)" }} className="muted">{l.views}×</td>
-                  <td style={{ padding: "14px 18px", borderBottom: "1px solid var(--line)", textAlign: "right", whiteSpace: "nowrap" }}>
-                    <button style={{ ...btn("ghost"), padding: ".35rem .7rem", fontSize: ".82rem" }}>Edit</button>{" "}
-                    <button style={{ ...btn("ghost"), padding: ".35rem .7rem", fontSize: ".82rem", color: "var(--crit)", borderColor: "color-mix(in oklab, var(--crit) 40%, var(--line-2))" }}>Hapus</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </Card>
-    </>
-  );
-
-  const Editor = (
-    <div style={{ display: "grid", gridTemplateColumns: "1.3fr .7fr", gap: 18 }} className="adm-2">
+    <div style={{ display: "grid", gridTemplateColumns: "1.05fr .95fr", gap: 18 }} className="adm-2">
+      {/* LEFT: live (top) + history (bottom) */}
       <Card>
-        <H>Buat video listing</H>
-        <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-          {(["9:16", "16:9"] as const).map((o) => (
-            <button key={o} onClick={() => setOrient(o)} style={{ ...btn(orient === o ? "brand" : "ghost"), padding: ".5rem 1rem" }}>{o === "9:16" ? "Vertikal 9:16" : "Horizontal 16:9"}</button>
-          ))}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <H>Listing live</H>
+          <span style={{ fontSize: ".78rem", color: "var(--good)", fontWeight: 600 }}>● {LISTINGS.length} tayang</span>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(116px, 1fr))", gap: 12, marginBottom: 14 }}>
-          <div style={drop}><Ic d="M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm2.5 3a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3ZM5 17h14l-4.5-6-3.5 4.5-2-2.5L5 17Z" s={22} /><div style={{ fontSize: ".82rem", marginTop: 6 }}>Unggah foto</div></div>
-          <div style={drop}><Ic d="M4 4h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Zm6 3v6l5-3z" s={22} /><div style={{ fontSize: ".82rem", marginTop: 6 }}>Unggah video</div></div>
-          <div style={drop}><Ic d="M6 2h9l5 5v14.2A.8.8 0 0 1 19.2 22H6a.8.8 0 0 1-.8-.8V2.8A.8.8 0 0 1 6 2Zm2 11h8v1.6H8zm0 3h6v1.6H8z" s={22} /><div style={{ fontSize: ".82rem", marginTop: 6 }}>Brosur / PDF<br />(opsional)</div></div>
-          <div style={drop}><Ic d="M12 3v10.5a3.5 3.5 0 1 1-2-3.16V6h6V3h-4Z" s={22} /><div style={{ fontSize: ".82rem", marginTop: 6 }}>Audio / voice<br />(opsional)</div></div>
-        </div>
-        <label className="muted" style={{ fontSize: ".82rem", fontWeight: 600 }}>Deskripsi properti</label>
-        <textarea rows={3} placeholder="Vila 4 kamar di Canggu, dekat pantai Berawa…" style={{ width: "100%", marginTop: 6, background: "var(--surface-2)", border: "1px solid var(--line-2)", borderRadius: 10, padding: 12, font: "inherit", fontSize: ".92rem", color: "var(--ink)", resize: "vertical" }} />
-        <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 14, flexWrap: "wrap" }}>
-          <button style={btn("brand")} onClick={() => { setGen("Sedang membuat video oleh mesin…"); setTimeout(() => setGen("✓ Video 62 detik selesai dibuat."), 2200); }}>✨ Generate video otomatis</button>
-          <span className="muted" style={{ fontSize: ".84rem" }}>Durasi otomatis 45–90 detik, dirangkai oleh mesin.</span>
-        </div>
-        {gen && <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 10, background: "var(--surface-2)", fontSize: ".9rem", color: gen.startsWith("✓") ? "var(--good)" : "var(--ink)" }}>{gen}</div>}
-      </Card>
-      <Card>
-        <H>Video Anda</H>
-        <div style={{ display: "grid", gap: 10 }}>
-          {["Vila Uluwatu · 9:16 · 60d", "Canggu Estate · 16:9 · 75d", "Seminyak · 9:16 · 48d"].map((v) => (
-            <div key={v} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 10, background: "var(--surface-2)" }}>
-              <span style={{ width: 30, height: 30, borderRadius: 8, background: "var(--ink)", color: "var(--bg)", display: "grid", placeItems: "center" }}><Ic d="M8 5v14l11-7z" s={14} /></span>
-              <span style={{ fontSize: ".86rem" }}>{v}</span><span style={{ marginLeft: "auto", fontSize: ".72rem", color: "var(--good)" }}>Selesai</span>
+        <p className="muted" style={{ fontSize: ".86rem", marginTop: -8, marginBottom: 12 }}>Properti yang sedang tayang di website Anda.</p>
+        <div style={{ display: "grid", gap: 8 }}>
+          {LISTINGS.map((l) => (
+            <div key={l.t} style={{ display: "flex", alignItems: "center", gap: 10, padding: "11px 14px", borderRadius: 10, background: "var(--surface-2)" }}>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontWeight: 600, fontSize: ".92rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{l.t}</div>
+                <div style={{ display: "flex", gap: 8, fontSize: ".78rem", marginTop: 2 }}>
+                  <span style={{ color: l.st === "Dijual" ? "var(--brand)" : "var(--jade)", fontWeight: 600 }}>{l.st}</span>
+                  <span className="mono muted">{l.price}</span>
+                  <span className="muted">· {l.views}×</span>
+                </div>
+              </div>
+              <div style={{ marginLeft: "auto", display: "flex", gap: 6, flex: "none" }}>
+                <button style={{ ...btn("ghost"), padding: ".32rem .6rem", fontSize: ".78rem" }}>Edit</button>
+                <button style={{ ...btn("ghost"), padding: ".32rem .6rem", fontSize: ".78rem", color: "var(--crit)", borderColor: "color-mix(in oklab, var(--crit) 40%, var(--line-2))" }}>Hapus</button>
+              </div>
             </div>
           ))}
         </div>
+        <h3 className="display" style={{ fontSize: "1.05rem", fontWeight: 600, margin: "22px 0 4px" }}>Riwayat</h3>
+        <p className="muted" style={{ fontSize: ".82rem", marginBottom: 12 }}>Listing yang sudah selesai atau diarsipkan.</p>
+        <div style={{ display: "grid", gap: 8 }}>
+          {LISTING_HISTORY.map((h) => {
+            const done = h.st === "Terjual" || h.st === "Tersewa";
+            return (
+              <div key={h.t + h.date} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, padding: "10px 14px", borderRadius: 10, background: "var(--surface-2)" }}>
+                <span style={{ fontWeight: 600, fontSize: ".9rem" }}>{h.t}</span>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, flex: "none" }}>
+                  <span style={{ fontSize: ".7rem", fontWeight: 700, padding: ".22rem .55rem", borderRadius: 999, color: done ? "var(--good)" : "var(--muted)", background: done ? "color-mix(in oklab, var(--good) 15%, var(--surface))" : "var(--surface)", border: done ? "none" : "1px solid var(--line)" }}>{h.st}</span>
+                  <span className="muted mono" style={{ fontSize: ".76rem", whiteSpace: "nowrap" }}>{h.date}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </Card>
+      {/* RIGHT: create new listing */}
+      <Card>
+        <H>Buat listing baru</H>
+        <div style={{ display: "grid", gap: 14 }}>
+          <div><label style={lbl}>Judul properti</label><input placeholder="mis. Vila Canggu Modern" style={inp} /></div>
+          <div><label style={lbl}>Lokasi / area</label><input placeholder="mis. Canggu, Bali" style={inp} /></div>
+          <div>
+            <label style={lbl}>Status</label>
+            <div style={{ display: "inline-flex", background: "var(--surface-2)", border: "1px solid var(--line)", borderRadius: 999, padding: 4 }}>
+              {(["jual", "sewa"] as const).map((s) => (
+                <button key={s} onClick={() => setNewStatus(s)} style={{ border: "none", cursor: "pointer", font: "inherit", fontWeight: 600, fontSize: ".85rem", padding: ".45rem 1.1rem", borderRadius: 999, background: newStatus === s ? "var(--brand)" : "transparent", color: newStatus === s ? "#fff" : "var(--muted)" }}>{s === "jual" ? "Dijual" : "Disewa"}</button>
+              ))}
+            </div>
+          </div>
+          <div><label style={lbl}>Harga{newStatus === "sewa" ? " / tahun" : ""}</label><input placeholder="mis. Rp 8.500.000.000" style={inp} /></div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+            <div><label style={lbl}>Kamar tidur</label><input type="number" placeholder="4" style={inp} /></div>
+            <div><label style={lbl}>Kamar mandi</label><input type="number" placeholder="3" style={inp} /></div>
+            <div><label style={lbl}>Luas (m²)</label><input type="number" placeholder="320" style={inp} /></div>
+          </div>
+          <div><label style={lbl}>Foto properti</label><div style={drop}><Ic d="M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm2.5 3a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3ZM5 17h14l-4.5-6-3.5 4.5-2-2.5L5 17Z" s={22} /><div style={{ fontSize: ".82rem", marginTop: 6 }}>Tarik &amp; letakkan foto, atau klik untuk unggah</div></div></div>
+          <div><label style={lbl}>Deskripsi</label><textarea rows={3} placeholder="Ceritakan keunggulan properti…" style={{ ...inp, resize: "vertical" }} /></div>
+          <div style={{ display: "flex", gap: 10 }}><button style={btn("brand")}>Terbitkan listing</button><button style={btn("ghost")}>Simpan draf</button></div>
+        </div>
+      </Card>
+    </div>
+  );
+
+  const posterImg = orient === "9:16" ? "/hero.jpg" : "/about/hero.jpg";
+  const Editor = (
+    <div style={{ display: "grid", gridTemplateColumns: "1.2fr .8fr", gap: 18, alignItems: "stretch" }} className="adm-2">
+      {/* LEFT column: create (top) + history (bottom) */}
+      <div style={{ display: "grid", gap: 18, alignContent: "start" }}>
+        <Card>
+          <H>Buat video listing</H>
+          <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+            {(["9:16", "16:9"] as const).map((o) => (
+              <button key={o} onClick={() => setOrient(o)} style={{ ...btn(orient === o ? "brand" : "ghost"), padding: ".5rem 1rem" }}>{o === "9:16" ? "Vertikal 9:16" : "Horizontal 16:9"}</button>
+            ))}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(116px, 1fr))", gap: 12, marginBottom: 14 }}>
+            <div style={drop}><Ic d="M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm2.5 3a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3ZM5 17h14l-4.5-6-3.5 4.5-2-2.5L5 17Z" s={22} /><div style={{ fontSize: ".82rem", marginTop: 6 }}>Unggah foto</div></div>
+            <div style={drop}><Ic d="M4 4h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Zm6 3v6l5-3z" s={22} /><div style={{ fontSize: ".82rem", marginTop: 6 }}>Unggah video</div></div>
+            <div style={drop}><Ic d="M6 2h9l5 5v14.2A.8.8 0 0 1 19.2 22H6a.8.8 0 0 1-.8-.8V2.8A.8.8 0 0 1 6 2Zm2 11h8v1.6H8zm0 3h6v1.6H8z" s={22} /><div style={{ fontSize: ".82rem", marginTop: 6 }}>Brosur / PDF<br />(opsional)</div></div>
+            <div style={drop}><Ic d="M12 3v10.5a3.5 3.5 0 1 1-2-3.16V6h6V3h-4Z" s={22} /><div style={{ fontSize: ".82rem", marginTop: 6 }}>Audio / voice<br />(opsional)</div></div>
+          </div>
+          <label className="muted" style={{ fontSize: ".82rem", fontWeight: 600 }}>Deskripsi properti</label>
+          <textarea rows={3} placeholder="Vila 4 kamar di Canggu, dekat pantai Berawa…" style={{ width: "100%", marginTop: 6, background: "var(--surface-2)", border: "1px solid var(--line-2)", borderRadius: 10, padding: 12, font: "inherit", fontSize: ".92rem", color: "var(--ink)", resize: "vertical" }} />
+          <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 14, flexWrap: "wrap" }}>
+            <button style={{ ...btn("brand"), opacity: genState === "working" ? .6 : 1 }} disabled={genState === "working"} onClick={() => { setGenPct(0); setGenState("working"); }}>✨ Generate video otomatis</button>
+            <span className="muted" style={{ fontSize: ".84rem" }}>Durasi otomatis 45–90 detik, dirangkai oleh mesin.</span>
+          </div>
+        </Card>
+        <Card>
+          <H>Riwayat video</H>
+          <div style={{ display: "grid", gap: 10 }}>
+            {[["Vila Uluwatu Cliff", "9:16 · 60 dtk", "2 Sep 2026"], ["Canggu Estate", "16:9 · 75 dtk", "27 Agu 2026"], ["Seminyak Retreat", "9:16 · 48 dtk", "19 Agu 2026"]].map(([t, m, d]) => (
+              <div key={t} style={{ display: "flex", alignItems: "center", gap: 11, padding: "10px 12px", borderRadius: 10, background: "var(--surface-2)", border: "1px solid var(--line)" }}>
+                <span style={{ width: 34, height: 34, borderRadius: 8, background: "var(--ink)", color: "var(--bg)", display: "grid", placeItems: "center", flex: "none" }}><Ic d="M8 5v14l11-7z" s={14} /></span>
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ fontWeight: 600, fontSize: ".88rem" }}>{t}</div>
+                  <div className="muted mono" style={{ fontSize: ".74rem" }}>{m} · {d}</div>
+                </div>
+                <div style={{ marginLeft: "auto", display: "flex", gap: 6, flex: "none" }}>
+                  <button style={{ ...btn("ghost"), padding: ".32rem .6rem", fontSize: ".76rem" }}>Unduh</button>
+                  <button style={{ ...btn("ghost"), padding: ".32rem .6rem", fontSize: ".76rem" }}>Bagikan</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+
+      {/* RIGHT column: player */}
+      <Card style={{ position: "sticky", top: 78, alignSelf: "start", display: "flex", flexDirection: "column" }}>
+        <H>Player</H>
+        <div style={{ borderRadius: 14, overflow: "hidden", border: "1px solid var(--line)", background: "var(--ink)", position: "relative", aspectRatio: arCss(orient), maxHeight: 420, margin: "0 auto", width: orient === "9:16" ? "min(100%, 260px)" : "100%" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={posterImg} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: genState === "done" ? 1 : .38 }} />
+          {genState === "done" ? (
+            <button aria-label="Putar" style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", border: "none", background: "rgba(20,15,9,.15)", cursor: "pointer" }}>
+              <span style={{ width: 62, height: 62, borderRadius: "50%", background: "rgba(255,255,255,.92)", color: "var(--ink)", display: "grid", placeItems: "center", boxShadow: "0 8px 24px rgba(0,0,0,.3)" }}><Ic d="M8 5v14l11-7z" s={26} /></span>
+            </button>
+          ) : genState === "working" ? (
+            <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", padding: 20 }}>
+              <div style={{ textAlign: "center", color: "#fff" }}>
+                <svg width="72" height="72" viewBox="0 0 72 72" style={{ transform: "rotate(-90deg)" }}>
+                  <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,.25)" strokeWidth="6" />
+                  <circle cx="36" cy="36" r="30" fill="none" stroke="#fff" strokeWidth="6" strokeLinecap="round" strokeDasharray={2 * Math.PI * 30} strokeDashoffset={2 * Math.PI * 30 * (1 - genPct / 100)} style={{ transition: "stroke-dashoffset .3s" }} />
+                </svg>
+                <div className="mono" style={{ fontWeight: 700, fontSize: "1.1rem", marginTop: 8 }}>{genPct}%</div>
+                <div style={{ fontSize: ".8rem", opacity: .85, marginTop: 2 }}>Merender…</div>
+              </div>
+            </div>
+          ) : (
+            <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", color: "rgba(255,255,255,.75)", textAlign: "center", padding: 24 }}>
+              <div><Ic d="M8 5v14l11-7z" s={30} /><div style={{ fontSize: ".84rem", marginTop: 6 }}>Video akan tampil di sini<br />setelah dibuat.</div></div>
+            </div>
+          )}
+        </div>
+
+        {genState === "done" && (
+          <>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 14 }}>
+              <Ic d="M8 5v14l11-7z" s={14} />
+              <div style={{ flex: 1, height: 5, borderRadius: 3, background: "var(--line)" }}><div style={{ width: "32%", height: "100%", borderRadius: 3, background: "var(--brand)" }} /></div>
+              <span className="mono muted" style={{ fontSize: ".74rem" }}>0:20 / 1:02</span>
+            </div>
+            <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
+              <button style={{ ...btn("brand"), flex: 1, justifyContent: "center", display: "flex" }}>Unduh</button>
+              <button style={{ ...btn("ghost"), flex: 1, justifyContent: "center", display: "flex" }}>Bagikan</button>
+            </div>
+            <div style={{ marginTop: 12, fontSize: ".82rem", color: "var(--good)", fontWeight: 600, textAlign: "center" }}>✓ Video 1:02 selesai dibuat</div>
+            <button onClick={() => { setGenState("idle"); setGenPct(0); }} style={{ ...btn("ghost"), marginTop: 10, width: "100%", justifyContent: "center", display: "flex", fontSize: ".84rem" }}>Buat video lain</button>
+          </>
+        )}
+        {genState === "working" && (
+          <div style={{ marginTop: 14, padding: "12px 14px", borderRadius: 10, background: "color-mix(in oklab, var(--brand) 8%, var(--surface-2))", border: "1px solid color-mix(in oklab, var(--brand) 22%, var(--line))" }}>
+            <div style={{ fontWeight: 700, fontSize: ".86rem", color: "var(--brand)", marginBottom: 4 }}>Berjalan di latar belakang</div>
+            <p className="muted" style={{ fontSize: ".82rem", margin: 0, lineHeight: 1.5 }}>Anda boleh berpindah menu atau menutup halaman — video tetap dirender. Kami beri tahu saat selesai.</p>
+            <button onClick={() => { setGenState("idle"); setGenPct(0); }} style={{ ...btn("ghost"), marginTop: 10, padding: ".4rem .8rem", fontSize: ".8rem" }}>Batalkan</button>
+          </div>
+        )}
+        {genState === "idle" && (
+          <p className="muted" style={{ fontSize: ".82rem", marginTop: 14, lineHeight: 1.5 }}>Unggah materi di kiri lalu tekan <strong style={{ color: "var(--ink)" }}>Generate</strong>. Proses berjalan di latar belakang, jadi Anda bebas melanjutkan pekerjaan lain.</p>
+        )}
       </Card>
     </div>
   );
@@ -207,27 +358,46 @@ function MemberDashboard() {
       <Card>
         <H>Konten siap dari sistem</H>
         <p className="muted" style={{ fontSize: ".86rem", marginTop: -8, marginBottom: 12 }}>Siap pakai berdasarkan properti & pasar Anda.</p>
-        <div style={{ display: "grid", gap: 10 }}>
-          {READY_CONTENT.map(([t, c]) => (
-            <div key={t} style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 14px", borderRadius: 10, background: "var(--surface-2)" }}>
-              <div><div style={{ fontSize: ".72rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: ".04em" }}>{c}</div><div style={{ fontWeight: 600, fontSize: ".92rem" }}>{t}</div></div>
-              <button style={{ ...btn("ghost"), marginLeft: "auto", padding: ".4rem .8rem", fontSize: ".82rem" }}>Pakai</button>
+        <div style={{ display: "grid", gap: 12 }}>
+          {READY_CONTENT.map((it) => (
+            <div key={it.t} style={{ display: "flex", gap: 12, padding: 10, borderRadius: 12, background: "var(--surface-2)", border: "1px solid var(--line)" }}>
+              <div style={{ width: 92, height: 92, borderRadius: 9, overflow: "hidden", flex: "none" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={it.img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              </div>
+              <div style={{ minWidth: 0, flex: 1, display: "flex", flexDirection: "column" }}>
+                <div style={{ fontSize: ".66rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: ".05em" }}>{it.c}</div>
+                <div style={{ fontWeight: 600, fontSize: ".94rem", lineHeight: 1.28, margin: "3px 0 4px" }}>{it.t}</div>
+                <div className="muted mono" style={{ fontSize: ".74rem" }}>{it.meta}</div>
+                <div style={{ marginTop: "auto", display: "flex", gap: 8, paddingTop: 8 }}>
+                  <button style={{ ...btn("brand"), padding: ".38rem .8rem", fontSize: ".8rem" }}>Pakai konten</button>
+                  <button style={{ ...btn("ghost"), padding: ".38rem .8rem", fontSize: ".8rem" }}>Pratinjau</button>
+                </div>
+              </div>
             </div>
           ))}
         </div>
-        <h3 className="display" style={{ fontSize: "1.05rem", fontWeight: 600, margin: "22px 0 4px" }}>Riwayat</h3>
+        <h3 className="display" style={{ fontSize: "1.05rem", fontWeight: 600, margin: "24px 0 4px" }}>Riwayat</h3>
         <p className="muted" style={{ fontSize: ".82rem", marginBottom: 12 }}>Kapan dipost ke blog & status bagikan/unduh.</p>
-        <div style={{ display: "grid", gap: 8 }}>
+        <div style={{ display: "grid", gap: 12 }}>
           {CONTENT_HISTORY.map((h) => (
-            <div key={h.t} style={{ padding: "10px 12px", borderRadius: 10, background: "var(--surface-2)" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
-                <span style={{ fontWeight: 600, fontSize: ".9rem" }}>{h.t}</span>
-                <span className="muted mono" style={{ fontSize: ".76rem", whiteSpace: "nowrap" }}>{h.posted ? h.date : "Draf"}</span>
+            <div key={h.t} style={{ display: "flex", gap: 12, padding: 10, borderRadius: 12, background: "var(--surface-2)", border: "1px solid var(--line)" }}>
+              <div style={{ width: 92, height: 92, borderRadius: 9, overflow: "hidden", flex: "none", position: "relative" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={h.img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", filter: h.posted ? "none" : "grayscale(.5)" }} />
+                {!h.posted && <span style={{ position: "absolute", inset: 0, background: "rgba(20,15,9,.35)", color: "#fff", display: "grid", placeItems: "center", fontSize: ".68rem", fontWeight: 700 }}>DRAF</span>}
               </div>
-              <div style={{ display: "flex", gap: 6, marginTop: 6, flexWrap: "wrap" }}>
-                <span style={tag(h.posted)}>{h.posted ? "Dipost ke blog" : "Belum dipost"}</span>
-                <span style={tag(h.shared)}>{h.shared ? "Dibagikan" : "Belum dibagikan"}</span>
-                <span style={tag(h.down)}>{h.down ? "Diunduh" : "Belum diunduh"}</span>
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "baseline" }}>
+                  <span style={{ fontSize: ".66rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: ".05em" }}>{h.c}</span>
+                  <span className="muted mono" style={{ fontSize: ".74rem", whiteSpace: "nowrap" }}>{h.posted ? h.date : "Belum dipost"}</span>
+                </div>
+                <div style={{ fontWeight: 600, fontSize: ".94rem", lineHeight: 1.28, margin: "2px 0 8px" }}>{h.t}</div>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                  <span style={tag(h.posted)}>{h.posted ? "Dipost ke blog" : "Belum dipost"}</span>
+                  <span style={tag(h.shared)}>{h.shared ? "Dibagikan" : "Belum dibagikan"}</span>
+                  <span style={tag(h.down)}>{h.down ? "Diunduh" : "Belum diunduh"}</span>
+                </div>
               </div>
             </div>
           ))}
@@ -265,28 +435,155 @@ function MemberDashboard() {
     </div>
   );
 
+  const usedVoices = VOICES.filter(Boolean).length;
+  const tabPill = (on: boolean): React.CSSProperties => ({ font: "inherit", fontSize: ".9rem", fontWeight: 600, cursor: "pointer", padding: ".55rem 1.1rem", borderRadius: 999, border: `1px solid ${on ? "var(--brand)" : "var(--line-2)"}`, background: on ? "color-mix(in oklab, var(--brand) 12%, var(--surface))" : "transparent", color: on ? "var(--brand)" : "var(--ink-2)" });
   const Assets = (
-    <Card>
-      <H>Pustaka aset cakra</H>
-      <p className="muted" style={{ fontSize: ".86rem", marginTop: -8, marginBottom: 14 }}>Aset siap pakai per format media sosial & video — bebas royalti.</p>
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
-        {FORMATS.map((f) => (
-          <button key={f.id} onClick={() => setAssetFmt(f.id)} style={{ font: "inherit", fontSize: ".84rem", fontWeight: 600, cursor: "pointer", padding: ".45rem .9rem", borderRadius: 999, border: `1px solid ${assetFmt === f.id ? "var(--brand)" : "var(--line-2)"}`, background: assetFmt === f.id ? "color-mix(in oklab, var(--brand) 12%, var(--surface))" : "transparent", color: assetFmt === f.id ? "var(--brand)" : "var(--ink-2)" }}>
-            <span className="mono">{f.id}</span>
-          </button>
+    <div style={{ display: "grid", gap: 18 }}>
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+        {([["gambar", "Gambar"], ["bgm", "Musik / BGM"], ["voice", "Voice karakter"]] as const).map(([id, l]) => (
+          <button key={id} onClick={() => setAssetTab(id)} style={tabPill(assetTab === id)}>{l}</button>
         ))}
       </div>
-      <p className="muted" style={{ fontSize: ".82rem", marginBottom: 14 }}>{FORMATS.find((f) => f.id === assetFmt)?.label}</p>
-      <div style={{ display: "grid", gridTemplateColumns: assetFmt === "9:16" ? "repeat(auto-fill,minmax(120px,1fr))" : "repeat(auto-fill,minmax(190px,1fr))", gap: 12 }}>
-        {ASSETS.map((a, i) => (
-          <div key={i} style={{ position: "relative", borderRadius: 10, overflow: "hidden", aspectRatio: arCss(assetFmt), border: "1px solid var(--line)" }} className="adm-asset">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={a} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-            <button style={{ position: "absolute", inset: 0, background: "rgba(20,15,9,.42)", color: "#fff", border: "none", cursor: "pointer", font: "inherit", fontWeight: 600, fontSize: ".85rem", opacity: 0, transition: ".15s" }} className="adm-use">Gunakan</button>
+
+      {assetTab === "gambar" && (
+        <Card>
+          <H>Gambar siap pakai</H>
+          <p className="muted" style={{ fontSize: ".86rem", marginTop: -8, marginBottom: 14 }}>Aset per format media sosial & video — bebas royalti.</p>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
+            {FORMATS.map((f) => (
+              <button key={f.id} onClick={() => setAssetFmt(f.id)} style={{ font: "inherit", fontSize: ".84rem", fontWeight: 600, cursor: "pointer", padding: ".45rem .9rem", borderRadius: 999, border: `1px solid ${assetFmt === f.id ? "var(--brand)" : "var(--line-2)"}`, background: assetFmt === f.id ? "color-mix(in oklab, var(--brand) 12%, var(--surface))" : "transparent", color: assetFmt === f.id ? "var(--brand)" : "var(--ink-2)" }}>
+                <span className="mono">{f.id}</span>
+              </button>
+            ))}
           </div>
-        ))}
-      </div>
-    </Card>
+          <p className="muted" style={{ fontSize: ".82rem", marginBottom: 14 }}>{FORMATS.find((f) => f.id === assetFmt)?.label}</p>
+          <div style={{ display: "grid", gridTemplateColumns: assetFmt === "9:16" ? "repeat(auto-fill,minmax(120px,1fr))" : "repeat(auto-fill,minmax(190px,1fr))", gap: 12 }}>
+            {ASSETS.map((a, i) => (
+              <div key={i} style={{ position: "relative", borderRadius: 10, overflow: "hidden", aspectRatio: arCss(assetFmt), border: "1px solid var(--line)" }} className="adm-asset">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={a} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                <button style={{ position: "absolute", inset: 0, background: "rgba(20,15,9,.42)", color: "#fff", border: "none", cursor: "pointer", font: "inherit", fontWeight: 600, fontSize: ".85rem", opacity: 0, transition: ".15s" }} className="adm-use">Gunakan</button>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
+
+      {assetTab === "bgm" && (
+        <Card>
+          <H>Musik latar (BGM)</H>
+          <p className="muted" style={{ fontSize: ".86rem", marginTop: -8, marginBottom: 16 }}>Bebas royalti — untuk reels, video listing, dan konten sosial.</p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 12 }}>
+            {BGM.map((b) => {
+              const on = bgmOn === b.t;
+              return (
+                <div key={b.t} style={{ display: "flex", alignItems: "center", gap: 13, padding: "12px 14px", borderRadius: 12, background: "var(--surface-2)", border: `1px solid ${on ? "color-mix(in oklab, var(--brand) 40%, var(--line))" : "var(--line)"}` }}>
+                  <button aria-label="Putar" onClick={() => setBgmOn(on ? null : b.t)} style={{ width: 44, height: 44, borderRadius: "50%", flex: "none", border: "none", cursor: "pointer", display: "grid", placeItems: "center", background: `var(${b.c})`, color: "#fff" }}>
+                    {on ? <Ic d="M7 5h4v14H7zM13 5h4v14h-4z" s={18} /> : <Ic d="M8 5v14l11-7z" s={18} />}
+                  </button>
+                  <div style={{ minWidth: 0, flex: 1 }}>
+                    <div style={{ fontWeight: 600, fontSize: ".92rem" }}>{b.t}</div>
+                    <div className="muted" style={{ fontSize: ".78rem" }}>{b.mood}</div>
+                  </div>
+                  <div className={"adm-eq" + (on ? " on" : "")} aria-hidden="true" style={{ display: "flex", alignItems: "flex-end", gap: 2, height: 20, flex: "none" }}>
+                    {[10, 16, 7, 19, 12].map((h, i) => <span key={i} style={{ width: 3, height: h, borderRadius: 2, background: on ? `var(${b.c})` : "var(--line-2)" }} />)}
+                  </div>
+                  <span className="mono muted" style={{ fontSize: ".76rem", flex: "none", width: 34, textAlign: "right" }}>{b.dur}</span>
+                  <button style={{ ...btn("ghost"), padding: ".35rem .7rem", fontSize: ".78rem", flex: "none" }}>Pakai</button>
+                </div>
+              );
+            })}
+          </div>
+          <div style={{ marginTop: 18, padding: "16px 18px", borderRadius: 12, background: "color-mix(in oklab, var(--brand) 7%, var(--surface-2))", border: "1px solid color-mix(in oklab, var(--brand) 20%, var(--line))", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+            <div style={{ minWidth: 220, flex: 1 }}>
+              <div style={{ fontWeight: 700, fontSize: ".92rem", color: "var(--brand)" }}>✨ Buat BGM khusus Anda</div>
+              <p className="muted" style={{ fontSize: ".84rem", margin: "4px 0 0", lineHeight: 1.5 }}>Hasilkan musik latar unik agar tidak sama dengan agen lain.</p>
+            </div>
+            <button style={btn("brand")}>Buat BGM baru</button>
+          </div>
+        </Card>
+      )}
+
+      {assetTab === "voice" && (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18, alignItems: "start" }} className="adm-2">
+          {/* LEFT: your 3 voice slots */}
+          <Card>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+              <H>Voice karakter Anda</H>
+              <span style={{ fontSize: ".74rem", fontWeight: 700, padding: ".25rem .6rem", borderRadius: 999, background: "color-mix(in oklab, var(--brand) 14%, var(--surface))", color: "var(--brand)" }}>{usedVoices} / 3 terpakai</span>
+            </div>
+            <p className="muted" style={{ fontSize: ".84rem", marginTop: -8, marginBottom: 14, lineHeight: 1.5 }}>Setiap agen memiliki 3 voice eksklusif, dipilih sekali dan bersifat <strong style={{ color: "var(--ink)" }}>permanen</strong> — agar suara brand Anda tidak sama dengan siapa pun.</p>
+            <div style={{ display: "grid", gap: 12 }}>
+              {VOICES.map((v, i) => v ? (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 13, padding: "13px 15px", borderRadius: 12, background: "var(--surface-2)", border: "1px solid var(--line)" }}>
+                  <button aria-label="Dengar" style={{ width: 42, height: 42, borderRadius: "50%", flex: "none", border: "none", cursor: "pointer", display: "grid", placeItems: "center", background: "var(--ink)", color: "var(--bg)" }}><Ic d="M8 5v14l11-7z" s={16} /></button>
+                  <div style={{ minWidth: 0, flex: 1 }}>
+                    <div style={{ fontWeight: 600, fontSize: ".94rem" }}>{v.name}</div>
+                    <div className="muted" style={{ fontSize: ".8rem" }}>{v.desc}</div>
+                  </div>
+                  <div aria-hidden="true" style={{ display: "flex", alignItems: "center", gap: 2, height: 22, flex: "none" }}>
+                    {v.wave.map((h, j) => <span key={j} style={{ width: 2.5, height: h, borderRadius: 2, background: "var(--line-2)" }} />)}
+                  </div>
+                  <span style={{ fontSize: ".68rem", fontWeight: 700, color: "var(--good)", flex: "none", display: "inline-flex", alignItems: "center", gap: 4 }}><Ic d="M12 1a5 5 0 0 0-5 5v4H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V6a5 5 0 0 0-5-5Zm3 9H9V6a3 3 0 0 1 6 0v4Z" s={13} /></span>
+                </div>
+              ) : (
+                <div key={i} style={{ ...drop, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "18px 15px" }}>
+                  <Ic d="M12 5v14M5 12h14" s={18} /><span style={{ fontSize: ".86rem", fontWeight: 600 }}>Slot kosong — buat voice baru →</span>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* RIGHT: create new voice via ElevenLabs */}
+          <Card>
+            <H>Buat voice baru</H>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: ".74rem", fontWeight: 700, color: "var(--muted)", marginTop: -8, marginBottom: 14 }}>
+              <span style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--good)" }} /> Ditenagai ElevenLabs
+            </div>
+            {usedVoices >= 3 ? (
+              <div style={{ padding: "18px", borderRadius: 12, background: "var(--surface-2)", textAlign: "center" }}>
+                <div style={{ fontWeight: 700 }}>Kuota 3 voice sudah penuh</div>
+                <p className="muted" style={{ fontSize: ".84rem", margin: "6px 0 0" }}>Pilihan voice bersifat permanen dan tidak dapat diganti.</p>
+              </div>
+            ) : voiceGen === "done" ? (
+              <div style={{ padding: "22px 18px", borderRadius: 12, background: "color-mix(in oklab, var(--good) 10%, var(--surface-2))", border: "1px solid color-mix(in oklab, var(--good) 30%, var(--line))", textAlign: "center" }}>
+                <div style={{ fontSize: "1.6rem" }}>✓</div>
+                <div style={{ fontWeight: 700, marginTop: 4 }}>Voice tersimpan permanen</div>
+                <p className="muted" style={{ fontSize: ".84rem", margin: "6px 0 14px" }}>Voice baru siap dipakai di Editor & konten. Sisa kuota: {3 - usedVoices - 1}.</p>
+                <button onClick={() => setVoiceGen("idle")} style={btn("ghost")}>Selesai</button>
+              </div>
+            ) : (
+              <div style={{ display: "grid", gap: 14 }}>
+                <div><label style={lbl}>Nama voice</label><input placeholder="mis. Kirana — Elegan" style={inp} /></div>
+                <div>
+                  <label style={lbl}>Jenis suara</label>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    {["Perempuan", "Laki-laki"].map((g) => (
+                      <button key={g} style={{ ...btn("ghost"), padding: ".5rem 1rem", flex: 1 }}>{g}</button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label style={lbl}>Gaya / karakter</label>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
+                    {VOICE_STYLES.map((s) => (
+                      <button key={s} onClick={() => setVoiceStyle(s)} style={{ font: "inherit", fontSize: ".8rem", fontWeight: 600, cursor: "pointer", padding: ".38rem .8rem", borderRadius: 999, border: `1px solid ${voiceStyle === s ? "var(--brand)" : "var(--line-2)"}`, background: voiceStyle === s ? "color-mix(in oklab, var(--brand) 12%, var(--surface))" : "transparent", color: voiceStyle === s ? "var(--brand)" : "var(--ink-2)" }}>{s}</button>
+                    ))}
+                  </div>
+                </div>
+                <div><label style={lbl}>Contoh teks (untuk pratinjau)</label><textarea rows={3} placeholder="Selamat datang di Kirana — properti impian Anda di Bali…" style={{ ...inp, resize: "vertical" }} /></div>
+                <div style={{ padding: "10px 12px", borderRadius: 10, background: "color-mix(in oklab, var(--warn) 10%, var(--surface-2))", border: "1px solid color-mix(in oklab, var(--warn) 26%, var(--line))", fontSize: ".8rem", color: "var(--ink-2)", lineHeight: 1.5 }}>
+                  ⚠️ Setelah disimpan, voice ini <strong>tidak bisa diganti</strong>. Anda punya {3 - usedVoices} slot tersisa.
+                </div>
+                <button onClick={() => setVoiceGen("working")} disabled={voiceGen === "working"} style={{ ...btn("brand"), opacity: voiceGen === "working" ? .6 : 1, justifyContent: "center", display: "flex" }}>
+                  {voiceGen === "working" ? "Membuat voice…" : "✨ Generate & simpan permanen"}
+                </button>
+              </div>
+            )}
+          </Card>
+        </div>
+      )}
+    </div>
   );
 
   const Profile = (
@@ -339,29 +636,42 @@ function MemberDashboard() {
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg)" }}>
-      <aside className="adm-side" style={{ width: 236, flex: "none", background: "var(--surface)", borderRight: "1px solid var(--line)", padding: "18px 14px", position: "sticky", top: 0, height: "100vh", display: "flex", flexDirection: "column" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 7, padding: "6px 8px 20px" }}>
-          <CakraMark size={30} /><span className="hand" style={{ fontSize: "1.7rem", fontWeight: 700, lineHeight: 1 }}>cakra</span>
+      <aside className="adm-side" style={{ width: collapsed ? 74 : 236, flex: "none", background: "var(--surface)", borderRight: "1px solid var(--line)", padding: collapsed ? "18px 10px" : "18px 14px", position: "sticky", top: 0, height: "100vh", display: "flex", flexDirection: "column", transition: "width .2s ease, padding .2s ease" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: collapsed ? "center" : "flex-start", gap: 7, padding: collapsed ? "6px 0 20px" : "6px 8px 20px" }}>
+          <CakraMark size={30} />{!collapsed && <span className="hand" style={{ fontSize: "1.7rem", fontWeight: 700, lineHeight: 1 }}>cakra</span>}
         </div>
         <nav style={{ display: "grid", gap: 3 }}>
           {NAV.map((n) => (
-            <button key={n.id} onClick={() => setSec(n.id)} style={{ display: "flex", alignItems: "center", gap: 11, padding: ".65rem .7rem", borderRadius: 10, border: "none", cursor: "pointer", font: "inherit", fontSize: ".95rem", fontWeight: sec === n.id ? 600 : 500, textAlign: "left", background: sec === n.id ? "color-mix(in oklab, var(--brand) 12%, var(--surface))" : "transparent", color: sec === n.id ? "var(--brand)" : "var(--ink-2)", transition: ".15s" }}>
-              <Ic d={n.icon} />{n.label}
+            <button key={n.id} onClick={() => setSec(n.id)} title={n.label} style={{ display: "flex", alignItems: "center", justifyContent: collapsed ? "center" : "flex-start", gap: 11, padding: ".65rem .7rem", borderRadius: 10, border: "none", cursor: "pointer", font: "inherit", fontSize: ".95rem", fontWeight: sec === n.id ? 600 : 500, textAlign: "left", background: sec === n.id ? "color-mix(in oklab, var(--brand) 12%, var(--surface))" : "transparent", color: sec === n.id ? "var(--brand)" : "var(--ink-2)", transition: ".15s" }}>
+              <Ic d={n.icon} />{!collapsed && n.label}
             </button>
           ))}
         </nav>
-        <button onClick={() => setSec("profile")} style={{ marginTop: "auto", display: "flex", alignItems: "center", gap: 10, padding: "10px 8px", borderRadius: 12, border: "1px solid var(--line)", background: sec === "profile" ? "var(--surface-2)" : "transparent", cursor: "pointer", font: "inherit", textAlign: "left" }}>
+        <button onClick={() => setSec("profile")} title="Kirana Sutanto" style={{ marginTop: "auto", display: "flex", alignItems: "center", justifyContent: collapsed ? "center" : "flex-start", gap: 10, padding: "10px 8px", borderRadius: 12, border: "1px solid var(--line)", background: sec === "profile" ? "var(--surface-2)" : "transparent", cursor: "pointer", font: "inherit", textAlign: "left" }}>
           <span style={{ width: 36, height: 36, borderRadius: "50%", background: "var(--ink)", color: "var(--bg)", display: "grid", placeItems: "center", fontWeight: 700, flex: "none" }}>K</span>
-          <span style={{ minWidth: 0 }}><span style={{ display: "block", fontWeight: 600, fontSize: ".9rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Kirana Sutanto</span><span className="muted" style={{ fontSize: ".78rem" }}>Paket Pro</span></span>
+          {!collapsed && <span style={{ minWidth: 0 }}><span style={{ display: "block", fontWeight: 600, fontSize: ".9rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Kirana Sutanto</span><span className="muted" style={{ fontSize: ".78rem" }}>Paket Pro</span></span>}
         </button>
       </aside>
 
       <div style={{ flex: 1, minWidth: 0 }}>
-        <header style={{ height: 60, borderBottom: "1px solid var(--line)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 clamp(18px,3vw,32px)", background: "color-mix(in oklab, var(--bg) 86%, transparent)", backdropFilter: "blur(8px)", position: "sticky", top: 0, zIndex: 5 }}>
-          <span style={{ fontSize: ".82rem", color: "var(--warn)", fontWeight: 600 }}>● Mode terbuka · tanpa autentikasi</span>
-          <a href="https://kirana.cakra.site" className="mono" style={{ fontSize: ".82rem", color: "var(--muted)", textDecoration: "none" }}>kirana.cakra.site ↗</a>
+        <header style={{ height: 60, borderBottom: "1px solid var(--line)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, padding: "0 clamp(14px,3vw,28px)", background: "color-mix(in oklab, var(--bg) 86%, transparent)", backdropFilter: "blur(8px)", position: "sticky", top: 0, zIndex: 5 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
+            <button onClick={() => setCollapsed((c) => !c)} aria-label={collapsed ? "Buka menu" : "Sembunyikan menu"} title={collapsed ? "Buka menu" : "Sembunyikan menu"} style={{ display: "grid", placeItems: "center", width: 38, height: 38, borderRadius: 10, border: "1px solid var(--line-2)", background: "transparent", color: "var(--ink)", cursor: "pointer", flex: "none" }}>
+              <Ic d="M4 6h16v2H4zM4 11h16v2H4zM4 16h16v2H4z" s={18} />
+            </button>
+            <span style={{ fontSize: ".82rem", color: "var(--warn)", fontWeight: 600, whiteSpace: "nowrap" }} className="adm-openmode">● Mode terbuka · tanpa autentikasi</span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
+            {genState === "working" && (
+              <button onClick={() => setSec("editor")} title="Lihat proses" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: ".38rem .7rem", borderRadius: 999, border: "1px solid color-mix(in oklab, var(--brand) 30%, var(--line))", background: "color-mix(in oklab, var(--brand) 10%, var(--surface))", color: "var(--brand)", cursor: "pointer", font: "inherit", fontSize: ".78rem", fontWeight: 700, flex: "none" }}>
+                <span className="adm-spin" style={{ width: 12, height: 12, borderRadius: "50%", border: "2px solid color-mix(in oklab, var(--brand) 30%, transparent)", borderTopColor: "var(--brand)", flex: "none" }} />
+                Merender video {genPct}%
+              </button>
+            )}
+            <a href="https://kirana.cakra.site" className="mono adm-hosturl" style={{ fontSize: ".82rem", color: "var(--muted)", textDecoration: "none", whiteSpace: "nowrap" }}>kirana.cakra.site ↗</a>
+          </div>
         </header>
-        <main className="adm-main" style={{ padding: "clamp(20px,3vw,34px)", maxWidth: 1120 }}>
+        <main className="adm-main" style={{ padding: "clamp(20px,3vw,34px)", maxWidth: 1400 }}>
           <h1 className="display" style={{ fontSize: "1.6rem", fontWeight: 700, margin: 0 }}>{titles[sec][0]}</h1>
           <p className="muted" style={{ margin: "4px 0 22px" }}>{titles[sec][1]}</p>
           {body}
@@ -370,8 +680,16 @@ function MemberDashboard() {
 
       <style>{`
         .adm-asset:hover .adm-use{ opacity:1 !important; }
+        .adm-eq.on span{ animation: admEq .9s ease-in-out infinite; }
+        .adm-eq.on span:nth-child(2){ animation-delay:.15s } .adm-eq.on span:nth-child(3){ animation-delay:.3s } .adm-eq.on span:nth-child(4){ animation-delay:.45s } .adm-eq.on span:nth-child(5){ animation-delay:.6s }
+        @keyframes admEq{ 0%,100%{ transform:scaleY(.4) } 50%{ transform:scaleY(1) } }
+        .adm-eq span{ transform-origin:bottom }
+        @keyframes admSpin{ to{ transform:rotate(360deg) } }
+        .adm-spin{ animation: admSpin .8s linear infinite; }
         @media (max-width: 860px){ .adm-2{ grid-template-columns:1fr !important; } }
+        @media (max-width: 640px){ .adm-openmode{ display:none !important; } .adm-hosturl{ display:none !important; } }
         @media (max-width: 720px){ .adm-side{ display:none !important; } }
+        @media (prefers-reduced-motion: reduce){ .adm-eq.on span, .adm-spin{ animation:none !important; } }
       `}</style>
     </div>
   );

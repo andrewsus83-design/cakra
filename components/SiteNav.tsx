@@ -76,12 +76,12 @@ export function SiteNav() {
         }}
       >
         <div className="wrap cakra-navbar" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 86 }}>
-          <Link href="/" className="cakra-logo" style={{ display: "flex", alignItems: "center", gap: 6, textDecoration: "none", color: txt }}>
+          <Link href="/" className="cakra-logo" style={{ display: "flex", alignItems: "center", gap: 4, textDecoration: "none", color: txt, marginLeft: -8 }}>
             <CakraMark size={46} />
             <span className="hand cakra-word" style={{ fontSize: "2.95rem", fontWeight: 700, lineHeight: 1 }}>cakra</span>
           </Link>
-          <div style={{ display: "flex", alignItems: "center", gap: 34 }}>
-            <nav style={{ display: "flex", gap: 30, alignItems: "center" }} className="cakra-navlinks">
+          <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+            <nav style={{ display: "flex", gap: 24, alignItems: "center" }} className="cakra-navlinks">
               {LINKS.map((l) => (
                 <Link key={l.href} href={l.href} style={{ color: muted, textDecoration: "none", fontSize: "1.12rem", fontWeight: 500, transition: "color .3s" }}>
                   {l.label}
