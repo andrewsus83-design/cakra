@@ -86,7 +86,7 @@ export default function Page() {
           </div>
           <div className="ab-img" style={{ aspectRatio: "3 / 2" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/about/shift.jpg" alt="Tangan memegang ponsel di teras rumah saat senja — pencarian properti kini dimulai dari sebuah pertanyaan" />
+            <img src="/about/shift-ai.jpg" alt="Tangan memegang ponsel yang menampilkan pencarian properti lewat asisten AI — era pencarian baru" />
           </div>
         </div>
       </section>
