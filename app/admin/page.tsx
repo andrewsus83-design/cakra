@@ -1,152 +1,272 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CakraMark } from "@/components/CakraMark";
+import { StaffAdmin } from "./StaffAdmin";
 
-type Section = "dashboard" | "member" | "assets" | "listing" | "hub" | "editor" | "llm" | "setting";
+type Sec = "home" | "listing" | "editor" | "content" | "assets" | "profile";
 
-const NAV: { id: Section; label: string; icon: string }[] = [
-  { id: "dashboard", label: "Dashboard", icon: "M3 13h8V3H3v10Zm10 8h8V3h-8v18ZM3 21h8v-6H3v6Z" },
-  { id: "member", label: "Member", icon: "M16 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm-8 0a3 3 0 1 0-3-3 3 3 0 0 0 3 3Zm0 2c-2.7 0-6 1.3-6 4v3h8v-3c0-1 .4-1.9 1-2.6C7.9 13.1 6.9 13 8 13Zm8 0c-2.7 0-8 1.3-8 4v3h16v-3c0-2.7-5.3-4-8-4Z" },
+const NAV: { id: Sec; label: string; icon: string }[] = [
+  { id: "home", label: "Home", icon: "M12 3 2.5 11H5v10h5v-6h4v6h5V11h2.5z" },
+  { id: "listing", label: "Listing", icon: "M4 5h16v3H4zM4 10.5h16v3H4zM4 16h16v3H4z" },
+  { id: "editor", label: "Editor", icon: "M4 4h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Zm6 3v6l5-3z" },
+  { id: "content", label: "Content", icon: "M6 2h9l5 5v14.2A.8.8 0 0 1 19.2 22H6a.8.8 0 0 1-.8-.8V2.8A.8.8 0 0 1 6 2Zm2 9h8v1.8H8zm0 4h8v1.8H8z" },
   { id: "assets", label: "Assets", icon: "M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm2.5 3a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3ZM5 17h14l-4.5-6-3.5 4.5-2-2.5L5 17Z" },
-  { id: "listing", label: "Listing", icon: "M12 3 2.5 11H5v10h5v-6h4v6h5V11h2.5z" },
-  { id: "hub", label: "Hub", icon: "M6 2h9l5 5v14.2A.8.8 0 0 1 19.2 22H6a.8.8 0 0 1-.8-.8V2.8A.8.8 0 0 1 6 2Zm2 9h8v1.8H8zm0 4h8v1.8H8z" },
-  { id: "editor", label: "Editor", icon: "M4 20h4L18.5 9.5l-4-4L4 16v4ZM17 3.5l3.5 3.5 1.4-1.4a1.5 1.5 0 0 0 0-2.1L20.6 2.1a1.5 1.5 0 0 0-2.1 0L17 3.5Z" },
-  { id: "llm", label: "LLM & API", icon: "M9 3h6v3h4v4h-3v4h3v4h-4v3H9v-3H5v-4h3v-4H5V6h4V3Zm2 8v2h2v-2h-2Z" },
-  { id: "setting", label: "Setting", icon: "M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm9 4-2 .3a7 7 0 0 1-.5 1.3l1.2 1.7-1.4 1.4-1.7-1.2a7 7 0 0 1-1.3.5L14.3 20H9.7l-.3-2a7 7 0 0 1-1.3-.5l-1.7 1.2-1.4-1.4 1.2-1.7a7 7 0 0 1-.5-1.3L3 12l.3-2a7 7 0 0 1 .5-1.3L2.6 7 4 5.6l1.7 1.2A7 7 0 0 1 7 6.3L9.7 4h4.6l.3 2c.5.1.9.3 1.3.5l1.7-1.2L19 6.7l-1.2 1.7c.2.4.4.8.5 1.3L21 10v2Z" },
 ];
 
-const MEMBERS = [
-  { n: "Kirana Sutanto", e: "kirana@email.com", plan: "Pro", st: "Aktif", site: "kirana.cakra.site", area: "Bali" },
-  { n: "Andi Pratama", e: "andi@email.com", plan: "Pro", st: "Aktif", site: "andipratama.cakra.site", area: "Jakarta" },
-  { n: "Sarah Wijaya", e: "sarah@email.com", plan: "Starter", st: "Aktif", site: "sarahwijaya.cakra.site", area: "Bandung" },
-  { n: "Budi Santoso", e: "budi@email.com", plan: "Pro", st: "Trial", site: "budisantoso.cakra.site", area: "Jakarta" },
-  { n: "Made Surya", e: "made@email.com", plan: "Starter", st: "Aktif", site: "madesurya.cakra.site", area: "Bali" },
-  { n: "Dewi Lestari", e: "dewi@email.com", plan: "Pro", st: "Aktif", site: "dewilestari.cakra.site", area: "Surabaya" },
-  { n: "Rian Hakim", e: "rian@email.com", plan: "Starter", st: "Nonaktif", site: "rianhakim.cakra.site", area: "Bogor" },
+const CENTERS = [["Website", 88, "--c-crown"], ["Listing", 74, "--c-eye"], ["Konten", 70, "--c-throat"], ["SEO", 72, "--c-heart"], ["GEO", 66, "--c-solar"], ["Social", 61, "--c-sacral"], ["Reputasi", 80, "--c-root"]] as const;
+const PERF = [["Kunjungan / bln", "3.240", "+14%", "--c-eye"], ["Lead masuk", "48", "+9", "--c-heart"], ["Listing aktif", "12", "2 baru", "--c-throat"], ["Peringkat SEO", "#3", "“vila Canggu”", "--c-solar"]] as const;
+const LISTINGS = [
+  { t: "Vila Uluwatu Cliff", st: "Dijual", price: "Rp 14 M", views: 320 },
+  { t: "Vila Canggu Estate", st: "Dijual", price: "Rp 8,5 M", views: 210 },
+  { t: "Vila Seminyak Retreat", st: "Disewa", price: "Rp 3,2 M/thn", views: 180 },
+  { t: "Townhouse Sanur", st: "Dijual", price: "Rp 4,8 M", views: 96 },
 ];
-
-const STATS = [
-  { l: "Total member", v: "148", d: "+12 bulan ini", c: "--c-eye" },
-  { l: "Website aktif", v: "132", d: "89% dari member", c: "--c-heart" },
-  { l: "Total listing", v: "1.240", d: "+86 minggu ini", c: "--c-throat" },
-  { l: "MRR", v: "Rp 42 jt", d: "+8% MoM", c: "--c-solar" },
+const IDEAS = [
+  ["Panduan harga vila Canggu 2026", "Pasar"],
+  ["5 alasan investasi properti Uluwatu", "Investasi"],
+  ["Hak pakai vs PT PMA untuk pembeli asing", "Legal"],
+  ["Tur 60 detik: Vila Seminyak Retreat", "Konten"],
 ];
+const ASSETS = ["/about/hero.jpg", "/about/transform.jpg", "/hero.jpg", "/about/invite.jpg", "/blog-0.jpg", "/blog-1.jpg", "/about/vision-hill.jpg", "/hero-top.jpg"];
 
-const INTEGRATIONS = [
-  ["Kling 3", "Video AI", true], ["ElevenLabs", "Voice AI", true], ["Firecrawl", "Web scraping", true],
-  ["Perplexity", "Riset AI", true], ["Gemini", "LLM", true], ["Claude", "LLM", true],
-  ["OpenAI", "LLM", false], ["Apify", "Otomasi data", false],
-];
+const SCORE = 76;
 
-function Ic({ d }: { d: string }) {
-  return <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d={d} /></svg>;
+function Ic({ d, s = 18 }: { d: string; s?: number }) {
+  return <svg viewBox="0 0 24 24" width={s} height={s} fill="currentColor" aria-hidden="true"><path d={d} /></svg>;
 }
-function stColor(st: string) { return st === "Aktif" ? "var(--good)" : st === "Trial" ? "var(--warn)" : "var(--crit)"; }
-
-function Panel({ title, sub, children }: { title: string; sub?: string; children?: React.ReactNode }) {
-  return (
-    <div>
-      <h1 style={{ fontSize: "1.6rem", fontWeight: 700, margin: 0 }} className="display">{title}</h1>
-      {sub && <p className="muted" style={{ margin: "4px 0 22px" }}>{sub}</p>}
-      {children}
-    </div>
-  );
+function Card({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
+  return <div className="card" style={{ padding: 22, ...style }}>{children}</div>;
 }
-function Placeholder({ title, sub, note }: { title: string; sub: string; note: string }) {
-  return (
-    <Panel title={title} sub={sub}>
-      <div className="card" style={{ padding: 40, textAlign: "center", color: "var(--muted)" }}>{note}</div>
-    </Panel>
-  );
+function H({ children }: { children: React.ReactNode }) {
+  return <h2 className="display" style={{ fontSize: "1.15rem", fontWeight: 600, margin: "0 0 14px" }}>{children}</h2>;
 }
+function btn(kind: "brand" | "ghost" = "brand"): React.CSSProperties {
+  return kind === "brand"
+    ? { background: "var(--brand)", color: "#fff", border: "none", borderRadius: 10, padding: ".62rem 1.2rem", font: "inherit", fontWeight: 600, fontSize: ".9rem", cursor: "pointer" }
+    : { background: "transparent", color: "var(--ink)", border: "1px solid var(--line-2)", borderRadius: 10, padding: ".62rem 1.2rem", font: "inherit", fontWeight: 600, fontSize: ".9rem", cursor: "pointer" };
+}
+const drop: React.CSSProperties = { border: "1.5px dashed var(--line-2)", borderRadius: 12, padding: "22px 16px", textAlign: "center", color: "var(--muted)", cursor: "pointer", background: "var(--surface-2)" };
 
-export default function Admin() {
-  const [sec, setSec] = useState<Section>("dashboard");
+function MemberDashboard() {
+  const [sec, setSec] = useState<Sec>("home");
+  const [orient, setOrient] = useState<"9:16" | "16:9">("9:16");
+  const [gen, setGen] = useState<string | null>(null);
 
-  const Members = (
-    <div className="card" style={{ overflow: "hidden" }}>
-      <div style={{ overflowX: "auto" }}>
-        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: ".92rem", minWidth: 720 }}>
-          <thead>
-            <tr style={{ textAlign: "left", color: "var(--muted)", fontSize: ".78rem", textTransform: "uppercase", letterSpacing: ".05em" }}>
-              {["Member", "Paket", "Status", "Website", "Area"].map((h) => <th key={h} style={{ padding: "14px 18px", borderBottom: "1px solid var(--line)" }}>{h}</th>)}
-            </tr>
-          </thead>
-          <tbody>
-            {MEMBERS.map((m) => (
-              <tr key={m.e}>
-                <td style={{ padding: "14px 18px", borderBottom: "1px solid var(--line)" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <span style={{ width: 32, height: 32, borderRadius: "50%", background: "color-mix(in oklab, var(--brand) 18%, var(--surface))", color: "var(--brand)", display: "grid", placeItems: "center", fontWeight: 700, fontSize: ".82rem" }}>{m.n[0]}</span>
-                    <div><div style={{ fontWeight: 600 }}>{m.n}</div><div className="muted" style={{ fontSize: ".82rem" }}>{m.e}</div></div>
-                  </div>
-                </td>
-                <td style={{ padding: "14px 18px", borderBottom: "1px solid var(--line)" }}><span className="pill">{m.plan}</span></td>
-                <td style={{ padding: "14px 18px", borderBottom: "1px solid var(--line)" }}><span style={{ display: "inline-flex", alignItems: "center", gap: 6, color: stColor(m.st), fontWeight: 600 }}><span style={{ width: 7, height: 7, borderRadius: "50%", background: "currentColor" }} />{m.st}</span></td>
-                <td style={{ padding: "14px 18px", borderBottom: "1px solid var(--line)" }}><span className="mono" style={{ fontSize: ".84rem" }}>{m.site}</span></td>
-                <td style={{ padding: "14px 18px", borderBottom: "1px solid var(--line)" }} className="muted">{m.area}</td>
-              </tr>
+  const r = 52, circ = 2 * Math.PI * r;
+
+  const Home = (
+    <>
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(280px, .8fr) 1.2fr", gap: 18, marginBottom: 18 }} className="adm-2">
+        <Card>
+          <H>Analisa profil</H>
+          <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
+            <svg width="128" height="128" viewBox="0 0 128 128" style={{ flex: "none" }}>
+              <circle cx="64" cy="64" r={r} fill="none" stroke="var(--line)" strokeWidth="11" />
+              <circle cx="64" cy="64" r={r} fill="none" stroke="var(--brand)" strokeWidth="11" strokeLinecap="round" strokeDasharray={circ} strokeDashoffset={circ * (1 - SCORE / 100)} transform="rotate(-90 64 64)" />
+              <text x="64" y="60" textAnchor="middle" className="display" style={{ fontSize: 30, fontWeight: 700, fill: "var(--ink)" }}>{SCORE}</text>
+              <text x="64" y="80" textAnchor="middle" style={{ fontSize: 10, fill: "var(--muted)", letterSpacing: 1 }}>PRESENCE</text>
+            </svg>
+            <div style={{ flex: 1, display: "grid", gap: 7 }}>
+              {CENTERS.map(([n, v, c]) => (
+                <div key={n}>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: ".8rem" }}><span>{n}</span><span className="muted mono">{v}</span></div>
+                  <div style={{ height: 5, borderRadius: 3, background: "var(--line)", marginTop: 2 }}><div style={{ height: "100%", width: `${v}%`, borderRadius: 3, background: `var(${c})` }} /></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Card>
+        <Card>
+          <H>Performa digital</H>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+            {PERF.map(([l, v, d, c]) => (
+              <div key={l} style={{ padding: "14px 16px", borderRadius: 12, background: "var(--surface-2)" }}>
+                <div className="muted" style={{ fontSize: ".82rem" }}>{l}</div>
+                <div className="display" style={{ fontSize: "1.7rem", fontWeight: 700, color: `var(${c})`, lineHeight: 1.1 }}>{v}</div>
+                <div className="muted" style={{ fontSize: ".76rem" }}>{d}</div>
+              </div>
             ))}
-          </tbody>
-        </table>
+          </div>
+        </Card>
       </div>
+      <Card>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+          <H>Preview website</H>
+          <button style={btn("brand")} onClick={() => setSec("home")}>Edit website</button>
+        </div>
+        <div style={{ borderRadius: 14, overflow: "hidden", border: "1px solid var(--line)" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 12px", background: "var(--surface-2)", borderBottom: "1px solid var(--line)" }}>
+            <span style={{ width: 9, height: 9, borderRadius: "50%", background: "var(--line-2)" }} /><span style={{ width: 9, height: 9, borderRadius: "50%", background: "var(--line-2)" }} /><span style={{ width: 9, height: 9, borderRadius: "50%", background: "var(--line-2)" }} />
+            <span className="mono" style={{ marginLeft: 10, fontSize: ".8rem", color: "var(--muted)" }}>kirana.cakra.site</span>
+            <span style={{ marginLeft: "auto", fontSize: ".74rem", fontWeight: 700, color: "var(--good)", background: "color-mix(in oklab, var(--good) 14%, var(--surface))", padding: ".2rem .5rem", borderRadius: 999 }}>Skor {SCORE} · Baik</span>
+          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/hero.jpg" alt="Preview website member" style={{ width: "100%", display: "block", maxHeight: 260, objectFit: "cover" }} />
+        </div>
+        <p className="muted" style={{ fontSize: ".88rem", marginTop: 12 }}>Analisa: SEO & GEO kuat, tingkatkan konten sosial dan reputasi untuk menembus skor 85+.</p>
+      </Card>
+    </>
+  );
+
+  const Listing = (
+    <>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, flexWrap: "wrap", gap: 12 }}>
+        <div style={{ display: "flex", gap: 8 }}><span className="pill">Semua</span><span className="pill" style={{ opacity: .6 }}>Riwayat</span></div>
+        <button style={btn("brand")}>+ Tambah listing</button>
+      </div>
+      <Card style={{ padding: 0, overflow: "hidden" }}>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: ".92rem", minWidth: 640 }}>
+            <thead><tr style={{ textAlign: "left", color: "var(--muted)", fontSize: ".76rem", textTransform: "uppercase", letterSpacing: ".05em" }}>{["Properti", "Status", "Harga", "Dilihat", ""].map((h) => <th key={h} style={{ padding: "14px 18px", borderBottom: "1px solid var(--line)" }}>{h}</th>)}</tr></thead>
+            <tbody>
+              {LISTINGS.map((l) => (
+                <tr key={l.t}>
+                  <td style={{ padding: "14px 18px", borderBottom: "1px solid var(--line)", fontWeight: 600 }}>{l.t}</td>
+                  <td style={{ padding: "14px 18px", borderBottom: "1px solid var(--line)" }}><span style={{ color: l.st === "Dijual" ? "var(--brand)" : "var(--jade)", fontWeight: 600, fontSize: ".85rem" }}>{l.st}</span></td>
+                  <td style={{ padding: "14px 18px", borderBottom: "1px solid var(--line)" }} className="mono">{l.price}</td>
+                  <td style={{ padding: "14px 18px", borderBottom: "1px solid var(--line)" }} className="muted">{l.views}×</td>
+                  <td style={{ padding: "14px 18px", borderBottom: "1px solid var(--line)", textAlign: "right", whiteSpace: "nowrap" }}>
+                    <button style={{ ...btn("ghost"), padding: ".35rem .7rem", fontSize: ".82rem" }}>Edit</button>{" "}
+                    <button style={{ ...btn("ghost"), padding: ".35rem .7rem", fontSize: ".82rem", color: "var(--crit)", borderColor: "color-mix(in oklab, var(--crit) 40%, var(--line-2))" }}>Hapus</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+    </>
+  );
+
+  const Editor = (
+    <div style={{ display: "grid", gridTemplateColumns: "1.3fr .7fr", gap: 18 }} className="adm-2">
+      <Card>
+        <H>Buat video listing</H>
+        <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+          {(["9:16", "16:9"] as const).map((o) => (
+            <button key={o} onClick={() => setOrient(o)} style={{ ...btn(orient === o ? "brand" : "ghost"), padding: ".5rem 1rem" }}>{o === "9:16" ? "Vertikal 9:16" : "Horizontal 16:9"}</button>
+          ))}
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 14 }}>
+          <div style={drop}><Ic d="M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm2.5 3a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3ZM5 17h14l-4.5-6-3.5 4.5-2-2.5L5 17Z" s={22} /><div style={{ fontSize: ".82rem", marginTop: 6 }}>Unggah foto</div></div>
+          <div style={drop}><Ic d="M4 4h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Zm6 3v6l5-3z" s={22} /><div style={{ fontSize: ".82rem", marginTop: 6 }}>Unggah video</div></div>
+          <div style={drop}><Ic d="M12 3v10.5a3.5 3.5 0 1 1-2-3.16V6h6V3h-4Z" s={22} /><div style={{ fontSize: ".82rem", marginTop: 6 }}>Audio / voice<br />(opsional)</div></div>
+        </div>
+        <label className="muted" style={{ fontSize: ".82rem", fontWeight: 600 }}>Deskripsi properti</label>
+        <textarea rows={3} placeholder="Vila 4 kamar di Canggu, dekat pantai Berawa…" style={{ width: "100%", marginTop: 6, background: "var(--surface-2)", border: "1px solid var(--line-2)", borderRadius: 10, padding: 12, font: "inherit", fontSize: ".92rem", color: "var(--ink)", resize: "vertical" }} />
+        <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 14, flexWrap: "wrap" }}>
+          <button style={btn("brand")} onClick={() => { setGen("Sedang membuat video oleh mesin…"); setTimeout(() => setGen("✓ Video 62 detik selesai dibuat."), 2200); }}>✨ Generate video otomatis</button>
+          <span className="muted" style={{ fontSize: ".84rem" }}>Durasi otomatis 45–90 detik, dirangkai oleh mesin.</span>
+        </div>
+        {gen && <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 10, background: "var(--surface-2)", fontSize: ".9rem", color: gen.startsWith("✓") ? "var(--good)" : "var(--ink)" }}>{gen}</div>}
+      </Card>
+      <Card>
+        <H>Video Anda</H>
+        <div style={{ display: "grid", gap: 10 }}>
+          {["Vila Uluwatu · 9:16 · 60d", "Canggu Estate · 16:9 · 75d", "Seminyak · 9:16 · 48d"].map((v) => (
+            <div key={v} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 10, background: "var(--surface-2)" }}>
+              <span style={{ width: 30, height: 30, borderRadius: 8, background: "var(--ink)", color: "var(--bg)", display: "grid", placeItems: "center" }}><Ic d="M8 5v14l11-7z" s={14} /></span>
+              <span style={{ fontSize: ".86rem" }}>{v}</span><span style={{ marginLeft: "auto", fontSize: ".72rem", color: "var(--good)" }}>Selesai</span>
+            </div>
+          ))}
+        </div>
+      </Card>
     </div>
   );
 
-  const content = () => {
-    switch (sec) {
-      case "dashboard":
-        return (
-          <Panel title="Dashboard" sub="Ringkasan platform cakra — data contoh.">
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 18, marginBottom: 26 }}>
-              {STATS.map((s) => (
-                <div key={s.l} className="card" style={{ padding: 22 }}>
-                  <div className="muted" style={{ fontSize: ".85rem" }}>{s.l}</div>
-                  <div className="display" style={{ fontSize: "2rem", fontWeight: 700, color: `var(${s.c})`, marginTop: 6, lineHeight: 1 }}>{s.v}</div>
-                  <div className="muted" style={{ fontSize: ".8rem", marginTop: 6 }}>{s.d}</div>
-                </div>
-              ))}
+  const Content = (
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }} className="adm-2">
+      <Card>
+        <H>Ide konten</H>
+        <p className="muted" style={{ fontSize: ".86rem", marginTop: -8, marginBottom: 12 }}>Disediakan sistem berdasarkan properti & pasar Anda.</p>
+        <div style={{ display: "grid", gap: 10 }}>
+          {IDEAS.map(([t, c]) => (
+            <div key={t} style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 14px", borderRadius: 10, background: "var(--surface-2)" }}>
+              <div><div style={{ fontSize: ".72rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: ".04em" }}>{c}</div><div style={{ fontWeight: 600, fontSize: ".92rem" }}>{t}</div></div>
+              <button style={{ ...btn("ghost"), marginLeft: "auto", padding: ".4rem .8rem", fontSize: ".82rem" }}>Tulis</button>
             </div>
-            <h2 className="display" style={{ fontSize: "1.15rem", fontWeight: 600, margin: "0 0 12px" }}>Member terbaru</h2>
-            {Members}
-          </Panel>
-        );
-      case "member":
-        return <Panel title="Member" sub="Kelola agen yang terdaftar di cakra.">{Members}</Panel>;
-      case "llm":
-        return (
-          <Panel title="LLM & API" sub="Integrasi model AI dan layanan pihak ketiga + prompt enhancer.">
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 16, marginBottom: 26 }}>
-              {INTEGRATIONS.map(([n, d, on]) => (
-                <div key={n as string} className="card" style={{ padding: 18, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-                  <div><div style={{ fontWeight: 600 }}>{n}</div><div className="muted" style={{ fontSize: ".82rem" }}>{d}</div></div>
-                  <span style={{ fontSize: ".78rem", fontWeight: 700, color: on ? "var(--good)" : "var(--muted)", background: on ? "color-mix(in oklab, var(--good) 14%, var(--surface))" : "var(--surface-2)", padding: ".28rem .6rem", borderRadius: 999 }}>{on ? "Terhubung" : "Belum"}</span>
-                </div>
-              ))}
+          ))}
+        </div>
+      </Card>
+      <Card>
+        <H>Tulis</H>
+        <p className="muted" style={{ fontSize: ".86rem", marginTop: -8, marginBottom: 12 }}>AI membantu menyusun draf, Anda menyempurnakan.</p>
+        <input placeholder="Judul artikel" style={{ width: "100%", marginBottom: 10, background: "var(--surface-2)", border: "1px solid var(--line-2)", borderRadius: 10, padding: ".7rem 1rem", font: "inherit", color: "var(--ink)" }} />
+        <textarea rows={7} placeholder="Mulai menulis, atau klik ‘Buat draf AI’…" style={{ width: "100%", background: "var(--surface-2)", border: "1px solid var(--line-2)", borderRadius: 10, padding: 12, font: "inherit", fontSize: ".92rem", color: "var(--ink)", resize: "vertical" }} />
+        <div style={{ display: "flex", gap: 10, marginTop: 12 }}><button style={btn("brand")}>✨ Buat draf AI</button><button style={btn("ghost")}>Terbitkan ke Hub</button></div>
+      </Card>
+    </div>
+  );
+
+  const Assets = (
+    <Card>
+      <H>Pustaka aset cakra</H>
+      <p className="muted" style={{ fontSize: ".86rem", marginTop: -8, marginBottom: 14 }}>Ribuan gambar & audio bebas royalti untuk video dan konten Anda.</p>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(150px,1fr))", gap: 12 }}>
+        {ASSETS.map((a, i) => (
+          <div key={i} style={{ position: "relative", borderRadius: 10, overflow: "hidden", aspectRatio: "1/1", border: "1px solid var(--line)" }} className="adm-asset">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={a} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <button style={{ position: "absolute", inset: 0, background: "rgba(20,15,9,.42)", color: "#fff", border: "none", cursor: "pointer", font: "inherit", fontWeight: 600, fontSize: ".85rem", opacity: 0, transition: ".15s" }} className="adm-use">Gunakan</button>
+          </div>
+        ))}
+      </div>
+    </Card>
+  );
+
+  const Profile = (
+    <div style={{ display: "grid", gap: 18, maxWidth: 720 }}>
+      <Card>
+        <H>Koneksi akun</H>
+        {[["Email", "kirana@email.com", true], ["Domain", "kirana.cakra.site", true], ["WhatsApp", "+62 812-0000-0000", true], ["Instagram", "Belum terhubung", false], ["TikTok", "Belum terhubung", false]].map(([k, v, on]) => (
+          <div key={k as string} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0", borderBottom: "1px solid var(--line)" }}>
+            <div><div style={{ fontWeight: 600, fontSize: ".92rem" }}>{k}</div><div className="muted" style={{ fontSize: ".84rem" }}>{v}</div></div>
+            {on ? <span style={{ color: "var(--good)", fontSize: ".85rem", fontWeight: 600 }}>✓ Terhubung</span> : <button style={{ ...btn("ghost"), padding: ".4rem .9rem", fontSize: ".84rem" }}>Hubungkan</button>}
+          </div>
+        ))}
+      </Card>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }} className="adm-2">
+        <Card>
+          <H>Tagihan</H>
+          <div style={{ fontWeight: 700, fontSize: "1.1rem" }}>Paket Pro</div>
+          <div className="muted" style={{ fontSize: ".9rem" }}>Rp 299.000 / bulan · perpanjang 1 Okt 2026</div>
+          <div className="mono" style={{ fontSize: ".86rem", marginTop: 8 }}>Kartu •••• 4242</div>
+          <button style={{ ...btn("ghost"), marginTop: 12 }}>Kelola tagihan</button>
+        </Card>
+        <Card>
+          <H>Keamanan</H>
+          {[["Kata sandi", "Ubah"], ["OTP via WhatsApp", "Aktif"], ["Autentikasi dua faktor", "Aktifkan"]].map(([k, a]) => (
+            <div key={k} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid var(--line)" }}>
+              <span style={{ fontSize: ".92rem" }}>{k}</span><button style={{ ...btn("ghost"), padding: ".35rem .8rem", fontSize: ".82rem" }}>{a}</button>
             </div>
-            <div className="card" style={{ padding: 22 }}>
-              <div style={{ fontWeight: 600, marginBottom: 8 }}>Prompt Enhancer</div>
-              <p className="muted" style={{ fontSize: ".92rem", margin: "0 0 12px" }}>Template dasar yang memperkaya setiap prompt agen sebelum dikirim ke model.</p>
-              <textarea rows={4} defaultValue={"Anda adalah asisten pemasaran properti untuk agen Indonesia. Tulis dengan nada profesional, hangat, dan meyakinkan. Optimalkan untuk SEO, GEO, dan pencarian sosial…"} style={{ width: "100%", background: "var(--surface-2)", border: "1px solid var(--line-2)", borderRadius: 10, padding: 12, font: "inherit", fontSize: ".92rem", color: "var(--ink)", resize: "vertical" }} />
-            </div>
-          </Panel>
-        );
-      case "assets": return <Placeholder title="Assets" sub="Pustaka gambar & audio bebas royalti untuk semua member." note="Grid aset (contoh) — unggah, kategorikan, dan bagikan ke member. Segera diisi." />;
-      case "listing": return <Placeholder title="Listing" sub="Semua listing properti lintas member." note="Tabel listing global dengan filter lokasi, harga, dan status. Segera diisi." />;
-      case "hub": return <Placeholder title="Hub" sub="Kurasi artikel & konten yang tampil di Hub." note="Editor konten Hub — publikasikan artikel pasar & panduan. Segera diisi." />;
-      case "editor": return <Placeholder title="Editor Setting" sub="Konfigurasi editor website & video AI." note="Preset tema, blok, dan parameter video (durasi, gaya, musik). Segera diisi." />;
-      case "setting": return <Placeholder title="Setting" sub="Pengaturan umum platform." note="Branding, domain, paket harga, dan notifikasi. Segera diisi." />;
-    }
+          ))}
+        </Card>
+      </div>
+      <Card>
+        <H>Legal</H>
+        <div style={{ display: "flex", gap: 18, flexWrap: "wrap" }}>
+          <a href="/privacy" className="gold" style={{ textDecoration: "none", fontWeight: 600 }}>Kebijakan Privasi →</a>
+          <a href="/terms" className="gold" style={{ textDecoration: "none", fontWeight: 600 }}>Syarat & Ketentuan →</a>
+        </div>
+      </Card>
+    </div>
+  );
+
+  const titles: Record<Sec, [string, string]> = {
+    home: ["Home", "Analisa, performa, dan preview website Anda."],
+    listing: ["Listing", "Kelola properti Anda — buat, ubah, hapus, riwayat."],
+    editor: ["Editor", "Buat video listing otomatis dan unggah materi."],
+    content: ["Content", "Ide dari sistem, lalu tulis dan terbitkan."],
+    assets: ["Assets", "Pustaka aset cakra untuk semua member."],
+    profile: ["Profil & pengaturan", "Koneksi, tagihan, keamanan, dan legal."],
   };
+  const body = { home: Home, listing: Listing, editor: Editor, content: Content, assets: Assets, profile: Profile }[sec];
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg)" }}>
-      {/* sidebar */}
-      <aside style={{ width: 244, flex: "none", background: "var(--surface)", borderRight: "1px solid var(--line)", padding: "18px 14px", position: "sticky", top: 0, height: "100vh", display: "flex", flexDirection: "column" }} className="adm-side">
-        <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 8px 18px" }}>
-          <CakraMark size={30} />
-          <span className="hand" style={{ fontSize: "1.7rem", fontWeight: 700, lineHeight: 1 }}>cakra</span>
-          <span className="pill" style={{ fontSize: ".62rem", padding: ".15rem .45rem" }}>admin</span>
+      <aside className="adm-side" style={{ width: 236, flex: "none", background: "var(--surface)", borderRight: "1px solid var(--line)", padding: "18px 14px", position: "sticky", top: 0, height: "100vh", display: "flex", flexDirection: "column" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 7, padding: "6px 8px 20px" }}>
+          <CakraMark size={30} /><span className="hand" style={{ fontSize: "1.7rem", fontWeight: 700, lineHeight: 1 }}>cakra</span>
         </div>
         <nav style={{ display: "grid", gap: 3 }}>
           {NAV.map((n) => (
@@ -155,24 +275,36 @@ export default function Admin() {
             </button>
           ))}
         </nav>
-        <div style={{ marginTop: "auto", padding: "12px 8px 0", borderTop: "1px solid var(--line)" }}>
-          <a href="/" className="muted" style={{ fontSize: ".85rem", textDecoration: "none" }}>← Kembali ke situs</a>
-        </div>
+        <button onClick={() => setSec("profile")} style={{ marginTop: "auto", display: "flex", alignItems: "center", gap: 10, padding: "10px 8px", borderRadius: 12, border: "1px solid var(--line)", background: sec === "profile" ? "var(--surface-2)" : "transparent", cursor: "pointer", font: "inherit", textAlign: "left" }}>
+          <span style={{ width: 36, height: 36, borderRadius: "50%", background: "var(--ink)", color: "var(--bg)", display: "grid", placeItems: "center", fontWeight: 700, flex: "none" }}>K</span>
+          <span style={{ minWidth: 0 }}><span style={{ display: "block", fontWeight: 600, fontSize: ".9rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Kirana Sutanto</span><span className="muted" style={{ fontSize: ".78rem" }}>Paket Pro</span></span>
+        </button>
       </aside>
 
-      {/* main */}
       <div style={{ flex: 1, minWidth: 0 }}>
-        <header style={{ height: 62, borderBottom: "1px solid var(--line)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 clamp(18px,3vw,32px)", background: "color-mix(in oklab, var(--bg) 86%, transparent)", backdropFilter: "blur(8px)", position: "sticky", top: 0, zIndex: 5 }}>
+        <header style={{ height: 60, borderBottom: "1px solid var(--line)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 clamp(18px,3vw,32px)", background: "color-mix(in oklab, var(--bg) 86%, transparent)", backdropFilter: "blur(8px)", position: "sticky", top: 0, zIndex: 5 }}>
           <span style={{ fontSize: ".82rem", color: "var(--warn)", fontWeight: 600 }}>● Mode terbuka · tanpa autentikasi</span>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <input placeholder="Cari member, listing…" style={{ background: "var(--surface)", border: "1px solid var(--line-2)", borderRadius: 999, padding: ".5rem 1rem", font: "inherit", fontSize: ".88rem", color: "var(--ink)", width: 220, maxWidth: "40vw" }} />
-            <span style={{ width: 34, height: 34, borderRadius: "50%", background: "var(--ink)", color: "var(--bg)", display: "grid", placeItems: "center", fontWeight: 700, fontSize: ".85rem" }}>A</span>
-          </div>
+          <a href="https://kirana.cakra.site" className="mono" style={{ fontSize: ".82rem", color: "var(--muted)", textDecoration: "none" }}>kirana.cakra.site ↗</a>
         </header>
-        <main style={{ padding: "clamp(22px,3vw,36px)", maxWidth: 1100 }}>{content()}</main>
+        <main style={{ padding: "clamp(20px,3vw,34px)", maxWidth: 1120 }}>
+          <h1 className="display" style={{ fontSize: "1.6rem", fontWeight: 700, margin: 0 }}>{titles[sec][0]}</h1>
+          <p className="muted" style={{ margin: "4px 0 22px" }}>{titles[sec][1]}</p>
+          {body}
+        </main>
       </div>
 
-      <style>{`@media (max-width: 720px){ .adm-side{ display:none !important; } }`}</style>
+      <style>{`
+        .adm-asset:hover .adm-use{ opacity:1 !important; }
+        @media (max-width: 860px){ .adm-2{ grid-template-columns:1fr !important; } }
+        @media (max-width: 720px){ .adm-side{ display:none !important; } }
+      `}</style>
     </div>
   );
+}
+
+export default function Admin() {
+  const [host, setHost] = useState<string | null>(null);
+  useEffect(() => { setHost(window.location.hostname); }, []);
+  const isMember = host === "member.cakra.xyz" || (host ? host.startsWith("member.") : false);
+  return isMember ? <MemberDashboard /> : <StaffAdmin />;
 }

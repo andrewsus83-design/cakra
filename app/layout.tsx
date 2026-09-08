@@ -24,6 +24,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="id" className={`${display.variable} ${sans.variable} ${mono.variable} ${hand.variable}`}>
       <body>
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var h=location.hostname,p=location.pathname;if(h==='sample.cakra.xyz'&&(p==='/'||p===''))location.replace('/demo');else if(h==='member.cakra.xyz'&&(p==='/'||p===''))location.replace('/admin');}catch(e){}})();` }} />
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('cakra-theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();` }} />
         <SiteNav />
         {children}
