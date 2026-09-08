@@ -48,6 +48,7 @@ export function SiteNav() {
   useEffect(() => { setMobileOpen(false); }, [pathname]);
 
   const overHero = isHero && !scrolled && !mobileOpen;
+  const atTop = !scrolled && !mobileOpen; // transparent bar at rest on every page; blur bg on scroll
   const heroWhite = overHero && theme === "dark"; // white text only over the dark-mode hero
   const txt = heroWhite ? "#fff" : "var(--ink)";
   const muted = heroWhite ? "rgba(255,255,255,.85)" : overHero ? "var(--ink-2)" : "var(--muted)";
@@ -70,9 +71,9 @@ export function SiteNav() {
       <header
         style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 50, transition: "background .3s ease, border-color .3s ease",
-          background: overHero ? "transparent" : "color-mix(in oklab, var(--bg) 92%, transparent)",
-          backdropFilter: overHero ? "none" : "blur(10px)",
-          borderBottom: `1px solid ${overHero ? "transparent" : "var(--line)"}`,
+          background: atTop ? "transparent" : "color-mix(in oklab, var(--bg) 92%, transparent)",
+          backdropFilter: atTop ? "none" : "blur(10px)",
+          borderBottom: `1px solid ${atTop ? "transparent" : "var(--line)"}`,
         }}
       >
         <div className="wrap cakra-navbar" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 86 }}>
