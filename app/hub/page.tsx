@@ -145,19 +145,20 @@ export default function Page() {
         </div>
 
         {/* subscribe — pinned above load more */}
-        <div className="card" data-hubsub style={{ marginTop: 34, padding: "clamp(24px, 4vw, 40px)", background: "var(--surface-2)", borderColor: "color-mix(in oklab, var(--brand) 24%, var(--line))", display: "grid", gridTemplateColumns: "1.4fr .6fr", gap: 24, alignItems: "center" }}>
+        <div className="card" data-hubsub style={{ marginTop: 40, padding: "clamp(34px, 5vw, 60px)", background: "var(--surface-2)", borderColor: "color-mix(in oklab, var(--brand) 24%, var(--line))", display: "grid", gridTemplateColumns: "1.15fr .85fr", gap: "clamp(28px, 4vw, 48px)", alignItems: "center" }}>
           <div>
-            <p className="hand gold" style={{ fontSize: "1.6rem", transform: "rotate(-2deg)", margin: 0 }}>tetap relevan</p>
-            <h3 className="display" style={{ fontSize: "clamp(1.5rem, 3vw, 2.1rem)", fontWeight: 700, margin: "4px 0 8px", maxWidth: "20ch", lineHeight: 1.1 }}>Wawasan pasar & AI, tiap minggu ke email Anda.</h3>
+            <p className="hand gold" style={{ fontSize: "2rem", transform: "rotate(-2deg)", margin: 0 }}>tetap relevan</p>
+            <h3 className="display" style={{ fontSize: "clamp(1.9rem, 3.8vw, 2.9rem)", fontWeight: 700, margin: "6px 0 10px", maxWidth: "22ch", lineHeight: 1.08 }}>Wawasan pasar & AI, tiap minggu ke email Anda.</h3>
+            <p className="muted" style={{ fontSize: "1.08rem", lineHeight: 1.6, margin: "0 0 18px", maxWidth: "46ch" }}>Tren pasar, ide pemasaran, dan perkembangan AI untuk agen properti — langsung ke email Anda.</p>
             {subscribed ? (
               <p style={{ color: "var(--good)", fontWeight: 600, margin: "10px 0 0" }}>✓ Terima kasih! Cek email Anda untuk konfirmasi.</p>
             ) : (
-              <form onSubmit={(e) => { e.preventDefault(); if (subEmail.trim()) setSubscribed(true); }} style={{ display: "flex", gap: 10, maxWidth: 460, flexWrap: "wrap", marginTop: 6 }}>
-                <input value={subEmail} onChange={(e) => setSubEmail(e.target.value)} type="email" required placeholder="anda@email.com" style={{ flex: "1 1 220px", background: "var(--surface)", border: "1px solid var(--line-2)", borderRadius: 12, padding: ".85rem 1.05rem", font: "inherit", fontSize: "1rem", color: "var(--ink)" }} />
-                <button type="submit" className="btn btn-brand" style={{ padding: ".85rem 1.6rem", fontSize: "1rem" }}>Langganan</button>
+              <form onSubmit={(e) => { e.preventDefault(); if (subEmail.trim()) setSubscribed(true); }} style={{ display: "flex", gap: 10, maxWidth: 520, flexWrap: "wrap" }}>
+                <input value={subEmail} onChange={(e) => setSubEmail(e.target.value)} type="email" required placeholder="anda@email.com" style={{ flex: "1 1 240px", background: "var(--surface)", border: "1px solid var(--line-2)", borderRadius: 12, padding: "1rem 1.15rem", font: "inherit", fontSize: "1.05rem", color: "var(--ink)" }} />
+                <button type="submit" className="btn btn-brand" style={{ padding: "1rem 1.9rem", fontSize: "1.05rem" }}>Langganan</button>
               </form>
             )}
-            <p className="muted" style={{ fontSize: ".82rem", marginTop: 12 }}>Tanpa spam. Berhenti kapan saja.</p>
+            <p className="muted" style={{ fontSize: ".9rem", marginTop: 14 }}>Tanpa spam. Berhenti kapan saja.</p>
           </div>
           <div className="hubsub-icon" style={{ borderRadius: 16, overflow: "hidden", aspectRatio: "1 / 1", boxShadow: "var(--shadow-soft)" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
