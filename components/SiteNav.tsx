@@ -7,8 +7,9 @@ import { CakraMark } from "./CakraMark";
 const LINKS = [
   { href: "/", label: "Beranda" },
   { href: "/about", label: "Tentang" },
+  { href: "/harga", label: "Harga" },
   { href: "/listing", label: "Listing" },
-  { href: "/kalkulator", label: "Kalkulator" },
+  { href: "/demo", label: "Contoh" },
   { href: "/hub", label: "Hub" },
   { href: "/faq", label: "FAQ" },
   { href: "/contact", label: "Kontak" },
