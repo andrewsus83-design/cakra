@@ -71,8 +71,8 @@ export default function Page() {
     <main>
       {/* header */}
       <section className="wrap" style={{ padding: "clamp(32px, 5vw, 60px) 0 8px" }}>
-        <p className="hand gold" style={{ fontSize: "1.7rem", transform: "rotate(-2deg)", margin: 0 }}>listing pilihan</p>
-        <h1 className="display" style={{ fontSize: "clamp(2.2rem, 4.6vw, 3.4rem)", fontWeight: 700, margin: "4px 0 0", maxWidth: "20ch" }}>
+        <p className="hand gold" style={{ fontSize: "1.7rem", transform: "rotate(-2deg)", margin: 0, lineHeight: 1, display: "inline-block" }}>listing pilihan</p>
+        <h1 className="display" style={{ fontSize: "clamp(2.2rem, 4.6vw, 3.4rem)", fontWeight: 700, margin: "12px 0 0", maxWidth: "20ch" }}>
           Properti dari para agen cakra.
         </h1>
         <p className="lead" style={{ marginTop: 14 }}>Setiap unit punya halaman, video, dan skor GEO-nya sendiri — siap ditemukan calon pembeli.</p>
