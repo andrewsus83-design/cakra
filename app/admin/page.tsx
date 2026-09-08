@@ -43,10 +43,10 @@ const PLATFORMS = [
   { id: "TikTok", fmt: "9:16" }, { id: "YouTube", fmt: "16:9" }, { id: "Presentasi", fmt: "16:9" },
 ];
 const READY_CONTENT = [
-  { t: "Panduan harga vila Canggu 2026", c: "Artikel", img: "/blog-0.jpg", meta: "6 mnt baca · SEO" },
-  { t: "Reels: Tur 60 detik Vila Uluwatu", c: "Reels", img: "/about/hero.jpg", meta: "9:16 · 60 dtk" },
-  { t: "Carousel: 5 tips beli vila di Bali", c: "Post", img: "/blog-1.jpg", meta: "1:1 · 5 slide" },
-  { t: "Video: Investasi properti Bali", c: "YouTube", img: "/about/transform.jpg", meta: "16:9 · 3 mnt" },
+  { t: "Panduan harga vila Canggu 2026", c: "Artikel", img: "/blog-0.jpg", meta: "6 mnt baca · SEO", body: "Harga vila di Canggu terus menguat sepanjang 2026, didorong permintaan sewa jangka panjang dan pembeli asing lewat skema hak pakai.\n\nUntuk vila 3–4 kamar dengan kolam pribadi, kisaran harga kini Rp 6–12 miliar tergantung jarak ke pantai Berawa dan Pererenan. Area yang sedang naik daun seperti Nyanyi dan Cemagi menawarkan harga 15–20% lebih rendah dengan potensi apresiasi tinggi.\n\nTips: bandingkan harga per meter persegi tanah, bukan hanya harga total — ini ukuran paling jujur untuk menilai apakah sebuah listing wajar." },
+  { t: "Reels: Tur 60 detik Vila Uluwatu", c: "Reels", img: "/about/hero.jpg", meta: "9:16 · 60 dtk", body: "Naskah reels (0–60 dtk):\n\n0–5 dtk — Drone melintas tebing, teks: “Bangun di atas Samudra Hindia.”\n5–35 dtk — Sapuan interior: ruang tamu terbuka, dapur granit, kamar utama berbalkon.\n35–50 dtk — Kolam infinity saat golden hour, sorot detail kayu jati & batu alam.\n50–60 dtk — Ajakan: “DM untuk jadwal viewing privat minggu ini.”\n\nCaption: Vila 5 kamar di Uluwatu — Rp 14 M. Hak milik. #propertibali #villauluwatu" },
+  { t: "Carousel: 5 tips beli vila di Bali", c: "Post", img: "/blog-1.jpg", meta: "1:1 · 5 slide", body: "5 tips sebelum membeli vila di Bali:\n\n1. Pastikan status tanah — Hak Milik, Hak Pakai, atau leasehold — dan sisa masa berlakunya.\n2. Cek zonasi (ITR/PKKPR); tidak semua area boleh untuk vila komersial.\n3. Hitung yield bersih setelah biaya manajemen, pajak, dan perawatan — bukan hanya yield kotor.\n4. Verifikasi IMB/PBG dan pastikan bangunan sesuai izin.\n5. Gunakan notaris & agen tepercaya; jangan transfer sebelum due diligence selesai.\n\nSimpan & bagikan ke teman yang sedang cari vila!" },
+  { t: "Video: Investasi properti Bali", c: "YouTube", img: "/about/transform.jpg", meta: "16:9 · 3 mnt", body: "Deskripsi video:\n\nKita bahas mengapa Bali tetap jadi salah satu pasar properti paling menarik di Asia Tenggara pada 2026 — dari pertumbuhan pariwisata, permintaan sewa harian, hingga skema kepemilikan untuk WNA.\n\nAgenda:\n• Tren harga per area (Canggu, Uluwatu, Ubud)\n• Perbandingan sewa harian vs tahunan\n• Struktur legal yang aman untuk pembeli asing\n• Studi kasus: ROI sebuah vila 3 kamar\n\nHubungi Kirana untuk konsultasi gratis 15 menit." },
 ];
 const CONTENT_HISTORY = [
   { t: "5 alasan investasi Uluwatu", c: "Artikel", img: "/about/invite.jpg", date: "2 Sep 2026", posted: true, shared: true, down: false },
@@ -996,7 +996,8 @@ function MemberDashboard() {
                 <h3 className="display" style={{ fontSize: "1.25rem", fontWeight: 700, margin: "4px 0 0" }}>{it.t}</h3>
                 {!contentSched ? (
                   <>
-                    <p className="muted" style={{ fontSize: ".9rem", margin: "10px 0 16px", lineHeight: 1.55 }}>Konten ini siap diterbitkan. Pilih tindakan.</p>
+                    <div style={{ margin: "12px 0 14px", padding: "14px 16px", borderRadius: 12, background: "var(--surface-2)", border: "1px solid var(--line)", maxHeight: 240, overflow: "auto", fontSize: ".9rem", lineHeight: 1.65, color: "var(--ink)", whiteSpace: "pre-line" }}>{it.body}</div>
+                    <p className="muted" style={{ fontSize: ".86rem", margin: "0 0 14px" }}>Konten ini siap diterbitkan. Pilih tindakan.</p>
                     <div style={{ display: "grid", gap: 10 }}>
                       <button onClick={() => setContentModal(null)} style={{ ...btn("brand"), justifyContent: "center", display: "flex", padding: ".85rem", fontSize: ".95rem" }}>Publish sekarang</button>
                       <button onClick={() => setContentSched(true)} style={{ ...btn("ghost"), justifyContent: "center", display: "flex", padding: ".85rem", fontSize: ".95rem" }}>Jadwalkan…</button>
