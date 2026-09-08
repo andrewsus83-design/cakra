@@ -59,10 +59,12 @@ export default function Demo() {
             <span className="l-mark"><span className="l-dot" /></span>
             <span className="l-word">LUMA</span>
           </a>
-          <nav className="l-links">
-            {NAV.map(([l, h]) => <a key={l} href={h}>{l}</a>)}
-          </nav>
-          <a href="#kontak" className="l-btn l-btn-primary l-nav-cta">Hubungi</a>
+          <div className="l-nav-right">
+            <nav className="l-links">
+              {NAV.map(([l, h]) => <a key={l} href={h}>{l}</a>)}
+            </nav>
+            <a href="#kontak" className="l-btn l-btn-primary l-nav-cta">Hubungi</a>
+          </div>
         </div>
       </header>
 
@@ -258,6 +260,7 @@ export default function Demo() {
         .l-mark{ width:30px; height:30px; border-radius:9px; background:linear-gradient(135deg, var(--l-accent), var(--l-pop)); display:grid; place-items:center; box-shadow:0 6px 16px -6px var(--l-accent); }
         .l-dot{ width:10px; height:10px; border-radius:50%; background:#fff; }
         .l-word{ font-family:var(--l-font-display); font-weight:800; font-size:1.35rem; letter-spacing:.02em; }
+        .l-nav-right{ display:flex; align-items:center; gap:28px; }
         .l-links{ display:flex; gap:26px; }
         .l-links a{ color:var(--l-ink-2); text-decoration:none; font-weight:500; font-size:.98rem; transition:color .15s; }
         .l-links a:hover{ color:var(--l-accent); }
