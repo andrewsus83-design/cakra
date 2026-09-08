@@ -69,7 +69,7 @@ export default function Home() {
             peringkat Anda di Google, pencarian AI, dan media sosial.
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 36, justifyContent: "center" }}>
-            <Link href="/signup" className="btn btn-brand" style={{ fontSize: "1.05rem", padding: ".95rem 1.8rem" }}>Mulai gratis</Link>
+            <Link href="/onboarding" className="btn btn-brand" style={{ fontSize: "1.05rem", padding: ".95rem 1.8rem" }}>Mulai gratis</Link>
             <a href="#cara-kerja" className="btn btn-on-photo" style={{ fontSize: "1.05rem", padding: ".95rem 1.8rem" }}>Lihat cara kerja</a>
           </div>
           <p className="on-photo-soft" style={{ marginTop: 26, fontSize: ".98rem" }}>

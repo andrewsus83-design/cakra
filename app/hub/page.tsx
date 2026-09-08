@@ -43,6 +43,9 @@ export default function Page() {
   });
   const [draft, setDraft] = useState("");
   const [toast, setToast] = useState<string | null>(null);
+  const [visibleCount, setVisibleCount] = useState(6);
+  const [subEmail, setSubEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
 
   const featured = ARTICLES.filter((a) => a.featured);
   const shown = cat === "Semua" ? ARTICLES : ARTICLES.filter((a) => a.cat === cat);
@@ -111,15 +114,16 @@ export default function Page() {
       <section className="wrap" style={{ padding: "26px 0 4px" }}>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           {CATS.map((c) => (
-            <button key={c} onClick={() => setCat(c)} style={{ font: "inherit", fontSize: ".92rem", fontWeight: 600, cursor: "pointer", padding: ".45rem 1rem", borderRadius: 999, border: `1px solid ${cat === c ? "var(--brand)" : "var(--line-2)"}`, background: cat === c ? "var(--brand)" : "transparent", color: cat === c ? "#fff" : "var(--muted)", transition: ".2s" }}>{c}</button>
+            <button key={c} onClick={() => { setCat(c); setVisibleCount(6); }} style={{ font: "inherit", fontSize: ".92rem", fontWeight: 600, cursor: "pointer", padding: ".45rem 1rem", borderRadius: 999, border: `1px solid ${cat === c ? "var(--brand)" : "var(--line-2)"}`, background: cat === c ? "var(--brand)" : "transparent", color: cat === c ? "#fff" : "var(--muted)", transition: ".2s" }}>{c}</button>
           ))}
         </div>
       </section>
 
       {/* masonry */}
       <section className="wrap" style={{ padding: "22px 0 84px" }}>
+        <div style={{ position: "relative" }}>
         <div className="masonry">
-          {shown.map((a) => (
+          {shown.slice(0, visibleCount).map((a) => (
             <button key={a.id} className="pin card" onClick={() => setOpen(a)}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={a.img} alt={a.title} />
@@ -135,6 +139,38 @@ export default function Page() {
             </button>
           ))}
         </div>
+        {visibleCount < shown.length && (
+          <div aria-hidden="true" style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 130, background: "linear-gradient(180deg, transparent, var(--bg))", pointerEvents: "none" }} />
+        )}
+        </div>
+
+        {/* subscribe — pinned above load more */}
+        <div className="card" data-hubsub style={{ marginTop: 34, padding: "clamp(24px, 4vw, 40px)", background: "var(--surface-2)", borderColor: "color-mix(in oklab, var(--brand) 24%, var(--line))", display: "grid", gridTemplateColumns: "1.4fr .6fr", gap: 24, alignItems: "center" }}>
+          <div>
+            <p className="hand gold" style={{ fontSize: "1.6rem", transform: "rotate(-2deg)", margin: 0 }}>tetap relevan</p>
+            <h3 className="display" style={{ fontSize: "clamp(1.5rem, 3vw, 2.1rem)", fontWeight: 700, margin: "4px 0 8px", maxWidth: "20ch", lineHeight: 1.1 }}>Wawasan pasar & AI, tiap minggu ke email Anda.</h3>
+            {subscribed ? (
+              <p style={{ color: "var(--good)", fontWeight: 600, margin: "10px 0 0" }}>✓ Terima kasih! Cek email Anda untuk konfirmasi.</p>
+            ) : (
+              <form onSubmit={(e) => { e.preventDefault(); if (subEmail.trim()) setSubscribed(true); }} style={{ display: "flex", gap: 10, maxWidth: 460, flexWrap: "wrap", marginTop: 6 }}>
+                <input value={subEmail} onChange={(e) => setSubEmail(e.target.value)} type="email" required placeholder="anda@email.com" style={{ flex: "1 1 220px", background: "var(--surface)", border: "1px solid var(--line-2)", borderRadius: 12, padding: ".85rem 1.05rem", font: "inherit", fontSize: "1rem", color: "var(--ink)" }} />
+                <button type="submit" className="btn btn-brand" style={{ padding: ".85rem 1.6rem", fontSize: "1rem" }}>Langganan</button>
+              </form>
+            )}
+            <p className="muted" style={{ fontSize: ".82rem", marginTop: 12 }}>Tanpa spam. Berhenti kapan saja.</p>
+          </div>
+          <div className="hubsub-icon" style={{ borderRadius: 16, overflow: "hidden", aspectRatio: "1 / 1", boxShadow: "var(--shadow-soft)" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/subscribe.jpg" alt="Buletin cakra — amplop dengan segel kuningan" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+          </div>
+        </div>
+
+        {visibleCount < shown.length && (
+          <div style={{ textAlign: "center", marginTop: 26 }}>
+            <button onClick={() => setVisibleCount((v) => v + 6)} className="btn btn-ghost" style={{ fontSize: "1rem", padding: ".9rem 1.8rem" }}>Muat lebih banyak ↓</button>
+            <p className="muted" style={{ fontSize: ".82rem", marginTop: 10 }}>Menampilkan {Math.min(visibleCount, shown.length)} dari {shown.length} artikel</p>
+          </div>
+        )}
       </section>
 
       {/* MODAL */}
@@ -200,6 +236,7 @@ export default function Page() {
         .act-btn{ font:inherit; font-size:.92rem; font-weight:600; cursor:pointer; padding:.5rem .9rem; border-radius:999px; border:1px solid var(--line-2); background:transparent; color:var(--muted); transition:.2s; }
         .act-btn:hover{ border-color:var(--brand); color:var(--brand); }
         @media (max-width: 900px){ .masonry{ column-count:2; } }
+        @media (max-width: 640px){ [data-hubsub]{ grid-template-columns:1fr; } .hubsub-icon{ display:none; } }
         @media (max-width: 560px){ .masonry{ column-count:1; } }
       `}</style>
     </main>

@@ -83,7 +83,7 @@ export function SiteNav() {
               <Link href="/login" className="btn" style={{ padding: ".62rem 1.2rem", fontSize: "1rem", background: "transparent", color: txt, border: `1px solid ${heroBorder}`, transition: "all .3s" }}>
                 Masuk
               </Link>
-              <Link href="/signup" className="btn btn-brand" style={{ padding: ".62rem 1.3rem", fontSize: "1rem" }}>Mulai gratis</Link>
+              <Link href="/onboarding" className="btn btn-brand" style={{ padding: ".62rem 1.3rem", fontSize: "1rem" }}>Mulai gratis</Link>
             </div>
           </div>
         </div>
