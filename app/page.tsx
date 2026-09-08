@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PresenceCard } from "@/components/PresenceCard";
 import { SectionTitle } from "@/components/SectionTitle";
 import { CenterPills } from "@/components/CenterPills";
+import { KprCalc } from "@/components/KprCalc";
 
 const VALUES = [
   ["Website profesional", "Domain & situs Anda sendiri"],
@@ -208,6 +209,12 @@ export default function Home() {
             <PresenceCard score={70} />
           </div>
         </div>
+      </section>
+
+      {/* CALCULATOR */}
+      <section className="wrap" style={{ padding: "40px 0" }}>
+        <SectionTitle hand="hitung dulu" max="26ch">Cicilan KPR, langsung di ujung jari.</SectionTitle>
+        <KprCalc compact />
       </section>
 
       {/* CTA */}

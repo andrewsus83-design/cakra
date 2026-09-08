@@ -8,6 +8,7 @@ const LINKS = [
   { href: "/", label: "Beranda" },
   { href: "/about", label: "Tentang" },
   { href: "/listing", label: "Listing" },
+  { href: "/kalkulator", label: "Kalkulator" },
   { href: "/hub", label: "Hub" },
   { href: "/faq", label: "FAQ" },
   { href: "/contact", label: "Kontak" },
@@ -88,13 +89,13 @@ export function SiteNav() {
               ))}
             </nav>
             <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-              {themeBtn}
               <div className="cakra-auth" style={{ display: "flex", gap: 12, alignItems: "center" }}>
                 <Link href="/login" className="btn" style={{ padding: ".62rem 1.2rem", fontSize: "1rem", background: "transparent", color: txt, border: `1px solid ${heroBorder}`, transition: "all .3s" }}>
                   Masuk
                 </Link>
                 <Link href="/onboarding" className="btn btn-brand" style={{ padding: ".62rem 1.3rem", fontSize: "1rem" }}>Mulai gratis</Link>
               </div>
+              {themeBtn}
               <button type="button" className="cakra-burger" onClick={() => setMobileOpen((o) => !o)} aria-label="Menu" aria-expanded={mobileOpen} style={{ display: "none", placeItems: "center", width: 44, height: 44, borderRadius: 11, background: "transparent", color: txt, border: `1px solid ${heroBorder}`, cursor: "pointer" }}>
                 {mobileOpen
                   ? <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
