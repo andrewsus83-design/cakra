@@ -22,6 +22,12 @@ const LEADS = [
 ];
 const LEAD_STATUSES = ["Semua", "Baru", "Dihubungi", "Viewing", "Nego"] as const;
 const LEAD_TONE: Record<string, string> = { Baru: "--c-heart", Dihubungi: "--c-eye", Viewing: "--c-throat", Nego: "--c-solar", Closing: "--c-sacral" };
+// Phase-2 features — shown in the nav as "Soon", not yet functional
+const COMING: { label: string; icon: string }[] = [
+  { label: "Inbox", icon: "M4 6h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm.4 2 7.6 4.6L19.6 8H4.4Z" },
+  { label: "Ads Management", icon: "M4 9v6h3l5 4V5L7 9H4Zm12-2a5 5 0 0 1 0 10v-2a3 3 0 0 0 0-6V7Z" },
+  { label: "Calendar", icon: "M7 2v2H5a1 1 0 0 0-1 1v15a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1h-2V2h-2v2H9V2H7Zm-1 6h12v11H6V8Z" },
+];
 
 const CENTERS = [["Website", 88, "--c-crown"], ["Listing", 74, "--c-eye"], ["Konten", 70, "--c-throat"], ["SEO", 72, "--c-heart"], ["GEO", 66, "--c-solar"], ["Social", 61, "--c-sacral"], ["Reputasi", 80, "--c-root"]] as const;
 const PERF = [["Kunjungan / bln", "3.240", "+14%", "--c-eye"], ["Lead masuk", "48", "+9", "--c-heart"], ["Listing aktif", "12", "2 baru", "--c-throat"], ["Peringkat SEO", "#3", "“vila Canggu”", "--c-solar"]] as const;
@@ -948,6 +954,12 @@ function MemberDashboard() {
               <Ic d={n.icon} />{!collapsed && n.label}
             </button>
           ))}
+          {COMING.map((n) => (
+            <div key={n.label} title={`${n.label} — segera hadir`} style={{ display: "flex", alignItems: "center", justifyContent: collapsed ? "center" : "space-between", gap: 11, padding: ".65rem .7rem", borderRadius: 10, color: "var(--muted)", fontSize: ".95rem", fontWeight: 500, cursor: "default", opacity: .6 }}>
+              <span style={{ display: "flex", alignItems: "center", gap: 11, minWidth: 0 }}><Ic d={n.icon} />{!collapsed && n.label}</span>
+              {!collapsed && <span style={{ fontSize: ".58rem", fontWeight: 700, padding: ".12rem .42rem", borderRadius: 999, background: "var(--surface-2)", border: "1px solid var(--line)", color: "var(--muted)", flex: "none" }}>Soon</span>}
+            </div>
+          ))}
         </nav>
         <button onClick={() => setSec("profile")} title="Kirana Sutanto" style={{ marginTop: "auto", display: "flex", alignItems: "center", justifyContent: collapsed ? "center" : "flex-start", gap: 10, padding: "10px 8px", borderRadius: 12, border: "1px solid var(--line)", background: sec === "profile" ? "var(--surface-2)" : "transparent", cursor: "pointer", font: "inherit", textAlign: "left" }}>
           <span style={{ width: 36, height: 36, borderRadius: "50%", background: "var(--ink)", color: "var(--bg)", display: "grid", placeItems: "center", fontWeight: 700, flex: "none" }}>K</span>
@@ -967,6 +979,12 @@ function MemberDashboard() {
                 <button key={n.id} onClick={() => { setSec(n.id); setMobileNav(false); }} style={{ display: "flex", alignItems: "center", gap: 11, padding: ".72rem .7rem", borderRadius: 10, border: "none", cursor: "pointer", font: "inherit", fontSize: "1rem", fontWeight: sec === n.id ? 600 : 500, textAlign: "left", background: sec === n.id ? "color-mix(in oklab, var(--brand) 12%, var(--surface))" : "transparent", color: sec === n.id ? "var(--brand)" : "var(--ink-2)" }}>
                   <Ic d={n.icon} />{n.label}
                 </button>
+              ))}
+              {COMING.map((n) => (
+                <div key={n.label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 11, padding: ".72rem .7rem", borderRadius: 10, color: "var(--muted)", fontSize: "1rem", fontWeight: 500, opacity: .6 }}>
+                  <span style={{ display: "flex", alignItems: "center", gap: 11 }}><Ic d={n.icon} />{n.label}</span>
+                  <span style={{ fontSize: ".6rem", fontWeight: 700, padding: ".12rem .45rem", borderRadius: 999, background: "var(--surface-2)", border: "1px solid var(--line)" }}>Soon</span>
+                </div>
               ))}
               <button onClick={() => { setSec("profile"); setMobileNav(false); }} style={{ display: "flex", alignItems: "center", gap: 11, padding: ".72rem .7rem", borderRadius: 10, border: "none", cursor: "pointer", font: "inherit", fontSize: "1rem", fontWeight: sec === "profile" ? 600 : 500, textAlign: "left", background: sec === "profile" ? "color-mix(in oklab, var(--brand) 12%, var(--surface))" : "transparent", color: sec === "profile" ? "var(--brand)" : "var(--ink-2)" }}>
                 <Ic d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-5 0-9 2.5-9 6v2h18v-2c0-3.5-4-6-9-6Z" />Profil

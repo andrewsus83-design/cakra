@@ -42,11 +42,11 @@ export function SiteFooter() {
           </div>
           {COLS.map((c) => (
             <div key={c.title}>
-              <div className="eyebrow" style={{ marginBottom: 10, fontSize: ".76rem" }}>{c.title}</div>
-              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 7 }}>
+              <div className="eyebrow" style={{ marginBottom: 8, fontSize: ".76rem" }}>{c.title}</div>
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 2 }}>
                 {c.links.map(([label, href]) => (
-                  <li key={label}>
-                    <Link href={href} className="muted" style={{ textDecoration: "none", fontSize: ".86rem" }}>
+                  <li key={label} style={{ lineHeight: 1.2 }}>
+                    <Link href={href} className="muted" style={{ textDecoration: "none", fontSize: ".86rem", display: "inline-block", padding: "2px 0" }}>
                       {label}
                     </Link>
                   </li>
