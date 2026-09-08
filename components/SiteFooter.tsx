@@ -4,8 +4,8 @@ import { usePathname } from "next/navigation";
 import { CakraMark } from "./CakraMark";
 
 const COLS = [
-  { title: "Platform", links: [["Website builder", "/#cara-kerja"], ["Listing", "/listing"], ["Kalkulator", "/kalkulator"], ["Harga", "/harga"]] },
-  { title: "Perusahaan", links: [["Tentang", "/about"], ["Contoh situs", "/demo"], ["Hub", "/hub"], ["FAQ", "/faq"], ["Kontak", "/contact"]] },
+  { title: "Platform", links: [["Website builder", "/demo"], ["Listing", "/listing"], ["Kalkulator", "/kalkulator"], ["Hub", "/hub"], ["Contoh situs", "/demo"], ["Harga", "/harga"]] },
+  { title: "Perusahaan", links: [["Tentang", "/about"], ["FAQ", "/faq"], ["Kontak", "/contact"]] },
   { title: "Legal", links: [["Syarat & Ketentuan", "/terms"], ["Privasi", "/privacy"], ["Masuk", "/login"], ["Daftar", "/onboarding"]] },
 ];
 
