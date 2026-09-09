@@ -213,19 +213,29 @@ export default function Demo() {
         ))}
       </section>
 
-      {/* RINGKASAN CEPAT — answer-first block, mudah dikutip mesin pencari & AI */}
+      {/* RINGKASAN — at-a-glance grid, mudah dikutip mesin pencari & AI */}
       <section className="k-wrap k-sec" style={{ paddingBottom: 0 }}>
-        <div className="k-tldr">
-          <h2 className="k-tldr-h">Ringkas: yang perlu Anda tahu tentang properti premium Bali bersama Kirana</h2>
-          <ul className="k-tldr-list">
-            <li><b>Fokus</b> — vila &amp; properti premium Bali mulai Rp 3 miliar ke atas, untuk dijual maupun disewa.</li>
-            <li><b>Kawasan</b> — Canggu, Pererenan, Seminyak, Uluwatu, Jimbaran, Nusa Dua, Sanur, dan Ubud.</li>
-            <li><b>Untuk siapa</b> — pembeli lokal, investor, pembeli asing (hak pakai, leasehold, atau PT PMA), serta penyewa jangka panjang &amp; musiman.</li>
-            <li><b>Pendampingan penuh</b> — kurasi properti → negosiasi → pemeriksaan legal → serah terima.</li>
-            <li><b>Pengalaman</b> — Kirana Sutanto, lebih dari 10 tahun di pasar properti premium Bali.</li>
-            <li><b>Konsultasi awal gratis</b> — langsung via WhatsApp, jawaban jujur tanpa tekanan.</li>
-          </ul>
-          <p className="k-tldr-note">Catatan: setiap kisaran harga di situs ini bersifat indikatif; penilaian resmi diberikan setelah kurasi dan pemeriksaan langsung.</p>
+        <div className="k-sum">
+          <div className="k-sum-head">
+            <span className="k-kick">ringkas</span>
+            <h2 className="k-sum-h">Yang perlu Anda tahu tentang properti premium Bali bersama Kirana</h2>
+          </div>
+          <div className="k-sum-grid">
+            {([
+              ["M12 2v3M12 19v3M2 12h3M19 12h3M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10Z", "Fokus", "Vila & properti premium Bali mulai Rp 3 miliar ke atas — untuk dijual maupun disewa."],
+              ["M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11zM12 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z", "Kawasan", "Canggu, Pererenan, Seminyak, Uluwatu, Jimbaran, Nusa Dua, Sanur, dan Ubud."],
+              ["M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM4 21a8 8 0 0 1 16 0", "Untuk siapa", "Pembeli lokal, investor, pembeli asing (hak pakai, leasehold, PT PMA), serta penyewa jangka panjang & musiman."],
+              ["M4 6h.01M4 12h.01M4 18h.01M9 6h11M9 12h11M9 18h11", "Pendampingan penuh", "Kurasi properti → negosiasi → pemeriksaan legal → serah terima."],
+              ["M12 15a6 6 0 1 0 0-12 6 6 0 0 0 0 12ZM8.5 13.5 7 22l5-3 5 3-1.5-8.5", "Pengalaman", "Kirana Sutanto — lebih dari 10 tahun di pasar properti premium Bali."],
+              ["M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z", "Konsultasi gratis", "Langsung via WhatsApp — jawaban jujur, tanpa tekanan."],
+            ] as [string, string, string][]).map(([d, label, text]) => (
+              <div key={label} className="k-sum-item">
+                <span className="k-sum-ic"><Ic d={d} s={20} /></span>
+                <div><div className="k-sum-label">{label}</div><div className="k-sum-text">{text}</div></div>
+              </div>
+            ))}
+          </div>
+          <p className="k-sum-note">Setiap kisaran harga di situs ini bersifat indikatif — penilaian resmi diberikan setelah kurasi dan pemeriksaan langsung.</p>
         </div>
       </section>
 
@@ -375,20 +385,33 @@ export default function Demo() {
           <p className="k-sub">Warga negara asing tidak dapat memegang Hak Milik (freehold), tetapi ada beberapa jalur kepemilikan yang sah dan lazim digunakan — masing-masing dengan konsekuensi, biaya, dan tingkat kendali yang berbeda.</p>
         </div>
         <div className="k-grid k-grid-3">
-          <div className="k-legal-item">
-            <h3 className="k-serv-t">Hak Pakai</h3>
-            <p className="k-muted">Hak legal atas nama pribadi asing yang berdomisili/berizin untuk memakai tanah dalam jangka waktu tertentu dan dapat diperpanjang. Sering dipilih untuk vila yang ditinggali sendiri.</p>
+          {([
+            ["M6 2h9l5 5v15H6zM14 2v6h6M9 13h6M9 17h6", "Hak Pakai", "Hak legal atas nama pribadi asing yang berdomisili/berizin untuk memakai tanah dalam jangka waktu tertentu dan dapat diperpanjang. Sering dipilih untuk vila yang ditinggali sendiri."],
+            ["M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20ZM12 7v5l3 3", "Leasehold", "Sewa jangka panjang (umumnya 25–30 tahun, sering dapat diperpanjang). Jalur paling sederhana untuk penggunaan pribadi; yang krusial adalah sisa masa sewa & syarat perpanjangan."],
+            ["M4 21V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v17M15 21V9h4a1 1 0 0 1 1 1v11M3 21h18M8 8h.01M8 12h.01", "PT PMA", "Badan usaha penanaman modal asing yang dapat memegang HGB — cocok bila properti ditujukan untuk disewakan atau dijalankan sebagai bisnis; menuntut kepatuhan pajak & pelaporan."],
+          ] as [string, string, string][]).map(([d, t, desc]) => (
+            <div key={t} className="k-legal-item">
+              <span className="k-legal-ic"><Ic d={d} s={24} /></span>
+              <h3 className="k-serv-t">{t}</h3>
+              <p className="k-muted">{desc}</p>
+            </div>
+          ))}
+        </div>
+        <p className="k-legal-lead">Tidak ada satu struktur ‘terbaik’ untuk semua orang — pilihan bergantung pada tujuan, jangka waktu, dan rencana keluar Anda.</p>
+        <div className="k-legal-assure">
+          <h3 className="k-legal-assure-h">Yang saya pastikan sebelum satu rupiah pun berpindah</h3>
+          <div className="k-legal-checks">
+            {["Verifikasi keaslian & status sertifikat", "Pengecekan zonasi dan izin bangunan (PBG/IMB)", "Telaah sengketa atau beban atas properti", "Penandatanganan di hadapan notaris/PPAT tepercaya"].map((c) => (
+              <div key={c} className="k-legal-check">
+                <span className="k-check"><Ic d="M20 6 9 17l-5-5" s={14} /></span><span>{c}</span>
+              </div>
+            ))}
           </div>
-          <div className="k-legal-item">
-            <h3 className="k-serv-t">Leasehold</h3>
-            <p className="k-muted">Sewa jangka panjang (umumnya 25–30 tahun, sering dapat diperpanjang). Jalur paling sederhana untuk penggunaan pribadi; yang krusial adalah sisa masa sewa &amp; syarat perpanjangan.</p>
-          </div>
-          <div className="k-legal-item">
-            <h3 className="k-serv-t">PT PMA</h3>
-            <p className="k-muted">Badan usaha penanaman modal asing yang dapat memegang HGB — cocok bila properti ditujukan untuk disewakan atau dijalankan sebagai bisnis; menuntut kepatuhan pajak &amp; pelaporan.</p>
+          <div className="k-legal-foot">
+            <p className="k-legal-note2">Saya tidak menggantikan nasihat hukum atau pajak — saya memastikan Anda didampingi profesional yang tepat.</p>
+            <span className="k-legal-chip"><Ic d="M20 4 3 11l6 2 2 6 3-5 4 3z" s={14} /> Prefer English? That's completely fine.</span>
           </div>
         </div>
-        <p className="k-legal-close">Tidak ada satu struktur ‘terbaik’ untuk semua orang — pilihan bergantung pada tujuan, jangka waktu, dan rencana keluar Anda. Pendampingan saya mencakup verifikasi keaslian &amp; status sertifikat, pengecekan zonasi dan izin bangunan (PBG/IMB), telaah sengketa atau beban, hingga penandatanganan di hadapan notaris/PPAT tepercaya. Saya tidak menggantikan nasihat hukum atau pajak — saya memastikan Anda didampingi profesional yang tepat sebelum satu rupiah pun berpindah. <span className="k-legal-en">(Prefer to talk this through in English? That is completely fine.)</span></p>
       </section>
 
       {/* FAQ */}
@@ -532,9 +555,30 @@ export default function Demo() {
         .k-tldr-list li::before{ content:""; position:absolute; left:2px; top:9px; width:7px; height:7px; border-radius:50%; background:var(--k-emerald); }
         .k-tldr-list b{ color:var(--k-ink); font-weight:700; }
         .k-tldr-note{ margin-top:16px; font-size:.86rem; color:var(--k-muted); border-top:1px solid var(--k-line); padding-top:12px; }
-        .k-legal-item{ background:var(--k-surface); border:1px solid var(--k-line); border-radius:var(--k-r); padding:24px; }
-        .k-legal-close{ max-width:70ch; margin:28px auto 0; text-align:center; color:var(--k-ink-2); line-height:1.7; }
-        .k-legal-en{ color:var(--k-muted); font-style:italic; }
+        .k-legal-item{ background:var(--k-surface); border:1px solid var(--k-line); border-radius:var(--k-r); padding:26px 24px; }
+        .k-legal-ic{ display:inline-grid; place-items:center; width:46px; height:46px; border-radius:12px; background:color-mix(in oklab, var(--k-gold) 12%, var(--k-surface)); color:var(--k-gold-2); border:1px solid color-mix(in oklab, var(--k-gold) 22%, transparent); margin-bottom:14px; }
+        .k-legal-lead{ text-align:center; max-width:62ch; margin:38px auto 22px; font-size:1.12rem; color:var(--k-ink-2); line-height:1.6; }
+        .k-legal-assure{ background:linear-gradient(125deg, var(--k-emerald-2), var(--k-emerald)); color:#fff; border-radius:var(--k-r); padding:clamp(28px,4vw,44px); box-shadow:0 30px 60px -38px var(--k-emerald); }
+        .k-legal-assure-h{ color:#fff; font-size:clamp(1.3rem,2.4vw,1.7rem); text-align:center; margin-bottom:26px; }
+        .k-legal-checks{ display:grid; grid-template-columns:repeat(2,1fr); gap:16px 28px; max-width:840px; margin:0 auto; }
+        .k-legal-check{ display:flex; gap:12px; align-items:flex-start; }
+        .k-legal-check .k-check{ background:rgba(255,255,255,.16); color:#fff; flex:none; margin-top:1px; }
+        .k-legal-check > span:last-child{ color:rgba(255,255,255,.92); line-height:1.5; font-size:.98rem; }
+        .k-legal-foot{ display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap; margin-top:28px; padding-top:24px; border-top:1px solid rgba(255,255,255,.18); }
+        .k-legal-note2{ color:rgba(255,255,255,.74); font-size:.9rem; max-width:52ch; margin:0; }
+        .k-legal-chip{ display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,.15); color:#fff; padding:.55rem 1.05rem; border-radius:999px; font-size:.86rem; font-weight:600; white-space:nowrap; }
+        .k-sum{ max-width:1040px; margin:0 auto; }
+        .k-sum-head{ text-align:center; max-width:60ch; margin:0 auto 34px; }
+        .k-sum-h{ font-size:clamp(1.5rem,2.9vw,2.1rem); line-height:1.18; }
+        .k-sum-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+        .k-sum-item{ display:flex; gap:14px; align-items:flex-start; padding:22px 20px; background:var(--k-surface); border:1px solid var(--k-line); border-radius:var(--k-r); box-shadow:0 1px 2px rgba(15,32,38,.05); transition:transform .2s ease, box-shadow .2s ease; }
+        .k-sum-item:hover{ transform:translateY(-3px); box-shadow:0 14px 30px -16px rgba(15,32,38,.2); }
+        .k-sum-ic{ flex:none; width:44px; height:44px; border-radius:12px; display:grid; place-items:center; background:color-mix(in oklab, var(--k-emerald) 12%, var(--k-surface)); color:var(--k-emerald); border:1px solid color-mix(in oklab, var(--k-emerald) 18%, transparent); }
+        .k-sum-label{ font-family:var(--k-font-display), serif; font-weight:700; font-size:1.02rem; margin-bottom:3px; color:var(--k-ink); }
+        .k-sum-text{ font-size:.9rem; color:var(--k-muted); line-height:1.5; }
+        .k-sum-note{ text-align:center; margin:28px auto 0; max-width:66ch; font-size:.86rem; color:var(--k-ink-2); background:color-mix(in oklab, var(--k-gold) 9%, var(--k-surface)); border:1px solid color-mix(in oklab, var(--k-gold) 24%, var(--k-line)); border-radius:14px; padding:12px 22px; }
+        @media(max-width:860px){ .k-sum-grid{ grid-template-columns:1fr 1fr; } }
+        @media(max-width:560px){ .k-sum-grid{ grid-template-columns:1fr; } .k-legal-checks{ grid-template-columns:1fr; } }
 
         .k-serv{ padding:6px 0; }
         .k-serv-ic{ display:inline-grid; place-items:center; width:52px; height:52px; border-radius:50%; background:color-mix(in oklab, var(--k-emerald) 10%, var(--k-surface)); color:var(--k-emerald); margin-bottom:16px; border:1px solid color-mix(in oklab, var(--k-emerald) 18%, transparent); }

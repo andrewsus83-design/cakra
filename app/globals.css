@@ -132,6 +132,6 @@ img { max-width: 100%; display: block; }
 .k-decor-item { position: absolute; }
 .k-decor-item svg { display: block; }
 [data-decor="low"] > .k-decor, [data-decor="high"] > .k-decor { display: block; }
-[data-decor="low"] > .k-decor { opacity: .12; }
-[data-decor="high"] > .k-decor { opacity: .28; }
+[data-decor="low"] > .k-decor { opacity: .2; }
+[data-decor="high"] > .k-decor { opacity: .42; }
 [data-decor="low"] > .k-decor .k-decor-item:nth-child(n+8) { display: none; }

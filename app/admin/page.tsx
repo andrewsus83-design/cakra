@@ -1039,9 +1039,7 @@ function MemberDashboard() {
   const bSty = B_STYLES.find((x) => x.id === builder.styleId)!;
   const bCopy = B_TONE_COPY[builder.tone];
   const pageBg = builder.bg === "gradient"
-    ? `linear-gradient(160deg, ${bPal.bg}, color-mix(in oklab, ${bPal.accent} 13%, ${bPal.bg}))`
-    : builder.bg === "dual"
-    ? `linear-gradient(180deg, ${bPal.bg}, color-mix(in oklab, ${bPal.brand} 6%, ${bPal.bg}))`
+    ? `linear-gradient(160deg, color-mix(in oklab, ${bPal.brand} 14%, ${bPal.bg}), color-mix(in oklab, ${bPal.accent} 22%, ${bPal.bg}))`
     : bPal.bg;
   const heroBg = builder.bg === "mono" ? bPal.brand : builder.bg === "gradient" ? `linear-gradient(135deg, ${bPal.accent}, ${bPal.brand} 62%)` : `linear-gradient(118deg, ${bPal.brand}, color-mix(in oklab, ${bPal.brand} 60%, #000))`;
   const bandBg = builder.bg === "mono" ? bPal.bg : builder.bg === "gradient" ? "transparent" : bPal.surface;
@@ -1062,7 +1060,7 @@ function MemberDashboard() {
     col: { em: bPal.brand, go: bPal.accent, bg: bPal.bg, ink: bPal.ink },
     r: { r: bRad.card, s: bRad.btn },
     font: { d: bFont.display, b: bFont.body },
-    bg: builder.bg, dec: builder.decoration,
+    bg: builder.bg, dec: builder.decoration, set: builder.tone,
     soc: { wa: builder.wa, ig: builder.instagram, tt: builder.tiktok, yt: builder.youtube, fb: builder.facebook },
   });
   const encodeSite = () => { try { return btoa(encodeURIComponent(JSON.stringify(siteCfg()))); } catch { return ""; } };
@@ -1247,7 +1245,7 @@ function MemberDashboard() {
               </div>
               {/* hero */}
               <div data-decor={builder.decoration} style={{ position: "relative", overflow: "hidden", background: builder.imgs.hero ? `linear-gradient(115deg, rgba(15,32,38,.82), rgba(15,32,38,.42)), url(${builder.imgs.hero}) center/cover` : heroBg, color: "#fff", padding: `${bDen.pad + 8}px ${bDen.pad}px` }}>
-                <Decor />
+                <Decor set={builder.tone} />
                 <div style={{ position: "relative" }}>
                 <div style={{ fontSize: ".72rem", fontWeight: 700, color: "rgba(255,255,255,.9)", ...capCss(), marginBottom: 10 }}>{bCopy.eyebrow}</div>
                 <div style={{ fontFamily: bFont.display, fontSize: "1.7rem", fontWeight: 700, lineHeight: 1.15, maxWidth: "18ch" }}>{bCopy.h1}</div>

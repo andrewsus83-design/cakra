@@ -1,5 +1,6 @@
 "use client";
 import { useEffect } from "react";
+import { DECOR_SETS } from "@/components/Decor";
 
 // Applies a published Web-Builder look (carried in the URL hash `#site=`) to this live site.
 // Deterministic: only overrides design tokens + links — never regenerates content. Cross-origin safe
@@ -44,6 +45,11 @@ export function SiteSkin() {
       // background decoration density → data-decor on the hero
       if (cfg.dec && cfg.dec !== "none") {
         root.querySelector(".k-hero")?.setAttribute("data-decor", String(cfg.dec));
+      }
+      // swap decoration motifs to match the tone/style set
+      if (cfg.set && DECOR_SETS[cfg.set]) {
+        const paths = DECOR_SETS[cfg.set];
+        root.querySelectorAll(".k-decor-item path").forEach((p, i) => p.setAttribute("d", paths[i % paths.length]));
       }
 
       if (cfg.font) {
