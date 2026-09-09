@@ -751,7 +751,7 @@ function MemberDashboard() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={fPoster} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: !rendering && lastDone ? 1 : .38 }} />
               {rendering ? (
-                <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", padding: 20 }}>
+                <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", padding: "clamp(8px,3vw,20px)" }}>
                   <div style={{ textAlign: "center", color: "#fff" }}>
                     <svg width="72" height="72" viewBox="0 0 72 72" style={{ transform: "rotate(-90deg)" }}>
                       <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,.25)" strokeWidth="6" />
@@ -1389,7 +1389,7 @@ function MemberDashboard() {
       </div>
 
       {aiModal && (
-        <div onClick={() => setAiModal(false)} style={{ position: "fixed", inset: 0, zIndex: 200, background: "rgba(20,15,9,.5)", backdropFilter: "blur(3px)", display: "grid", placeItems: "center", padding: 20 }}>
+        <div onClick={() => setAiModal(false)} style={{ position: "fixed", inset: 0, zIndex: 200, background: "rgba(20,15,9,.5)", backdropFilter: "blur(3px)", display: "grid", placeItems: "center", padding: "clamp(8px,3vw,20px)" }}>
           <div onClick={(e) => e.stopPropagation()} style={{ width: "min(560px,100%)", maxHeight: "88vh", overflowY: "auto", background: "var(--surface)", borderRadius: 16, border: "1px solid var(--line)", boxShadow: "0 40px 90px -30px rgba(0,0,0,.5)", padding: "24px 26px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
               <div>
@@ -1490,7 +1490,7 @@ function MemberDashboard() {
       )}
 
       <div style={{ flex: 1, minWidth: 0 }}>
-        <header style={{ height: 60, borderBottom: "1px solid var(--line)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, padding: "0 clamp(14px,3vw,28px)", background: "color-mix(in oklab, var(--bg) 86%, transparent)", backdropFilter: "blur(8px)", position: "sticky", top: 0, zIndex: 5 }}>
+        <header style={{ height: 60, borderBottom: "1px solid var(--line)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, padding: "0 clamp(8px,3vw,28px)", background: "color-mix(in oklab, var(--bg) 86%, transparent)", backdropFilter: "blur(8px)", position: "sticky", top: 0, zIndex: 5 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
             <button onClick={() => setMobileNav(true)} aria-label="Menu" className="adm-mobile-btn" style={{ placeItems: "center", width: 38, height: 38, borderRadius: 10, border: "1px solid var(--line-2)", background: "transparent", color: "var(--ink)", cursor: "pointer", flex: "none" }}>
               <Ic d="M4 6h16v2H4zM4 11h16v2H4zM4 16h16v2H4z" s={18} />
@@ -1521,7 +1521,7 @@ function MemberDashboard() {
       {listingModal !== null && (() => {
         const l = LISTINGS[listingModal];
         return (
-          <div onClick={() => setListingModal(null)} style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(20,15,9,.55)", backdropFilter: "blur(3px)", display: "grid", placeItems: "center", padding: 20 }}>
+          <div onClick={() => setListingModal(null)} style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(20,15,9,.55)", backdropFilter: "blur(3px)", display: "grid", placeItems: "center", padding: "clamp(8px,3vw,20px)" }}>
             <div onClick={(e) => e.stopPropagation()} style={{ width: "min(560px, 94vw)", maxHeight: "90vh", overflow: "auto", background: "var(--surface)", borderRadius: 18, border: "1px solid var(--line)", boxShadow: "0 40px 100px rgba(20,15,9,.4)" }}>
               <div style={{ position: "relative", aspectRatio: "16 / 10" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1559,7 +1559,7 @@ function MemberDashboard() {
       {videoModal !== null && (() => {
         const v = VIDEO_HISTORY[videoModal];
         return (
-          <div onClick={() => setVideoModal(null)} style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(20,15,9,.62)", backdropFilter: "blur(3px)", display: "grid", placeItems: "center", padding: 20 }}>
+          <div onClick={() => setVideoModal(null)} style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(20,15,9,.62)", backdropFilter: "blur(3px)", display: "grid", placeItems: "center", padding: "clamp(8px,3vw,20px)" }}>
             <div onClick={(e) => e.stopPropagation()} style={{ width: v.ar === "9:16" ? "min(360px, 92vw)" : "min(760px, 94vw)", background: "var(--surface)", borderRadius: 18, border: "1px solid var(--line)", overflow: "hidden", boxShadow: "0 40px 100px rgba(20,15,9,.45)" }}>
               <div style={{ position: "relative", aspectRatio: arCss(v.ar), background: "var(--ink)", maxHeight: "72vh", margin: "0 auto" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1594,7 +1594,7 @@ function MemberDashboard() {
       {contentModal !== null && (() => {
         const it = READY_CONTENT[contentModal];
         return (
-          <div onClick={() => setContentModal(null)} style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(20,15,9,.55)", backdropFilter: "blur(3px)", display: "grid", placeItems: "center", padding: 20 }}>
+          <div onClick={() => setContentModal(null)} style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(20,15,9,.55)", backdropFilter: "blur(3px)", display: "grid", placeItems: "center", padding: "clamp(8px,3vw,20px)" }}>
             <div onClick={(e) => e.stopPropagation()} style={{ width: "min(340px, 94vw)", maxHeight: "92vh", overflow: "auto", background: "var(--surface)", borderRadius: 18, border: "1px solid var(--line)", boxShadow: "0 40px 100px rgba(20,15,9,.4)" }}>
               {/* 9:16 social-media player */}
               <div style={{ position: "relative", aspectRatio: "9 / 16", background: "var(--ink)", color: "#fff" }}>

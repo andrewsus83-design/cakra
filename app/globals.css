@@ -106,10 +106,18 @@ img { max-width: 100%; display: block; }
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-soft); }
 .hair { border-color: var(--line); }
 
-/* mobile: consistent 8px side gutter so content is never cut off by the edge */
+/* mobile: consistent 8px side gutter + a gentle downscale so content breathes */
 @media (max-width: 640px) {
-  .wrap { padding-left: 8px; padding-right: 8px; }
+  html { font-size: 15px; }            /* downscale all rem-based sizing ~6% */
+  body { font-size: 15.5px; }
+  /* inline shorthand `padding: clamp(..) 0 ..` zeroes the sides, so !important is required */
+  .wrap { padding-left: 8px !important; padding-right: 8px !important; }
   .adm-main { padding-left: 8px !important; padding-right: 8px !important; }
+  .lead { font-size: 1.1rem; }
+  .card { padding: 14px !important; }
+  .adm-main h1.display { font-size: 1.32rem !important; }
+  .adm-main h2.display { font-size: 1.05rem !important; }
+  .adm-kpi { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
 }
 
 /* ── theme-aware photo hero: light cream wash in light mode, dark in dark mode ── */

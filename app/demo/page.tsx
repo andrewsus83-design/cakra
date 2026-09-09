@@ -678,7 +678,19 @@ export default function Demo() {
         .k-fab:hover{ transform:scale(1.06); }
 
         @media (max-width: 900px){ .k-links, .k-foot-links{ display:none; } .k-stats{ grid-template-columns:1fr 1fr; } .k-stat:nth-child(2){ border-right:none; } .k-stat{ border-bottom:1px solid var(--k-line); } .k-split{ grid-template-columns:1fr; } .k-about-img{ order:-1; } .k-faq-grid{ grid-template-columns:1fr; } }
-        @media (max-width: 640px){ .k-wrap{ padding-left:8px; padding-right:8px; } .k-sec{ padding-left:8px; padding-right:8px; } .k-hero-in{ padding-left:8px; padding-right:8px; } }
+        @media (max-width: 640px){
+          .k-wrap{ padding-left:8px; padding-right:8px; }
+          .k-sec{ padding:44px 8px; }
+          .k-hero-in{ padding:52px 8px 58px; }
+          .k-split{ padding:36px 8px; gap:24px; }
+          .k-cta{ padding:34px 16px; } .k-cta-p{ font-size:1rem; }
+          .k-connect{ padding:18px 16px; }
+          .k-tldr{ padding:20px 16px; } .k-testi{ padding:22px 18px 20px; }
+          .k-stat{ padding:18px 12px; } .k-card-body{ padding:16px 16px 18px; }
+          .k-legal-item{ padding:18px 16px; } .k-legal-assure{ padding:22px 16px; } .k-sum-item{ padding:18px 16px; } .k-modal-body{ padding:18px 18px 20px; }
+          .k-h1{ font-size:1.95rem; line-height:1.14; } .k-h2{ font-size:1.5rem; line-height:1.2; }
+          .k-lead{ font-size:1rem; margin:16px 0 24px; } .k-sub,.k-p{ font-size:1rem; } .k-center{ margin-bottom:28px; }
+        }
       `}</style>
     </div>
   );

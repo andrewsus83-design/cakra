@@ -235,7 +235,7 @@ export function StaffAdmin() {
         </div>
       </aside>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <header style={{ height: 62, borderBottom: "1px solid var(--line)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 clamp(18px,3vw,32px)", background: "color-mix(in oklab, var(--bg) 86%, transparent)", backdropFilter: "blur(8px)", position: "sticky", top: 0, zIndex: 5 }}>
+        <header style={{ height: 62, borderBottom: "1px solid var(--line)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 clamp(8px,3vw,32px)", background: "color-mix(in oklab, var(--bg) 86%, transparent)", backdropFilter: "blur(8px)", position: "sticky", top: 0, zIndex: 5 }}>
           <span style={{ fontSize: ".82rem", color: "var(--warn)", fontWeight: 600 }}>● Backend · mode terbuka tanpa autentikasi</span>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <input placeholder="Cari member, listing…" style={{ background: "var(--surface)", border: "1px solid var(--line-2)", borderRadius: 999, padding: ".5rem 1rem", font: "inherit", fontSize: ".88rem", color: "var(--ink)", width: 220, maxWidth: "40vw" }} />
