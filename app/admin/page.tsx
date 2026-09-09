@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { CakraMark } from "@/components/CakraMark";
 import { Decor } from "@/components/Decor";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { LocationInput } from "./LocationInput";
 import { StaffAdmin } from "./StaffAdmin";
 
 type Sec = "home" | "builder" | "prospek" | "listing" | "editor" | "content" | "assets" | "profile";
@@ -1250,7 +1251,7 @@ function MemberDashboard() {
             ) : (
               <p className="muted" style={{ fontSize: ".84rem", marginTop: -4, marginBottom: 12, lineHeight: 1.5 }}>Fondasi mesin konten. Bisa diubah maksimal <b style={{ color: "var(--ink)" }}>sekali per 30 hari</b> — semakin stabil, semakin baik optimasi & mengurangi coba-coba.</p>
             )}
-            {bField("Lokasi utama (konten location-based)", <input style={{ ...bInp, opacity: foundationLocked() ? .55 : 1, cursor: foundationLocked() ? "not-allowed" : "text" }} value={builder.location} disabled={foundationLocked()} onChange={(e) => setB({ location: e.target.value })} placeholder="mis. Canggu, Bali" />)}
+            {bField("Lokasi utama (konten location-based)", <LocationInput value={builder.location} onChange={(v) => setB({ location: v })} disabled={foundationLocked()} placeholder="Ketik kota/kawasan…" style={{ ...bInp, opacity: foundationLocked() ? .55 : 1, cursor: foundationLocked() ? "not-allowed" : "text" }} />, "🔎 Google Places bila aktif")}
             {bField("Gaya bahasa", <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{B_TONES.map((o) => <button key={o.id} disabled={foundationLocked()} onClick={() => { if (!foundationLocked()) setB({ tone: o.id }); }} style={{ ...segBtn(builder.tone === o.id), opacity: foundationLocked() && builder.tone !== o.id ? .5 : 1, cursor: foundationLocked() ? "not-allowed" : "pointer" }}>{o.label}</button>)}</div>, "Nada + set ikon/dekorasi")}
             {!foundationLocked() && <button onClick={lockFoundation} style={{ ...btn("brand"), width: "100%", justifyContent: "center", display: "flex", marginTop: 4, fontSize: ".85rem" }}>Terapkan & kunci 30 hari</button>}
           </>, foundationLocked() ? "🔒 Terkunci" : "Lokasi + nada")}
