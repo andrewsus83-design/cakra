@@ -62,17 +62,33 @@ const PLATFORMS = [
   { id: "TikTok", fmt: "9:16" }, { id: "YouTube", fmt: "16:9" }, { id: "Presentasi", fmt: "16:9" },
 ];
 const READY_CONTENT = [
-  { t: "Panduan harga vila Canggu 2026", c: "Artikel", img: "/blog-0.webp", meta: "6 mnt baca · SEO", body: "Harga vila di Canggu terus menguat sepanjang 2026, didorong permintaan sewa jangka panjang dan pembeli asing lewat skema hak pakai.\n\nUntuk vila 3–4 kamar dengan kolam pribadi, kisaran harga kini Rp 6–12 miliar tergantung jarak ke pantai Berawa dan Pererenan. Area yang sedang naik daun seperti Nyanyi dan Cemagi menawarkan harga 15–20% lebih rendah dengan potensi apresiasi tinggi.\n\nTips: bandingkan harga per meter persegi tanah, bukan hanya harga total — ini ukuran paling jujur untuk menilai apakah sebuah listing wajar." },
-  { t: "Reels: Tur 60 detik Vila Uluwatu", c: "Reels", img: "/about/hero.webp", meta: "9:16 · 60 dtk", body: "Naskah reels (0–60 dtk):\n\n0–5 dtk — Drone melintas tebing, teks: “Bangun di atas Samudra Hindia.”\n5–35 dtk — Sapuan interior: ruang tamu terbuka, dapur granit, kamar utama berbalkon.\n35–50 dtk — Kolam infinity saat golden hour, sorot detail kayu jati & batu alam.\n50–60 dtk — Ajakan: “DM untuk jadwal viewing privat minggu ini.”\n\nCaption: Vila 5 kamar di Uluwatu — Rp 14 M. Hak milik. #propertibali #villauluwatu" },
-  { t: "Carousel: 5 tips beli vila di Bali", c: "Post", img: "/blog-1.webp", meta: "1:1 · 5 slide", body: "5 tips sebelum membeli vila di Bali:\n\n1. Pastikan status tanah — Hak Milik, Hak Pakai, atau leasehold — dan sisa masa berlakunya.\n2. Cek zonasi (ITR/PKKPR); tidak semua area boleh untuk vila komersial.\n3. Hitung yield bersih setelah biaya manajemen, pajak, dan perawatan — bukan hanya yield kotor.\n4. Verifikasi IMB/PBG dan pastikan bangunan sesuai izin.\n5. Gunakan notaris & agen tepercaya; jangan transfer sebelum due diligence selesai.\n\nSimpan & bagikan ke teman yang sedang cari vila!" },
-  { t: "Video: Investasi properti Bali", c: "YouTube", img: "/about/transform.webp", meta: "16:9 · 3 mnt", body: "Deskripsi video:\n\nKita bahas mengapa Bali tetap jadi salah satu pasar properti paling menarik di Asia Tenggara pada 2026 — dari pertumbuhan pariwisata, permintaan sewa harian, hingga skema kepemilikan untuk WNA.\n\nAgenda:\n• Tren harga per area (Canggu, Uluwatu, Ubud)\n• Perbandingan sewa harian vs tahunan\n• Struktur legal yang aman untuk pembeli asing\n• Studi kasus: ROI sebuah vila 3 kamar\n\nHubungi Kirana untuk konsultasi gratis 15 menit." },
+  { t: "Panduan harga vila Canggu 2026", c: "Artikel", plat: "Blog", img: "/blog-0.webp", meta: "6 mnt baca · SEO", body: "Harga vila di Canggu terus menguat sepanjang 2026, didorong permintaan sewa jangka panjang dan pembeli asing lewat skema hak pakai.\n\nUntuk vila 3–4 kamar dengan kolam pribadi, kisaran harga kini Rp 6–12 miliar tergantung jarak ke pantai Berawa dan Pererenan. Area yang sedang naik daun seperti Nyanyi dan Cemagi menawarkan harga 15–20% lebih rendah dengan potensi apresiasi tinggi.\n\nTips: bandingkan harga per meter persegi tanah, bukan hanya harga total — ini ukuran paling jujur untuk menilai apakah sebuah listing wajar." },
+  { t: "Reels: Tur 60 detik Vila Uluwatu", c: "Reels", plat: "Instagram", img: "/about/hero.webp", meta: "9:16 · 60 dtk", body: "Naskah reels (0–60 dtk):\n\n0–5 dtk — Drone melintas tebing, teks: “Bangun di atas Samudra Hindia.”\n5–35 dtk — Sapuan interior: ruang tamu terbuka, dapur granit, kamar utama berbalkon.\n35–50 dtk — Kolam infinity saat golden hour, sorot detail kayu jati & batu alam.\n50–60 dtk — Ajakan: “DM untuk jadwal viewing privat minggu ini.”\n\nCaption: Vila 5 kamar di Uluwatu — Rp 14 M. Hak milik. #propertibali #villauluwatu" },
+  { t: "Carousel: 5 tips beli vila di Bali", c: "Post", plat: "Facebook", img: "/blog-1.webp", meta: "1:1 · 5 slide", body: "5 tips sebelum membeli vila di Bali:\n\n1. Pastikan status tanah — Hak Milik, Hak Pakai, atau leasehold — dan sisa masa berlakunya.\n2. Cek zonasi (ITR/PKKPR); tidak semua area boleh untuk vila komersial.\n3. Hitung yield bersih setelah biaya manajemen, pajak, dan perawatan — bukan hanya yield kotor.\n4. Verifikasi IMB/PBG dan pastikan bangunan sesuai izin.\n5. Gunakan notaris & agen tepercaya; jangan transfer sebelum due diligence selesai.\n\nSimpan & bagikan ke teman yang sedang cari vila!" },
+  { t: "Video: Investasi properti Bali", c: "YouTube", plat: "YouTube", img: "/about/transform.webp", meta: "16:9 · 3 mnt", body: "Deskripsi video:\n\nKita bahas mengapa Bali tetap jadi salah satu pasar properti paling menarik di Asia Tenggara pada 2026 — dari pertumbuhan pariwisata, permintaan sewa harian, hingga skema kepemilikan untuk WNA.\n\nAgenda:\n• Tren harga per area (Canggu, Uluwatu, Ubud)\n• Perbandingan sewa harian vs tahunan\n• Struktur legal yang aman untuk pembeli asing\n• Studi kasus: ROI sebuah vila 3 kamar\n\nHubungi Kirana untuk konsultasi gratis 15 menit." },
+  { t: "TikTok: POV keliling vila Canggu", c: "TikTok", plat: "TikTok", img: "/hero.webp", meta: "9:16 · 22 dtk", body: "Naskah TikTok (POV, 22 dtk):\n\nHook (0–3 dtk): “POV: kamu baru dapat kunci vila di Canggu.”\n3–15 dtk: jalan cepat dari gerbang → taman → kolam → rooftop, potongan cepat mengikuti beat.\n15–22 dtk: duduk santai saat sunset, teks: “Rp 8,5 M. Mau yang seperti ini? Komen ‘INFO’.”\n\nCaption: Vila 4 kamar Canggu, dekat Berawa. #vilabali #canggu #propertibali" },
+  { t: "Shorts: Sunset Uluwatu 30 detik", c: "Shorts", plat: "Shorts", img: "/hero-top.webp", meta: "9:16 · 30 dtk", body: "Naskah Shorts (30 dtk):\n\n0–5 dtk: drone naik dari tebing, teks besar “Sunset terbaik di Bali?”\n5–22 dtk: sapuan vila clifftop + kolam infinity menghadap samudra.\n22–30 dtk: logo + ajakan “Subscribe untuk tur vila premium tiap minggu.”\n\nJudul: Vila clifftop Uluwatu saat golden hour 🌅 #shorts #bali #luxuryvilla" },
 ];
 const CONTENT_HISTORY = [
-  { t: "5 alasan investasi Uluwatu", c: "Artikel", img: "/about/invite.webp", date: "2 Sep 2026", posted: true, shared: true, down: false },
-  { t: "Panduan KPR pembeli pertama", c: "Artikel", img: "/blog-2.webp", date: "28 Agu 2026", posted: true, shared: false, down: true },
-  { t: "Tur Vila Seminyak Retreat", c: "Reels", img: "/hero.webp", date: "20 Agu 2026", posted: true, shared: true, down: true },
-  { t: "Harga tanah Pererenan", c: "Artikel", img: "/about/vision-hill.webp", date: "—", posted: false, shared: false, down: false },
+  { t: "5 alasan investasi Uluwatu", c: "Artikel", plat: "Blog", img: "/about/invite.webp", date: "2 Sep 2026", posted: true, shared: true, down: false },
+  { t: "Panduan KPR pembeli pertama", c: "Artikel", plat: "Blog", img: "/blog-2.webp", date: "28 Agu 2026", posted: true, shared: false, down: true },
+  { t: "Tur Vila Seminyak Retreat", c: "Reels", plat: "Instagram", img: "/hero.webp", date: "20 Agu 2026", posted: true, shared: true, down: true },
+  { t: "POV tren harga properti Bali", c: "TikTok", plat: "TikTok", img: "/blog-0.webp", date: "16 Agu 2026", posted: true, shared: true, down: false },
+  { t: "Q&A investasi vila (YouTube)", c: "YouTube", plat: "YouTube", img: "/about/transform.webp", date: "12 Agu 2026", posted: true, shared: false, down: true },
+  { t: "Shorts sunset Uluwatu", c: "Shorts", plat: "Shorts", img: "/hero-top.webp", date: "8 Agu 2026", posted: true, shared: true, down: true },
+  { t: "Promo halaman Facebook", c: "Post", plat: "Facebook", img: "/blog-1.webp", date: "5 Agu 2026", posted: true, shared: false, down: false },
+  { t: "Harga tanah Pererenan", c: "Artikel", plat: "Blog", img: "/about/vision-hill.webp", date: "—", posted: false, shared: false, down: false },
 ];
+const CONTENT_PLATS = ["Semua", "Blog", "TikTok", "Instagram", "YouTube", "Facebook", "Shorts"] as const;
+// 6 pertanyaan singkat — cukup untuk menulis advertorial/skrip/isi situs yang optimal (SEO/GEO/social/local)
+const AI_QUESTIONS = [
+  { key: "audience", q: "Siapa target pembeli/penyewa utama Anda?", ph: "mis. pembeli asing (hak pakai/PT PMA), investor, keluarga lokal, penyewa jangka panjang" },
+  { key: "focus", q: "Jenis properti & kisaran harga yang Anda fokuskan?", ph: "mis. vila premium Rp 3–15 M, apartemen, tanah, komersial" },
+  { key: "usp", q: "Apa keunggulan utama Anda? (pengalaman, jaringan, spesialisasi)", ph: "mis. 10+ tahun, jaringan pemilik, ahli legalitas WNA, closing cepat" },
+  { key: "areas", q: "Kawasan/lingkungan spesifik yang paling Anda kuasai?", ph: "mis. Canggu (Berawa, Pererenan), Uluwatu, Ubud" },
+  { key: "cta", q: "Aksi utama yang Anda inginkan dari pengunjung situs?", ph: "mis. chat WhatsApp, jadwalkan viewing, minta penilaian harga" },
+  { key: "proof", q: "Bukti/pencapaian atau layanan khas untuk ditonjolkan?", ph: "mis. 150+ closing, pendampingan notaris, layanan Bahasa Inggris" },
+] as const;
 const CONTENT_TIPS = [
   "Pembeli sering mencari “vila dekat pantai Canggu” — buat konten khusus area itu.",
   "Reels tur 30–60 detik menaikkan interaksi hingga 3× dibanding foto.",
@@ -98,7 +114,7 @@ const VOICE_STYLES = ["Hangat", "Berwibawa", "Energetik", "Lembut", "Profesional
 // ---------- Web Builder (deterministic "machine" — no AI credits to build) ----------
 type BState = {
   radius: string; bg: string; decoration: string; fontId: string; paletteId: string; density: string; styleId: string; tone: string;
-  brand: string; tagline: string; metaTitle: string; metaDesc: string; logo: string; domain: string;
+  brand: string; tagline: string; metaTitle: string; metaDesc: string; logo: string; domain: string; location: string;
   wa: string; instagram: string; tiktok: string; youtube: string; facebook: string;
   imgs: Record<string, string>;
 };
@@ -112,7 +128,7 @@ const BUILDER_DEFAULT: BState = {
   brand: "Kirana", tagline: "Spesialis Properti Premium Bali",
   metaTitle: "Kirana — Spesialis Properti Premium Bali (Jual & Sewa)",
   metaDesc: "Vila & properti premium di Canggu, Seminyak, Uluwatu, Jimbaran & Ubud. Didampingi dari kurasi, negosiasi, hingga serah terima yang aman & legal.",
-  logo: "", domain: "kirana.cakra.xyz",
+  logo: "", domain: "kirana.cakra.xyz", location: "Bali — Canggu, Seminyak, Uluwatu, Jimbaran, Ubud",
   wa: "6281234567890", instagram: "kirana.property", tiktok: "kiranaproperty", youtube: "Kirana Property", facebook: "",
 };
 const B_RADII = [
@@ -232,6 +248,11 @@ function MemberDashboard() {
   const [listingModal, setListingModal] = useState<number | null>(null);
   const [videoModal, setVideoModal] = useState<number | null>(null);
   const [contentModal, setContentModal] = useState<number | null>(null);
+  const [contentFilter, setContentFilter] = useState<string>("Semua");
+  const [aiModal, setAiModal] = useState(false);
+  const [aiAnswers, setAiAnswers] = useState<Record<string, string>>({});
+  const [aiSaved, setAiSaved] = useState(false);
+  const submitAI = () => { try { localStorage.setItem("cakra-ai-brief", JSON.stringify(aiAnswers)); } catch {} setAiSaved(true); };
   const [contentSched, setContentSched] = useState(false);
   // background video render QUEUE — one renders at a time, the rest wait; persists across section switches
   type Job = { id: number; label: string; orient: "9:16" | "16:9"; status: "queued" | "rendering" | "done"; pct: number };
@@ -304,6 +325,14 @@ function MemberDashboard() {
     setBuilder((b) => ({ ...b, imgs: { ...b.imgs, [key]: url } })); setBuilderSaved(false);
   };
   const clearImg = (key: string) => setBuilder((b) => { const n = { ...b.imgs }; delete n[key]; return { ...b, imgs: n }; });
+  // Lokasi & gaya bahasa = fondasi mesin — hanya bisa dikunci-ubah sekali per 30 hari
+  const [locks, setLocks] = useState<Record<string, number>>({});
+  useEffect(() => { try { const raw = localStorage.getItem("cakra-builder-locks"); if (raw) setLocks(JSON.parse(raw)); } catch {} }, []);
+  const LOCK_MS = 30 * 24 * 3600 * 1000;
+  const foundationLocked = () => { const t = locks.foundation; return t ? Date.now() < t + LOCK_MS : false; };
+  const foundationUnlockDate = () => new Date((locks.foundation || 0) + LOCK_MS).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
+  const lockFoundation = () => { const next = { ...locks, foundation: Date.now() }; setLocks(next); try { localStorage.setItem("cakra-builder-locks", JSON.stringify(next)); } catch {} };
+  const clearLocks = () => { setLocks({}); try { localStorage.removeItem("cakra-builder-locks"); } catch {} };
 
   // promote the next queued job whenever nothing is rendering
   useEffect(() => {
@@ -820,8 +849,11 @@ function MemberDashboard() {
       <Card>
         <H>Konten siap</H>
         <p className="muted" style={{ fontSize: ".86rem", marginTop: -8, marginBottom: 12 }}>Draf dari sistem maupun buatan Anda yang belum diterbitkan — klik untuk kelola.</p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 14 }}>
+          {CONTENT_PLATS.map((p) => { const on = contentFilter === p; return <button key={p} onClick={() => setContentFilter(p)} style={{ font: "inherit", fontSize: ".78rem", fontWeight: 600, cursor: "pointer", padding: ".34rem .7rem", borderRadius: 999, border: `1px solid ${on ? "var(--brand)" : "var(--line-2)"}`, background: on ? "color-mix(in oklab, var(--brand) 12%, var(--surface))" : "transparent", color: on ? "var(--brand)" : "var(--ink-2)" }}>{p}</button>; })}
+        </div>
         <div style={{ display: "grid", gap: 12 }}>
-          {READY_CONTENT.map((it, i) => (
+          {READY_CONTENT.map((it, i) => (contentFilter === "Semua" || it.plat === contentFilter) ? (
             <button key={it.t} onClick={() => { setContentModal(i); setContentSched(false); }} className="adm-thumb" style={{ display: "flex", gap: 12, padding: 10, borderRadius: 12, background: "var(--surface-2)", border: "1px solid var(--line)", cursor: "pointer", font: "inherit", textAlign: "left", width: "100%" }}>
               <div style={{ width: 92, height: 92, borderRadius: 9, overflow: "hidden", flex: "none" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -837,12 +869,12 @@ function MemberDashboard() {
                 <div style={{ marginTop: "auto", paddingTop: 8, fontSize: ".8rem", fontWeight: 600, color: "var(--brand)" }}>Kelola — publish, jadwalkan, tolak →</div>
               </div>
             </button>
-          ))}
+          ) : null)}
         </div>
         <h3 className="display" style={{ fontSize: "1.05rem", fontWeight: 600, margin: "24px 0 4px" }}>Riwayat</h3>
         <p className="muted" style={{ fontSize: ".82rem", marginBottom: 12 }}>Kapan dipost ke blog & status bagikan/unduh.</p>
         <div style={{ display: "grid", gap: 12 }}>
-          {CONTENT_HISTORY.map((h) => (
+          {CONTENT_HISTORY.map((h) => (contentFilter === "Semua" || h.plat === contentFilter) ? (
             <div key={h.t} style={{ display: "flex", gap: 12, padding: 10, borderRadius: 12, background: "var(--surface-2)", border: "1px solid var(--line)" }}>
               <div style={{ width: 92, height: 92, borderRadius: 9, overflow: "hidden", flex: "none", position: "relative" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -862,7 +894,7 @@ function MemberDashboard() {
                 </div>
               </div>
             </div>
-          ))}
+          ) : null)}
         </div>
       </Card>
     </div>
@@ -1209,10 +1241,19 @@ function MemberDashboard() {
             })}</div>)}
           </>)}
 
-          {acc("bahasa", "Gaya bahasa", <>
-            <p className="muted" style={{ fontSize: ".84rem", marginTop: -4, marginBottom: 12 }}>Menentukan nada seluruh teks & advertorial yang ditulis sistem — dan set ikon/dekorasi yang menyesuaikan gaya situs Anda.</p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{B_TONES.map((o) => <button key={o.id} onClick={() => setB({ tone: o.id })} style={segBtn(builder.tone === o.id)}>{o.label}</button>)}</div>
-          </>, "Nada + ikon")}
+          {acc("bahasa", "Lokasi & gaya bahasa", <>
+            {foundationLocked() ? (
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 10, padding: "11px 13px", borderRadius: 10, background: "color-mix(in oklab, var(--warn) 10%, var(--surface))", border: "1px solid color-mix(in oklab, var(--warn) 26%, var(--line))", marginBottom: 14, fontSize: ".82rem", color: "var(--ink-2)", lineHeight: 1.5 }}>
+                <span style={{ fontSize: "1rem" }}>🔒</span>
+                <span>Terkunci sampai <b style={{ color: "var(--ink)" }}>{foundationUnlockDate()}</b>. Lokasi & gaya bahasa adalah fondasi mesin — semakin stabil, semakin optimal hasilnya.</span>
+              </div>
+            ) : (
+              <p className="muted" style={{ fontSize: ".84rem", marginTop: -4, marginBottom: 12, lineHeight: 1.5 }}>Fondasi mesin konten. Bisa diubah maksimal <b style={{ color: "var(--ink)" }}>sekali per 30 hari</b> — semakin stabil, semakin baik optimasi & mengurangi coba-coba.</p>
+            )}
+            {bField("Lokasi utama (konten location-based)", <input style={{ ...bInp, opacity: foundationLocked() ? .55 : 1, cursor: foundationLocked() ? "not-allowed" : "text" }} value={builder.location} disabled={foundationLocked()} onChange={(e) => setB({ location: e.target.value })} placeholder="mis. Canggu, Bali" />)}
+            {bField("Gaya bahasa", <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{B_TONES.map((o) => <button key={o.id} disabled={foundationLocked()} onClick={() => { if (!foundationLocked()) setB({ tone: o.id }); }} style={{ ...segBtn(builder.tone === o.id), opacity: foundationLocked() && builder.tone !== o.id ? .5 : 1, cursor: foundationLocked() ? "not-allowed" : "pointer" }}>{o.label}</button>)}</div>, "Nada + set ikon/dekorasi")}
+            {!foundationLocked() && <button onClick={lockFoundation} style={{ ...btn("brand"), width: "100%", justifyContent: "center", display: "flex", marginTop: 4, fontSize: ".85rem" }}>Terapkan & kunci 30 hari</button>}
+          </>, foundationLocked() ? "🔒 Terkunci" : "Lokasi + nada")}
 
           {acc("sosial", "Sosial & WhatsApp", <>
             {bField("Nomor WhatsApp", <input style={bInp} value={builder.wa} onChange={(e) => setB({ wa: e.target.value.replace(/[^\d]/g, "") })} placeholder="6281234567890" />, "Format 62…")}
@@ -1222,24 +1263,30 @@ function MemberDashboard() {
             {bField("Facebook", <input style={bInp} value={builder.facebook} onChange={(e) => setB({ facebook: e.target.value })} placeholder="Halaman (opsional)" />)}
           </>)}
 
-          {acc("ai", "Optimalkan dengan AI", <>
-            <p className="muted" style={{ fontSize: ".84rem", marginTop: -4, marginBottom: 12 }}>Situs ini memakai teks default. Tulis ulang seluruh advertorial, judul, dan naskah agar dioptimalkan untuk SEO, GEO, dan social search — disesuaikan dengan gaya bahasa <b style={{ color: "var(--ink)" }}>{B_TONES.find((t) => t.id === builder.tone)?.label}</b> & area Anda.</p>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 12px", borderRadius: 10, background: "color-mix(in oklab, var(--brand) 8%, var(--surface))", border: "1px solid color-mix(in oklab, var(--brand) 20%, var(--line))", marginBottom: 12 }}>
-              <span style={{ fontSize: ".78rem", fontWeight: 700, color: "var(--brand)", background: "color-mix(in oklab, var(--brand) 16%, var(--surface))", padding: ".2rem .55rem", borderRadius: 999 }}>Paket Pro</span>
-              <span className="muted" style={{ fontSize: ".8rem" }}>≈ 2 layer riset → tulis · hemat kredit</span>
-            </div>
-            <button onClick={() => setAccOpen((s) => ({ ...s, aiInfo: !s.aiInfo }))} style={{ ...btn("brand"), width: "100%", justifyContent: "center", display: "flex", opacity: .95 }}>✨ Optimalkan teks dengan AI</button>
-            {accOpen.aiInfo && <p className="muted" style={{ fontSize: ".8rem", marginTop: 10, lineHeight: 1.55 }}>Segera hadir — generator konten sedang disiapkan. Saat aktif, tombol ini menjalankan riset (Layer 1) lalu menulis ulang seluruh salinan situs (Layer 2) sesuai persona Anda.</p>}
-          </>, "Pro")}
         </div>
 
         {/* ---------------- Live preview ---------------- */}
         <div className="bld-preview" style={{ display: "grid", gap: 14 }}>
+          {/* Premium AI upsell — above the publish action */}
+          <div style={{ position: "relative", overflow: "hidden", borderRadius: 16, padding: "18px 20px", background: "linear-gradient(125deg, #16292E 0%, #0E1F23 58%, #1A3238 100%)", border: "1px solid rgba(231,200,146,.28)", boxShadow: "0 22px 55px -26px rgba(15,32,38,.65)" }}>
+            <div style={{ position: "absolute", inset: 0, background: "radial-gradient(130px 130px at 90% -12%, rgba(231,200,146,.24), transparent 70%)", pointerEvents: "none" }} />
+            <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 14, flexWrap: "wrap" }}>
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                  <span style={{ fontSize: ".68rem", fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: "#E7C892" }}>✨ Premium AI</span>
+                  <span style={{ fontSize: ".62rem", fontWeight: 700, padding: ".14rem .5rem", borderRadius: 999, background: "rgba(255,255,255,.13)", color: "#fff" }}>Pro</span>
+                </div>
+                <div className="display" style={{ fontSize: "1.22rem", fontWeight: 700, color: "#fff", lineHeight: 1.18 }}>Optimalkan situs dengan AI</div>
+                <p style={{ fontSize: ".84rem", color: "rgba(255,255,255,.8)", margin: "5px 0 0", lineHeight: 1.5, maxWidth: "46ch" }}>Advertorial, naskah & isi situs ditulis ulang — dioptimalkan untuk SEO, GEO, social & local search sesuai persona Anda.</p>
+              </div>
+              <button onClick={() => { setAiSaved(false); setAiModal(true); }} style={{ flex: "none", display: "inline-flex", alignItems: "center", gap: 8, font: "inherit", fontWeight: 700, fontSize: ".92rem", cursor: "pointer", border: "none", borderRadius: 12, padding: ".8rem 1.4rem", color: "#231a08", background: "linear-gradient(120deg, #F0D699, #C9A24B 55%, #B0812F)", boxShadow: "0 12px 26px -10px rgba(176,129,47,.7)" }}>✨ Optimalkan</button>
+            </div>
+          </div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, flexWrap: "wrap" }}>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: ".76rem", fontWeight: 700, color: "var(--good)", background: "color-mix(in oklab, var(--good) 12%, var(--surface))", padding: ".3rem .65rem", borderRadius: 999 }}><span style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--good)" }} /> Pratinjau langsung · realtime</span>
             <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
               {builderSaved && !published && <span style={{ fontSize: ".8rem", fontWeight: 600, color: "var(--good)" }}>✓ Tersimpan</span>}
-              <button style={{ ...btn("ghost"), padding: ".5rem .85rem", fontSize: ".84rem" }} onClick={() => setBuilder(BUILDER_DEFAULT)}>Reset</button>
+              <button style={{ ...btn("ghost"), padding: ".5rem .85rem", fontSize: ".84rem" }} onClick={() => { setBuilder(BUILDER_DEFAULT); clearLocks(); }}>Reset</button>
               <button style={{ ...btn("ghost"), padding: ".5rem .85rem", fontSize: ".84rem" }} onClick={saveBuilder}>Simpan draf</button>
               <button style={{ ...btn("ghost"), padding: ".5rem .85rem", fontSize: ".84rem" }} onClick={viewLive}>Lihat situs ↗</button>
               <button style={{ ...btn("brand"), padding: ".5rem 1.15rem", fontSize: ".84rem" }} onClick={publishSite}>Terbitkan situs</button>
@@ -1337,6 +1384,40 @@ function MemberDashboard() {
           </div>
         </div>
       </div>
+
+      {aiModal && (
+        <div onClick={() => setAiModal(false)} style={{ position: "fixed", inset: 0, zIndex: 200, background: "rgba(20,15,9,.5)", backdropFilter: "blur(3px)", display: "grid", placeItems: "center", padding: 20 }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ width: "min(560px,100%)", maxHeight: "88vh", overflowY: "auto", background: "var(--surface)", borderRadius: 16, border: "1px solid var(--line)", boxShadow: "0 40px 90px -30px rgba(0,0,0,.5)", padding: "24px 26px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
+              <div>
+                <h2 className="display" style={{ fontSize: "1.3rem", fontWeight: 700, margin: 0 }}>✨ Optimalkan dengan AI</h2>
+                <p className="muted" style={{ fontSize: ".86rem", marginTop: 4, lineHeight: 1.5 }}>Jawab {AI_QUESTIONS.length} pertanyaan singkat — sistem menulis ulang seluruh advertorial, naskah & isi situs yang dioptimalkan untuk SEO, GEO, social & local search.</p>
+              </div>
+              <button onClick={() => setAiModal(false)} aria-label="Tutup" style={{ ...btn("ghost"), padding: ".35rem .6rem", flex: "none" }}>✕</button>
+            </div>
+            <div style={{ display: "grid", gap: 14, marginTop: 16 }}>
+              {AI_QUESTIONS.map((qq, i) => (
+                <div key={qq.key}>
+                  <label style={{ fontSize: ".84rem", fontWeight: 600, display: "block", marginBottom: 6 }}><span style={{ color: "var(--brand)" }}>{i + 1}.</span> {qq.q}</label>
+                  <textarea rows={2} value={aiAnswers[qq.key] || ""} onChange={(e) => { setAiAnswers((a) => ({ ...a, [qq.key]: e.target.value })); setAiSaved(false); }} placeholder={qq.ph} style={{ ...bInp, resize: "vertical", minHeight: 52, lineHeight: 1.5 }} />
+                </div>
+              ))}
+            </div>
+            {aiSaved ? (
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 16, padding: "12px 14px", borderRadius: 12, background: "color-mix(in oklab, var(--good) 10%, var(--surface))", border: "1px solid color-mix(in oklab, var(--good) 26%, var(--line))" }}>
+                <span style={{ width: 28, height: 28, borderRadius: "50%", flex: "none", display: "grid", placeItems: "center", background: "var(--good)", color: "#fff" }}><Ic d="M20 6 9 17l-5-5" s={15} /></span>
+                <span style={{ fontSize: ".84rem", color: "var(--ink-2)", lineHeight: 1.45 }}>Brief tersimpan. Digabung dengan profil Anda, mesin konten akan menulis hasilnya di <b style={{ color: "var(--ink)" }}>“Konten siap”</b> saat aktif.</span>
+              </div>
+            ) : (
+              <div style={{ display: "flex", gap: 10, marginTop: 18, alignItems: "center" }}>
+                <button onClick={submitAI} style={{ ...btn("brand"), flex: 1, justifyContent: "center", display: "flex" }}>Buat konten optimal</button>
+                <button onClick={() => setAiModal(false)} style={btn("ghost")}>Nanti</button>
+              </div>
+            )}
+            <p className="muted" style={{ fontSize: ".76rem", marginTop: 14, lineHeight: 1.5 }}>Fitur Pro · digabung otomatis dengan brand, lokasi & gaya bahasa Anda untuk hasil paling relevan.</p>
+          </div>
+        </div>
+      )}
     </>
   );
 
