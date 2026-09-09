@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { DECOR_SETS } from "@/components/Decor";
+import { DECOR_TONES } from "@/components/Decor";
 
 // Applies a published Web-Builder look (carried in the URL hash `#site=`) to this live site.
 // Deterministic: only overrides design tokens + links — never regenerates content. Cross-origin safe
@@ -46,10 +46,9 @@ export function SiteSkin() {
       if (cfg.dec && cfg.dec !== "none") {
         root.setAttribute("data-decor", String(cfg.dec));
       }
-      // swap decoration motifs to match the tone/style set
-      if (cfg.set && DECOR_SETS[cfg.set]) {
-        const paths = DECOR_SETS[cfg.set];
-        root.querySelectorAll(".k-decor-item path").forEach((p, i) => p.setAttribute("d", paths[i % paths.length]));
+      // swap decoration icon sprite to match the tone/style set
+      if (cfg.set && DECOR_TONES.includes(cfg.set)) {
+        root.querySelectorAll(".k-decor-item").forEach((el) => { (el as HTMLElement).style.backgroundImage = `url(/decor/${cfg.set}.webp)`; });
       }
 
       // density + card style → injected stylesheet (things CSS vars alone can't carry)

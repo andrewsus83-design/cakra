@@ -174,7 +174,7 @@ export default function Demo() {
   return (
     <div className={`${display.variable} ${body.variable} ${script.variable} kir`} id="top">
       <SiteSkin />
-      <Decor color="var(--k-emerald)" />
+      <Decor />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* DEMO RIBBON — this is a sample site built with cakra */}

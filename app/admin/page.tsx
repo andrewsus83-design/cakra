@@ -81,6 +81,7 @@ const CONTENT_HISTORY = [
   { t: "Harga tanah Pererenan", c: "Artikel", plat: "Blog", img: "/about/vision-hill.webp", date: "—", posted: false, shared: false, down: false },
 ];
 const CONTENT_PLATS = ["Semua", "Blog", "TikTok", "Instagram", "YouTube", "Facebook", "Shorts"] as const;
+const PLAT_AR: Record<string, string> = { Blog: "16 / 9", TikTok: "9 / 16", Instagram: "9 / 16", YouTube: "16 / 9", Facebook: "1 / 1", Shorts: "9 / 16" };
 // 6 pertanyaan singkat — cukup untuk menulis advertorial/skrip/isi situs yang optimal (SEO/GEO/social/local)
 const AI_QUESTIONS = [
   { key: "audience", q: "Siapa target pembeli/penyewa utama Anda?", ph: "mis. pembeli asing (hak pakai/PT PMA), investor, keluarga lokal, penyewa jangka panjang" },
@@ -856,7 +857,7 @@ function MemberDashboard() {
         <div style={{ display: "grid", gap: 12 }}>
           {READY_CONTENT.map((it, i) => (contentFilter === "Semua" || it.plat === contentFilter) ? (
             <button key={it.t} onClick={() => { setContentModal(i); setContentSched(false); }} className="adm-thumb" style={{ display: "flex", gap: 12, padding: 10, borderRadius: 12, background: "var(--surface-2)", border: "1px solid var(--line)", cursor: "pointer", font: "inherit", textAlign: "left", width: "100%" }}>
-              <div style={{ width: 92, height: 92, borderRadius: 9, overflow: "hidden", flex: "none" }}>
+              <div style={{ width: 96, aspectRatio: PLAT_AR[it.plat] || "16 / 9", borderRadius: 9, overflow: "hidden", flex: "none", background: "var(--surface)" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={it.img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               </div>
@@ -877,7 +878,7 @@ function MemberDashboard() {
         <div style={{ display: "grid", gap: 12 }}>
           {CONTENT_HISTORY.map((h) => (contentFilter === "Semua" || h.plat === contentFilter) ? (
             <div key={h.t} style={{ display: "flex", gap: 12, padding: 10, borderRadius: 12, background: "var(--surface-2)", border: "1px solid var(--line)" }}>
-              <div style={{ width: 92, height: 92, borderRadius: 9, overflow: "hidden", flex: "none", position: "relative" }}>
+              <div style={{ width: 96, aspectRatio: PLAT_AR[h.plat] || "16 / 9", borderRadius: 9, overflow: "hidden", flex: "none", position: "relative", background: "var(--surface)" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={h.img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", filter: h.posted ? "none" : "grayscale(.5)" }} />
                 {!h.posted && <span style={{ position: "absolute", inset: 0, background: "rgba(20,15,9,.35)", color: "#fff", display: "grid", placeItems: "center", fontSize: ".68rem", fontWeight: 700 }}>DRAF</span>}
@@ -1312,7 +1313,7 @@ function MemberDashboard() {
               <span className="mono" style={{ marginLeft: 10, fontSize: ".78rem", color: "var(--muted)" }}>{builder.domain}</span>
             </div>
             <div data-decor={builder.decoration} style={{ ...pvVars, position: "relative", isolation: "isolate", fontFamily: bFont.body, color: bPal.ink, background: pageBg }}>
-              <Decor set={builder.tone} color="var(--pv-brand)" />
+              <Decor set={builder.tone} />
               {/* nav */}
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: `12px ${bDen.pad}px`, background: bPal.surface, borderBottom: bSty.ruled ? `1px solid color-mix(in oklab, ${bPal.ink} 12%, transparent)` : "1px solid rgba(0,0,0,.05)" }}>
                 <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -1593,9 +1594,9 @@ function MemberDashboard() {
         return (
           <div onClick={() => setContentModal(null)} style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(20,15,9,.55)", backdropFilter: "blur(3px)", display: "grid", placeItems: "center", padding: 20 }}>
             <div onClick={(e) => e.stopPropagation()} style={{ width: "min(480px, 94vw)", maxHeight: "90vh", overflow: "auto", background: "var(--surface)", borderRadius: 18, border: "1px solid var(--line)", boxShadow: "0 40px 100px rgba(20,15,9,.4)" }}>
-              <div style={{ position: "relative", aspectRatio: "16 / 9" }}>
+              <div style={{ position: "relative", aspectRatio: PLAT_AR[it.plat] || "16 / 9", width: PLAT_AR[it.plat] === "9 / 16" ? "min(100%, 264px)" : "100%", margin: "0 auto", background: "var(--ink)" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={it.img} alt={it.t} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", borderRadius: "18px 18px 0 0" }} />
+                <img src={it.img} alt={it.t} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                 <span style={{ position: "absolute", top: 12, left: 12, fontSize: ".64rem", fontWeight: 700, letterSpacing: ".05em", textTransform: "uppercase", padding: ".24rem .6rem", borderRadius: 999, color: "#fff", background: "var(--brand)" }}>{it.c}</span>
                 <button onClick={() => setContentModal(null)} aria-label="Tutup" style={{ position: "absolute", top: 12, right: 12, width: 34, height: 34, borderRadius: "50%", border: "none", cursor: "pointer", background: "rgba(255,255,255,.92)", color: "var(--ink)", fontSize: "1rem", display: "grid", placeItems: "center" }}>✕</button>
               </div>

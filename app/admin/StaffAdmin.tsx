@@ -50,6 +50,7 @@ const API_KEYS: { group: string; items: ApiItem[] }[] = [
   { group: "Email & analytics", items: [
     { name: "Resend", purpose: "Email transaksional + buletin", env: "RESEND_API_KEY", where: ["Supabase"] },
     { name: "GA4 Measurement ID", purpose: "Google Analytics", env: "NEXT_PUBLIC_GA_ID", where: ["Vercel"], ph: "G-XXXXXXXXXX" },
+    { name: "Google Maps Places", purpose: "Autocomplete lokasi Web Builder · local SEO", env: "NEXT_PUBLIC_GOOGLE_MAPS_API_KEY", where: ["Vercel"], ph: "AIza…" },
   ] },
   { group: "Media generation (gambar #4 · video #5)", items: [
     { name: "Nano Banana 2 (gambar)", purpose: "Batch in-house + real-time member · pakai kunci Gemini di atas", env: "GEMINI_API_KEY", where: ["Supabase"] },
