@@ -104,6 +104,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="id" className={`${display.variable} ${sans.variable} ${mono.variable} ${hand.variable}`}>
       <body>
+        {process.env.NEXT_PUBLIC_GA_ID ? (
+          <>
+            {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} />
+            <script dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${process.env.NEXT_PUBLIC_GA_ID}');` }} />
+          </>
+        ) : null}
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('cakra-theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();` }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />
         <SiteNav />
