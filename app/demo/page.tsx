@@ -286,10 +286,12 @@ export default function Demo() {
       {/* TENTANG — profil agen (SEO: Person + ProfilePage schema) */}
       <section id="tentang" className="k-band">
         <div className="k-wrap k-split">
-          <div className="k-about-img k-profile-img">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/about/origin.webp" alt="Kirana Sutanto — agen properti spesialis vila premium Bali" />
-            <div className="k-profile-cap">
+          <div className="k-card k-profile-card">
+            <div className="k-card-media">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/about/origin.webp" alt="Kirana Sutanto — agen properti spesialis vila premium Bali" />
+            </div>
+            <div className="k-card-body">
               <div className="k-profile-name">Kirana Sutanto</div>
               <div className="k-profile-role">Agen Properti · Spesialis Vila Bali · 10+ tahun</div>
             </div>
@@ -621,8 +623,9 @@ export default function Demo() {
         .k-about-img:hover img{ transform:scale(1.04); }
         .k-profile-img{ position:relative; }
         .k-profile-cap{ position:absolute; left:0; right:0; bottom:0; padding:18px 20px; background:linear-gradient(0deg, rgba(15,32,38,.85), rgba(15,32,38,.15) 70%, transparent); color:#fff; }
-        .k-profile-name{ font-family:var(--k-font-display), serif; font-weight:700; font-size:1.35rem; line-height:1.1; }
-        .k-profile-role{ font-size:.85rem; color:rgba(255,255,255,.85); margin-top:3px; }
+        .k-profile-card{ align-self:start; }
+        .k-profile-name{ font-family:var(--k-font-display), serif; font-weight:700; font-size:1.3rem; line-height:1.15; color:var(--k-ink); }
+        .k-profile-role{ font-size:.86rem; color:var(--k-muted); margin-top:4px; }
         .k-list{ list-style:none; padding:0; margin:0 0 26px; display:grid; gap:13px; }
         .k-list li{ display:flex; gap:12px; align-items:flex-start; color:var(--k-ink-2); }
         .k-check{ flex:none; width:24px; height:24px; border-radius:50%; background:color-mix(in oklab, var(--k-emerald) 12%, var(--k-surface)); color:var(--k-emerald); display:grid; place-items:center; margin-top:2px; }
