@@ -103,8 +103,8 @@ type BState = {
   imgs: Record<string, string>;
 };
 const IMAGE_SLOTS = [
-  { key: "hero", label: "Foto hero", hint: "Gambar utama di atas" },
-  { key: "about", label: "Foto tentang / agen", hint: "Untuk section profil" },
+  { key: "hero", label: "Foto hero", hint: "Gambar utama di atas", def: "/hero-top.webp" },
+  { key: "about", label: "Foto tentang / agen", hint: "Untuk section profil", def: "/about/origin.webp" },
 ] as const;
 const BUILDER_DEFAULT: BState = {
   radius: "semi", bg: "dual", decoration: "none", fontId: "anggun", paletteId: "coastal", density: "normal", styleId: "lembut", tone: "normal",
@@ -1120,22 +1120,25 @@ function MemberDashboard() {
       <div className="bld-acc-body">{children}</div>
     </details>
   );
-  const imgSlot = (key: string, label: string, hint: string) => (
-    <div key={key} style={{ display: "flex", alignItems: "center", gap: 12 }}>
-      <span style={{ width: 66, height: 46, borderRadius: 8, flex: "none", overflow: "hidden", background: "var(--surface-2)", border: "1px solid var(--line)", display: "grid", placeItems: "center", color: "var(--muted)" }}>
-        {builder.imgs[key] ? <img src={builder.imgs[key]} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Ic d="M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm2.5 3a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3ZM5 17h14l-4.5-6-3.5 4.5-2-2.5L5 17Z" s={18} />}
-      </span>
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: ".86rem", fontWeight: 600 }}>{label}</div>
-        <div className="muted" style={{ fontSize: ".74rem" }}>{builder.imgs[key] ? "Terunggah" : `Default in-house · ${hint}`}</div>
+  const imgSlot = (key: string, label: string, hint: string, def?: string) => {
+    const shown = builder.imgs[key] || def;
+    return (
+      <div key={key} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <span style={{ width: 72, height: 50, borderRadius: 8, flex: "none", overflow: "hidden", background: "var(--surface-2)", border: "1px solid var(--line)", display: "grid", placeItems: "center", color: "var(--muted)" }}>
+          {shown ? <img src={shown} alt={label} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Ic d="M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm2.5 3a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3ZM5 17h14l-4.5-6-3.5 4.5-2-2.5L5 17Z" s={18} />}
+        </span>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: ".86rem", fontWeight: 600 }}>{label}</div>
+          <div className="muted" style={{ fontSize: ".74rem" }}>{builder.imgs[key] ? "Foto Anda · terunggah" : "Gambar default in-house"}</div>
+        </div>
+        <label style={{ ...btn("ghost"), padding: ".4rem .8rem", fontSize: ".8rem", cursor: "pointer" }}>
+          {builder.imgs[key] ? "Ganti" : "Unggah"}
+          <input type="file" accept="image/*" onChange={onImg(key)} style={{ display: "none" }} />
+        </label>
+        {builder.imgs[key] && <button onClick={() => clearImg(key)} title="Kembali ke default" style={{ ...btn("ghost"), padding: ".4rem .55rem", fontSize: ".8rem", color: "var(--muted)" }}>✕</button>}
       </div>
-      <label style={{ ...btn("ghost"), padding: ".4rem .8rem", fontSize: ".8rem", cursor: "pointer" }}>
-        {builder.imgs[key] ? "Ganti" : "Unggah"}
-        <input type="file" accept="image/*" onChange={onImg(key)} style={{ display: "none" }} />
-      </label>
-      {builder.imgs[key] && <button onClick={() => clearImg(key)} title="Hapus" style={{ ...btn("ghost"), padding: ".4rem .55rem", fontSize: ".8rem", color: "var(--muted)" }}>✕</button>}
-    </div>
-  );
+    );
+  };
 
   const Builder = (
     <>
@@ -1174,7 +1177,7 @@ function MemberDashboard() {
 
           {acc("gambar", "Gambar situs", <>
             <p className="muted" style={{ fontSize: ".84rem", marginTop: -4, marginBottom: 14 }}>Ganti gambar situs kapan saja dengan foto Anda sendiri. Default memakai pustaka aset in-house cakra.</p>
-            <div style={{ display: "grid", gap: 14 }}>{IMAGE_SLOTS.map((s) => imgSlot(s.key, s.label, s.hint))}</div>
+            <div style={{ display: "grid", gap: 14 }}>{IMAGE_SLOTS.map((s) => imgSlot(s.key, s.label, s.hint, s.def))}</div>
             <p className="muted" style={{ fontSize: ".8rem", marginTop: 14, paddingTop: 12, borderTop: "1px solid var(--line)", lineHeight: 1.5 }}>📷 Foto listing otomatis mengikuti dari menu <b style={{ color: "var(--ink)" }}>Listing</b> — tidak perlu diunggah terpisah di sini.</p>
           </>, "2 slot")}
 
