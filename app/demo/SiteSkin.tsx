@@ -34,20 +34,16 @@ export function SiteSkin() {
         set("--k-r-sm", cfg.r.s >= 999 ? "999px" : `${cfg.r.s}px`);
       }
 
-      // background mode (dual = template default, left untouched)
+      // background mode — PAGE BACKGROUND + section bands only. NEVER the hero image.
+      let bgCss = "";
       if (cfg.bg === "gradient" && c.bg) {
-        root.style.background = `linear-gradient(165deg, color-mix(in oklab, ${c.em || c.bg} 14%, ${c.bg}), color-mix(in oklab, ${c.go || c.bg} 24%, ${c.bg}))`;
+        root.style.background = `linear-gradient(165deg, color-mix(in oklab, ${c.em || c.bg} 16%, ${c.bg}), color-mix(in oklab, ${c.go || c.bg} 26%, ${c.bg}))`;
+        bgCss = `.kir .k-band{ background:transparent !important; }`;   // bands reveal the page gradient
       } else if (cfg.bg === "mono" && c.bg) {
         root.style.background = c.bg;
-        set("--k-surface", c.bg);
+        bgCss = `.kir .k-band{ background:${c.bg} !important; }`;       // flat: bands blend into the page
       }
-      // make the mode obvious on the hero (biggest surface) by tinting its scrim
-      const scrim = root.querySelector(".k-hero-scrim") as HTMLElement | null;
-      if (scrim && c.em) {
-        if (cfg.bg === "gradient") scrim.style.background = `linear-gradient(120deg, color-mix(in oklab, ${c.em} 86%, transparent), color-mix(in oklab, ${c.go || c.em} 56%, transparent) 66%, color-mix(in oklab, ${c.em} 16%, transparent))`;
-        else if (cfg.bg === "mono") scrim.style.background = `linear-gradient(115deg, color-mix(in oklab, ${c.em} 82%, transparent), color-mix(in oklab, ${c.em} 40%, transparent))`;
-        // dual keeps the default dark scrim
-      }
+      // dual: template default (alternating page bg / white bands) — hero untouched in every mode
 
       // background decoration density → data-decor on the page root (behind all content)
       if (cfg.dec && cfg.dec !== "none") {
@@ -67,7 +63,7 @@ export function SiteSkin() {
         tegas: { b: "1.5px solid var(--k-ink)", s: "5px 5px 0 var(--k-ink)" },
         editorial: { b: "1px solid color-mix(in oklab, var(--k-ink) 14%, transparent)", s: "none" },
       };
-      let css = "";
+      let css = bgCss;
       if (cfg.den && DEN_PAD[cfg.den]) css += `.kir .k-sec{padding-top:${DEN_PAD[cfg.den]}px;padding-bottom:${DEN_PAD[cfg.den]}px}.kir .k-split{padding-top:${DEN_PAD[cfg.den]}px;padding-bottom:${DEN_PAD[cfg.den]}px}.kir{line-height:${DEN_LH[cfg.den]}}`;
       if (cfg.sty && STY[cfg.sty]) css += `.kir .k-card,.kir .k-legal-item,.kir .k-sum-item,.kir .k-connect{border:${STY[cfg.sty].b};box-shadow:${STY[cfg.sty].s}}`;
       if (css) { let st = document.getElementById("cakra-skin-css") as HTMLStyleElement | null; if (!st) { st = document.createElement("style"); st.id = "cakra-skin-css"; document.head.appendChild(st); } st.textContent = css; }

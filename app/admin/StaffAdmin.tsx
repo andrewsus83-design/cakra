@@ -46,6 +46,7 @@ const API_KEYS: { group: string; items: ApiItem[] }[] = [
   { group: "Layer 2–3 — Index & konten", items: [
     { name: "Gemini (Google AI Studio)", purpose: "Index Flash-Lite · Nano Banana 2 gambar (batch + real-time) · Kling 3 via Studio", env: "GEMINI_API_KEY", where: ["Supabase"] },
     { name: "Anthropic (Claude Sonnet)", purpose: "Komposisi konten · cron (MCP untuk interaktif)", env: "ANTHROPIC_API_KEY", where: ["Supabase"] },
+    { name: "OpenAI (GPT)", purpose: "LLM alternatif / cadangan · GPT Image", env: "OPENAI_API_KEY", where: ["Supabase"] },
   ] },
   { group: "Email & analytics", items: [
     { name: "Resend", purpose: "Email transaksional + buletin", env: "RESEND_API_KEY", where: ["Supabase"] },

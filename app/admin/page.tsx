@@ -1128,7 +1128,8 @@ function MemberDashboard() {
   const pageBg = builder.bg === "gradient"
     ? `linear-gradient(160deg, color-mix(in oklab, ${bPal.brand} 14%, ${bPal.bg}), color-mix(in oklab, ${bPal.accent} 22%, ${bPal.bg}))`
     : bPal.bg;
-  const heroBg = builder.bg === "mono" ? bPal.brand : builder.bg === "gradient" ? `linear-gradient(135deg, ${bPal.accent}, ${bPal.brand} 62%)` : `linear-gradient(118deg, ${bPal.brand}, color-mix(in oklab, ${bPal.brand} 60%, #000))`;
+  // hero stays CONSISTENT across bg modes — background mode only affects the page + section bands, never the hero
+  const heroBg = `linear-gradient(118deg, ${bPal.brand}, color-mix(in oklab, ${bPal.brand} 62%, #000))`;
   const bandBg = builder.bg === "mono" ? bPal.bg : builder.bg === "gradient" ? "transparent" : bPal.surface;
   const pvVars = { "--pv-brand": bPal.brand, "--pv-accent": bPal.accent, "--pv-ink": bPal.ink, "--pv-bg": bPal.bg, "--pv-surface": bPal.surface } as React.CSSProperties;
   const capCss = (): React.CSSProperties => ({ textTransform: bSty.caps ? "uppercase" : "none", letterSpacing: bSty.caps ? ".14em" : ".08em" });
