@@ -26,6 +26,15 @@ const WA_MSG = encodeURIComponent("Halo Kirana, saya tertarik dengan properti An
 const WA_LINK = `https://wa.me/${WA}?text=${WA_MSG}`;
 const EMAIL_LINK = "mailto:halo@kirana.property?subject=" + encodeURIComponent("Pertanyaan properti Bali");
 
+// Social + Google Business — optional per agent, editable in the dashboard. Empty ones are hidden.
+const SOCIALS: { label: string; href: string; d: string }[] = [
+  { label: "Instagram", href: "https://instagram.com/kirana.property", d: "M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm5.5-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2ZM7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4Zm0 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7Z" },
+  { label: "TikTok", href: "https://tiktok.com/@kiranaproperty", d: "M14 3c.3 2.2 1.7 3.9 4 4.2v2.5c-1.5 0-2.9-.5-4-1.3v5.9a5.3 5.3 0 1 1-5.3-5.3c.3 0 .6 0 .9.1v2.7a2.6 2.6 0 1 0 1.8 2.5V3H14Z" },
+  { label: "YouTube", href: "https://youtube.com/@kiranaproperty", d: "M21.6 7.2a2.6 2.6 0 0 0-1.8-1.8C18 5 12 5 12 5s-6 0-7.8.4A2.6 2.6 0 0 0 2.4 7.2 27 27 0 0 0 2 12a27 27 0 0 0 .4 4.8 2.6 2.6 0 0 0 1.8 1.8C6 19 12 19 12 19s6 0 7.8-.4a2.6 2.6 0 0 0 1.8-1.8A27 27 0 0 0 22 12a27 27 0 0 0-.4-4.8ZM10 15V9l5 3-5 3Z" },
+  { label: "Facebook", href: "https://facebook.com/kirana.property", d: "M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.7l-.4 2.9h-2.3v7A10 10 0 0 0 22 12Z" },
+];
+const GOOGLE_PROFILE = "https://g.page/kirana-property";
+
 const NAV = [["Beranda", "#top"], ["Tentang", "#tentang"], ["Listing", "#listing"], ["Hub", "#hub"], ["FAQ", "#faq"]];
 
 const STATS = [
@@ -82,31 +91,58 @@ const FAQS = [
 ];
 
 const parsePrice = (s: string) => Math.round(Number(s.replace(/[^0-9,]/g, "").replace(",", ".")) * 1e9);
+const AGENT_ID = "https://cakra.xyz/demo#agent";
+const PERSON_ID = "https://cakra.xyz/demo#person";
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "RealEstateAgent",
-  "@id": "https://cakra.xyz/demo#agent",
-  name: "Kirana Sutanto",
-  url: "https://cakra.xyz/demo",
-  image: "https://cakra.xyz/about/transform.webp",
-  description: "Spesialis vila & properti premium di Bali untuk jual dan sewa, mulai Rp 3 miliar, dengan pengalaman lebih dari 10 tahun.",
-  telephone: "+62-811-0000-000",
-  priceRange: "Rp 3.000.000.000+",
-  slogan: "Properti premium Bali, dari tangan yang benar-benar paham.",
-  knowsAbout: ["vila premium Bali", "investasi properti Bali", "sewa vila Bali", "legalitas properti"],
-  address: { "@type": "PostalAddress", streetAddress: "Jl. Pantai Berawa", addressLocality: "Canggu", addressRegion: "Bali", postalCode: "80361", addressCountry: "ID" },
-  geo: { "@type": "GeoCoordinates", latitude: -8.66, longitude: 115.14 },
-  areaServed: AREAS.map((a) => ({ "@type": "Place", name: `${a}, Bali` })),
-  aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "150", bestRating: "5" },
-  makesOffer: LISTINGS.map((p) => ({
-    "@type": "Offer",
-    name: p.t,
-    priceCurrency: "IDR",
-    price: parsePrice(p.price),
-    availability: "https://schema.org/InStock",
-    areaServed: `${p.loc}, Bali`,
-    itemOffered: { "@type": "SingleFamilyResidence", name: p.t, numberOfRooms: p.beds, floorSize: { "@type": "QuantitativeValue", value: p.size, unitCode: "MTK" } },
-  })),
+  "@graph": [
+    {
+      "@type": "RealEstateAgent",
+      "@id": AGENT_ID,
+      name: "Kirana Sutanto",
+      url: "https://cakra.xyz/demo",
+      image: "https://cakra.xyz/about/transform.webp",
+      description: "Spesialis vila & properti premium di Bali untuk jual dan sewa, mulai Rp 3 miliar, dengan pengalaman lebih dari 10 tahun.",
+      telephone: "+62-811-0000-000",
+      priceRange: "Rp 3.000.000.000+",
+      slogan: "Properti premium Bali, dari tangan yang benar-benar paham.",
+      knowsAbout: ["vila premium Bali", "investasi properti Bali", "sewa vila Bali", "legalitas properti"],
+      sameAs: [...SOCIALS.map((s) => s.href), GOOGLE_PROFILE],
+      founder: { "@id": PERSON_ID },
+      employee: { "@id": PERSON_ID },
+      address: { "@type": "PostalAddress", streetAddress: "Jl. Pantai Berawa", addressLocality: "Canggu", addressRegion: "Bali", postalCode: "80361", addressCountry: "ID" },
+      geo: { "@type": "GeoCoordinates", latitude: -8.66, longitude: 115.14 },
+      areaServed: AREAS.map((a) => ({ "@type": "Place", name: `${a}, Bali` })),
+      aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "150", bestRating: "5" },
+      makesOffer: LISTINGS.map((p) => ({
+        "@type": "Offer",
+        name: p.t,
+        priceCurrency: "IDR",
+        price: parsePrice(p.price),
+        availability: "https://schema.org/InStock",
+        areaServed: `${p.loc}, Bali`,
+        itemOffered: { "@type": "SingleFamilyResidence", name: p.t, numberOfRooms: p.beds, floorSize: { "@type": "QuantitativeValue", value: p.size, unitCode: "MTK" } },
+      })),
+    },
+    {
+      "@type": "Person",
+      "@id": PERSON_ID,
+      name: "Kirana Sutanto",
+      jobTitle: "Agen Properti · Spesialis Vila & Properti Premium Bali",
+      image: "https://cakra.xyz/about/origin.webp",
+      description: "Lebih dari 10 tahun di pasar properti premium Bali — mendampingi pembeli, pemilik, dan investor dari kurasi hingga serah terima, dengan prinsip kepercayaan lebih dulu.",
+      url: "https://cakra.xyz/demo#tentang",
+      worksFor: { "@id": AGENT_ID },
+      knowsAbout: ["vila premium Bali", "investasi properti Bali", "sewa vila Bali", "legalitas properti (hak pakai, PT PMA)"],
+      areaServed: "Bali, Indonesia",
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": "https://cakra.xyz/demo#profile",
+      mainEntity: { "@id": PERSON_ID },
+      about: { "@id": AGENT_ID },
+    },
+  ],
 };
 
 function Ic({ d, s = 18 }: { d: string; s?: number }) {
@@ -221,16 +257,20 @@ export default function Demo() {
         </div>
       </section>
 
-      {/* TENTANG */}
+      {/* TENTANG — profil agen (SEO: Person + ProfilePage schema) */}
       <section id="tentang" className="k-band">
         <div className="k-wrap k-split">
-          <div className="k-about-img">
+          <div className="k-about-img k-profile-img">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/about/origin.webp" alt="Ruang kerja Kirana Sutanto" />
+            <img src="/about/origin.webp" alt="Kirana Sutanto — agen properti spesialis vila premium Bali" />
+            <div className="k-profile-cap">
+              <div className="k-profile-name">Kirana Sutanto</div>
+              <div className="k-profile-role">Agen Properti · Spesialis Vila Bali · 10+ tahun</div>
+            </div>
           </div>
           <div>
-            <span className="k-kick">tentang kirana</span>
-            <h2 className="k-h2">Sepuluh tahun, satu prinsip: kepercayaan lebih dulu.</h2>
+            <span className="k-kick">profil agen</span>
+            <h2 className="k-h2">Kirana Sutanto — kepercayaan lebih dulu.</h2>
             <p className="k-muted k-p">Lebih dari satu dekade di pasar properti premium Bali mengajarkan saya bahwa transaksi terbaik lahir dari kejujuran dan kesabaran. Saya bantu Anda memahami nilai, legalitas, dan potensi setiap properti — sebelum Anda menandatangani apa pun.</p>
             <ul className="k-list">
               {["Fokus properti premium Rp 3 miliar ke atas", "Pendampingan penuh: survei, negosiasi, hingga notaris", "Jaringan pemilik, pengembang, dan penyewa tepercaya", "Data pasar & simulasi imbal hasil yang realistis"].map((x) => (
@@ -324,6 +364,28 @@ export default function Demo() {
             <a href={EMAIL_LINK} className="k-btn k-btn-glass k-lg">halo@kirana.property</a>
           </div>
           <p className="k-cta-note">Kantor: Jl. Pantai Berawa, Canggu · Sen–Sab, 09.00–19.00 WITA</p>
+        </div>
+      </section>
+
+      {/* TERHUBUNG — social + Google Business (opsional, dapat diedit di dashboard) */}
+      <section className="k-wrap k-sec" style={{ paddingTop: 0 }}>
+        <div className="k-connect">
+          <div style={{ minWidth: 220 }}>
+            <span className="k-kick">terhubung</span>
+            <h2 className="k-h2">Ikuti &amp; hubungkan.</h2>
+            <p className="k-sub" style={{ marginTop: 8 }}>Update listing terbaru & wawasan pasar Bali.</p>
+          </div>
+          <div className="k-social-row">
+            {SOCIALS.map((s) => (
+              <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} className="k-social">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d={s.d} /></svg>
+              </a>
+            ))}
+            <a href={GOOGLE_PROFILE} target="_blank" rel="noopener noreferrer" className="k-gbp">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z" /></svg>
+              Google Bisnis
+            </a>
+          </div>
         </div>
       </section>
 
@@ -436,6 +498,10 @@ export default function Demo() {
         .k-split{ display:grid; grid-template-columns:.9fr 1.1fr; gap:clamp(30px,5vw,64px); align-items:center; padding:clamp(60px,9vw,104px) clamp(18px,4vw,30px); }
         .k-about-img{ border-radius:var(--k-r); overflow:hidden; aspect-ratio:4/3; box-shadow:0 34px 64px -44px rgba(15,32,38,.6); }
         .k-about-img img{ width:100%; height:100%; object-fit:cover; }
+        .k-profile-img{ position:relative; }
+        .k-profile-cap{ position:absolute; left:0; right:0; bottom:0; padding:18px 20px; background:linear-gradient(0deg, rgba(15,32,38,.85), rgba(15,32,38,.15) 70%, transparent); color:#fff; }
+        .k-profile-name{ font-family:var(--k-font-display), serif; font-weight:700; font-size:1.35rem; line-height:1.1; }
+        .k-profile-role{ font-size:.85rem; color:rgba(255,255,255,.85); margin-top:3px; }
         .k-list{ list-style:none; padding:0; margin:0 0 26px; display:grid; gap:13px; }
         .k-list li{ display:flex; gap:12px; align-items:flex-start; color:var(--k-ink-2); }
         .k-check{ flex:none; width:24px; height:24px; border-radius:50%; background:color-mix(in oklab, var(--k-emerald) 12%, var(--k-surface)); color:var(--k-emerald); display:grid; place-items:center; margin-top:2px; }
@@ -460,6 +526,13 @@ export default function Demo() {
         .k-cta{ position:relative; overflow:hidden; background:linear-gradient(120deg, var(--k-emerald-2), var(--k-emerald)); border-radius:var(--k-r); padding:clamp(44px,7vw,80px) clamp(24px,5vw,56px); text-align:center; box-shadow:0 40px 80px -44px var(--k-emerald); }
         .k-cta-p{ color:rgba(255,255,255,.88); max-width:52ch; margin:12px auto 0; font-size:1.06rem; }
         .k-cta-note{ color:rgba(255,255,255,.68); font-size:.85rem; margin-top:18px; }
+
+        .k-connect{ display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap; padding:clamp(24px,3vw,34px); background:var(--k-surface); border:1px solid var(--k-line); border-radius:var(--k-r); }
+        .k-social-row{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+        .k-social{ width:46px; height:46px; border-radius:50%; border:1px solid var(--k-line-2); display:grid; place-items:center; color:var(--k-ink-2); background:var(--k-surface); text-decoration:none; transition:.15s; }
+        .k-social:hover{ border-color:var(--k-emerald); color:var(--k-emerald); transform:translateY(-2px); }
+        .k-gbp{ display:inline-flex; align-items:center; gap:8px; padding:.7rem 1.2rem; border-radius:999px; border:1px solid var(--k-line-2); color:var(--k-ink); font-weight:600; font-size:.9rem; text-decoration:none; background:var(--k-surface); transition:.15s; }
+        .k-gbp:hover{ border-color:var(--k-gold); color:var(--k-gold-2); }
 
         .k-foot{ background:var(--k-emerald-2); color:#fff; padding:38px 0 26px; }
         .k-foot .k-word{ color:#fff; }
