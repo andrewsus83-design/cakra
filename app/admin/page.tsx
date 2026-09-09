@@ -241,10 +241,12 @@ function MemberDashboard() {
   // Web Builder — deterministic template config (persisted locally; later → Supabase profile)
   const [builder, setBuilder] = useState<BState>(BUILDER_DEFAULT);
   const [builderSaved, setBuilderSaved] = useState(false);
+  const [published, setPublished] = useState<string | null>(null);
   const logoInput = useRef<HTMLInputElement>(null);
   const setB = (patch: Partial<BState>) => { setBuilder((b) => ({ ...b, ...patch })); setBuilderSaved(false); };
   useEffect(() => {
     try { const raw = localStorage.getItem("cakra-builder"); if (raw) setBuilder((b) => ({ ...b, ...JSON.parse(raw) })); } catch {}
+    try { const at = localStorage.getItem("cakra-builder-published-at"); if (at) setPublished(at); } catch {}
   }, []);
   useEffect(() => {
     const id = "cakra-builder-fonts";
@@ -1030,6 +1032,29 @@ function MemberDashboard() {
     ["Facebook", builder.facebook, "M13 22v-8h2.7l.4-3H13V9c0-.9.3-1.5 1.6-1.5H16V4.9c-.3 0-1.2-.1-2.2-.1-2.2 0-3.8 1.3-3.8 3.9V11H7.5v3H10v8h3Z"],
   ].filter((x) => x[1]) as [string, string, string][];
 
+  // publish → carry the applied look to the live public site via URL (works cross-origin, no backend yet)
+  const LIVE_BASE = "https://cakra.xyz/demo";
+  const siteCfg = () => ({
+    brand: builder.brand,
+    ini: (builder.brand.trim().split(/\s+/).map((w) => w[0]).join("").slice(0, 2) || "K").toUpperCase(),
+    col: { em: bPal.brand, go: bPal.accent, bg: bPal.bg, ink: bPal.ink },
+    r: { r: bRad.card, s: bRad.btn },
+    font: { d: bFont.display, b: bFont.body },
+    soc: { wa: builder.wa, ig: builder.instagram, tt: builder.tiktok, yt: builder.youtube, fb: builder.facebook },
+  });
+  const encodeSite = () => { try { return btoa(encodeURIComponent(JSON.stringify(siteCfg()))); } catch { return ""; } };
+  const viewLive = () => { try { window.open(`${LIVE_BASE}#site=${encodeSite()}`, "_blank", "noopener"); } catch {} };
+  const publishSite = () => {
+    try {
+      localStorage.setItem("cakra-builder", JSON.stringify(builder));
+      localStorage.setItem("cakra-builder-published", encodeSite());
+      const at = new Date().toLocaleString("id-ID", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+      localStorage.setItem("cakra-builder-published-at", at);
+      setPublished(at); setBuilderSaved(true);
+    } catch {}
+    viewLive();
+  };
+
   const segBtn = (on: boolean): React.CSSProperties => ({ font: "inherit", fontSize: ".82rem", fontWeight: 600, cursor: "pointer", padding: ".48rem .85rem", borderRadius: 10, border: `1px solid ${on ? "var(--brand)" : "var(--line-2)"}`, background: on ? "color-mix(in oklab, var(--brand) 12%, var(--surface))" : "transparent", color: on ? "var(--brand)" : "var(--ink-2)", transition: ".15s" });
   const bInp: React.CSSProperties = { width: "100%", padding: ".6rem .75rem", borderRadius: 10, border: "1px solid var(--line-2)", background: "var(--surface-2)", color: "var(--ink)", font: "inherit", fontSize: ".88rem" };
   const bField = (label: string, node: React.ReactNode, hint?: string) => (
@@ -1116,12 +1141,25 @@ function MemberDashboard() {
         <div className="bld-preview" style={{ display: "grid", gap: 14 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, flexWrap: "wrap" }}>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: ".76rem", fontWeight: 700, color: "var(--good)", background: "color-mix(in oklab, var(--good) 12%, var(--surface))", padding: ".3rem .65rem", borderRadius: 999 }}><span style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--good)" }} /> Pratinjau langsung · realtime</span>
-            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-              {builderSaved && <span style={{ fontSize: ".8rem", fontWeight: 600, color: "var(--good)" }}>✓ Tersimpan</span>}
-              <button style={{ ...btn("ghost"), padding: ".5rem .9rem", fontSize: ".84rem" }} onClick={() => setBuilder(BUILDER_DEFAULT)}>Reset</button>
-              <button style={{ ...btn("brand"), padding: ".5rem 1.1rem", fontSize: ".84rem" }} onClick={saveBuilder}>Simpan & terapkan</button>
+            <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+              {builderSaved && !published && <span style={{ fontSize: ".8rem", fontWeight: 600, color: "var(--good)" }}>✓ Tersimpan</span>}
+              <button style={{ ...btn("ghost"), padding: ".5rem .85rem", fontSize: ".84rem" }} onClick={() => setBuilder(BUILDER_DEFAULT)}>Reset</button>
+              <button style={{ ...btn("ghost"), padding: ".5rem .85rem", fontSize: ".84rem" }} onClick={saveBuilder}>Simpan draf</button>
+              <button style={{ ...btn("ghost"), padding: ".5rem .85rem", fontSize: ".84rem" }} onClick={viewLive}>Lihat situs ↗</button>
+              <button style={{ ...btn("brand"), padding: ".5rem 1.15rem", fontSize: ".84rem" }} onClick={publishSite}>Terbitkan situs</button>
             </div>
           </div>
+
+          {published && (
+            <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", borderRadius: 12, background: "color-mix(in oklab, var(--good) 10%, var(--surface))", border: "1px solid color-mix(in oklab, var(--good) 26%, var(--line))", flexWrap: "wrap" }}>
+              <span style={{ width: 30, height: 30, borderRadius: "50%", flex: "none", display: "grid", placeItems: "center", background: "var(--good)", color: "#fff" }}><Ic d="M20 6 9 17l-5-5" s={16} /></span>
+              <div style={{ flex: 1, minWidth: 180 }}>
+                <div style={{ fontWeight: 700, fontSize: ".9rem", color: "var(--ink)" }}>Situs terbit</div>
+                <div className="muted" style={{ fontSize: ".8rem" }}>Perubahan tampil di situs langsung Anda · {published}</div>
+              </div>
+              <button style={{ ...btn("ghost"), padding: ".45rem .9rem", fontSize: ".82rem" }} onClick={viewLive}>Lihat situs langsung ↗</button>
+            </div>
+          )}
 
           {/* browser frame */}
           <div style={{ borderRadius: 16, overflow: "hidden", border: "1px solid var(--line)", boxShadow: "0 24px 60px -34px rgba(15,32,38,.4)", background: "var(--surface)" }}>

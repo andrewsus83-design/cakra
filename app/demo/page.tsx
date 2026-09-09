@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Manrope, Dancing_Script } from "next/font/google";
+import { SiteSkin } from "./SiteSkin";
 
 const display = Playfair_Display({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--k-font-display" });
 const body = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], variable: "--k-font-body" });
@@ -160,6 +161,7 @@ function Brand() {
 export default function Demo() {
   return (
     <div className={`${display.variable} ${body.variable} ${script.variable} kir`} id="top">
+      <SiteSkin />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* DEMO RIBBON — this is a sample site built with cakra */}
