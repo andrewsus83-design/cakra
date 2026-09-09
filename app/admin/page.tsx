@@ -1094,7 +1094,7 @@ function MemberDashboard() {
   );
 
   const acc = (id: string, title: string, children: React.ReactNode, hint?: string) => (
-    <details className="bld-acc" open={!!accOpen[id]} onToggle={(e) => setAccOpen((s) => ({ ...s, [id]: (e.currentTarget as HTMLDetailsElement).open }))}>
+    <details className="bld-acc" open={!!accOpen[id]} onToggle={(e) => { const el = (e.currentTarget || e.target) as HTMLDetailsElement | null; if (el) setAccOpen((s) => (s[id] === el.open ? s : { ...s, [id]: el.open })); }}>
       <summary><span>{title}{hint && <span className="bld-acc-hint">{hint}</span>}</span><span className="bld-chev"><Ic d="m6 9 6 6 6-6" s={16} /></span></summary>
       <div className="bld-acc-body">{children}</div>
     </details>
