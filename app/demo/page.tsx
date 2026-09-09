@@ -84,11 +84,15 @@ const ARTICLES = [
 ];
 
 const FAQS = [
+  ["Apakah warga negara asing bisa memiliki properti di Bali?", "Ya, dengan struktur yang tepat. WNA umumnya tidak bisa memegang Hak Milik, tetapi bisa memakai Hak Pakai atas namanya, membeli secara leasehold (umumnya 25–30 tahun, dapat diperpanjang), atau berinvestasi lewat PT PMA untuk properti komersial/disewakan. Saya mendampingi pemilihan struktur bersama notaris/PPAT. (Informasi umum, bukan nasihat hukum.)"],
   ["Area mana saja yang Anda layani?", "Fokus di Bali Selatan — Canggu, Pererenan, Seminyak, Uluwatu, Jimbaran, Nusa Dua, Sanur — serta Ubud untuk vila & properti investasi."],
-  ["Berapa kisaran harga properti Anda?", "Saya berfokus pada properti premium mulai Rp 3 miliar ke atas, baik untuk dijual maupun disewakan."],
-  ["Apakah melayani jual dan sewa?", "Ya, keduanya — penjualan vila premium dan penyewaan jangka panjang maupun musiman, lengkap dengan strategi pemasaran."],
-  ["Apakah membantu pembeli asing?", "Ya. Saya memandu struktur kepemilikan yang legal (hak pakai atau PT PMA) bersama notaris dan konsultan pajak tepercaya."],
-  ["Sudah berapa lama Anda berkecimpung?", "Lebih dari 10 tahun, khusus di pasar properti premium Bali — dengan jaringan pemilik, pengembang, dan pembeli yang luas."],
+  ["Apa yang termasuk 'properti premium' di Bali?", "Di praktik saya, properti premium adalah vila dan hunian mulai Rp 3 miliar ke atas dengan lokasi utama, kualitas bangunan tinggi, dan status legal yang jelas."],
+  ["Apa itu due diligence tanah dan mengapa penting?", "Proses memverifikasi keaslian sertifikat, status kepemilikan, zonasi, izin bangunan (PBG/IMB), serta memastikan tidak ada sengketa atau beban. Ini pengaman terpenting sebelum uang berpindah tangan."],
+  ["Berapa sisa masa leasehold yang ideal saat membeli vila?", "Semakin panjang, semakin baik untuk nilai jual kembali. Saya menelaah sisa masa dan syarat perpanjangan sebelum Anda menawar — masa sewa pendek bisa menekan harga, tetapi juga menekan nilai di masa depan."],
+  ["Berapa ROI realistis untuk vila sewa di Bali?", "Sangat bergantung pada lokasi, kualitas manajemen, okupansi nyata, dan struktur biaya. Angka yang beredar sering terlalu optimistis; saya lebih memilih menyusun proyeksi konservatif per properti berdasarkan data okupansi dan biaya nyata."],
+  ["Berapa lama proses pembelian vila di Bali?", "Umumnya beberapa minggu hingga beberapa bulan, tergantung uji tuntas legal, negosiasi, dan struktur kepemilikan. Saya mendampingi dari kurasi hingga serah terima."],
+  ["Apakah dana pembeli aman selama proses?", "Saya menganjurkan pembayaran bertahap dan penggunaan notaris/PPAT tepercaya, sehingga dana terlindungi sampai syarat terpenuhi."],
+  ["Apakah semua vila boleh disewakan komersial?", "Tidak otomatis. Legalitas menyewakan bergantung pada zonasi dan izin — hal yang saya periksa sejak awal, khususnya untuk pembeli berorientasi investasi."],
   ["Berapa biaya jasa Anda?", "Transparan sejak awal. Komisi standar dibahas di muka, dengan rencana pemasaran (foto, video, iklan, jaringan) yang jelas."],
 ];
 
@@ -143,6 +147,11 @@ const jsonLd = {
       "@id": "https://cakra.xyz/demo#profile",
       mainEntity: { "@id": PERSON_ID },
       about: { "@id": AGENT_ID },
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://cakra.xyz/demo#faq",
+      mainEntity: FAQS.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
     },
   ],
 };
@@ -202,6 +211,22 @@ export default function Demo() {
         {STATS.map(([n, l]) => (
           <div key={l} className="k-stat"><div className="k-stat-n">{n}</div><div className="k-stat-l">{l}</div></div>
         ))}
+      </section>
+
+      {/* RINGKASAN CEPAT — answer-first block, mudah dikutip mesin pencari & AI */}
+      <section className="k-wrap k-sec" style={{ paddingBottom: 0 }}>
+        <div className="k-tldr">
+          <h2 className="k-tldr-h">Ringkas: yang perlu Anda tahu tentang properti premium Bali bersama Kirana</h2>
+          <ul className="k-tldr-list">
+            <li><b>Fokus</b> — vila &amp; properti premium Bali mulai Rp 3 miliar ke atas, untuk dijual maupun disewa.</li>
+            <li><b>Kawasan</b> — Canggu, Pererenan, Seminyak, Uluwatu, Jimbaran, Nusa Dua, Sanur, dan Ubud.</li>
+            <li><b>Untuk siapa</b> — pembeli lokal, investor, pembeli asing (hak pakai, leasehold, atau PT PMA), serta penyewa jangka panjang &amp; musiman.</li>
+            <li><b>Pendampingan penuh</b> — kurasi properti → negosiasi → pemeriksaan legal → serah terima.</li>
+            <li><b>Pengalaman</b> — Kirana Sutanto, lebih dari 10 tahun di pasar properti premium Bali.</li>
+            <li><b>Konsultasi awal gratis</b> — langsung via WhatsApp, jawaban jujur tanpa tekanan.</li>
+          </ul>
+          <p className="k-tldr-note">Catatan: setiap kisaran harga di situs ini bersifat indikatif; penilaian resmi diberikan setelah kurasi dan pemeriksaan langsung.</p>
+        </div>
       </section>
 
       {/* LAYANAN */}
@@ -342,6 +367,30 @@ export default function Demo() {
         </div>
       </section>
 
+      {/* PEMBELI INTERNASIONAL — kepercayaan (E-E-A-T) + intent pembeli asing */}
+      <section id="pembeli-asing" className="k-wrap k-sec">
+        <div className="k-center">
+          <span className="k-kick">untuk pembeli internasional</span>
+          <h2 className="k-h2">Membeli vila di Bali sebagai orang asing — dengan struktur yang benar.</h2>
+          <p className="k-sub">Warga negara asing tidak dapat memegang Hak Milik (freehold), tetapi ada beberapa jalur kepemilikan yang sah dan lazim digunakan — masing-masing dengan konsekuensi, biaya, dan tingkat kendali yang berbeda.</p>
+        </div>
+        <div className="k-grid k-grid-3">
+          <div className="k-legal-item">
+            <h3 className="k-serv-t">Hak Pakai</h3>
+            <p className="k-muted">Hak legal atas nama pribadi asing yang berdomisili/berizin untuk memakai tanah dalam jangka waktu tertentu dan dapat diperpanjang. Sering dipilih untuk vila yang ditinggali sendiri.</p>
+          </div>
+          <div className="k-legal-item">
+            <h3 className="k-serv-t">Leasehold</h3>
+            <p className="k-muted">Sewa jangka panjang (umumnya 25–30 tahun, sering dapat diperpanjang). Jalur paling sederhana untuk penggunaan pribadi; yang krusial adalah sisa masa sewa &amp; syarat perpanjangan.</p>
+          </div>
+          <div className="k-legal-item">
+            <h3 className="k-serv-t">PT PMA</h3>
+            <p className="k-muted">Badan usaha penanaman modal asing yang dapat memegang HGB — cocok bila properti ditujukan untuk disewakan atau dijalankan sebagai bisnis; menuntut kepatuhan pajak &amp; pelaporan.</p>
+          </div>
+        </div>
+        <p className="k-legal-close">Tidak ada satu struktur ‘terbaik’ untuk semua orang — pilihan bergantung pada tujuan, jangka waktu, dan rencana keluar Anda. Pendampingan saya mencakup verifikasi keaslian &amp; status sertifikat, pengecekan zonasi dan izin bangunan (PBG/IMB), telaah sengketa atau beban, hingga penandatanganan di hadapan notaris/PPAT tepercaya. Saya tidak menggantikan nasihat hukum atau pajak — saya memastikan Anda didampingi profesional yang tepat sebelum satu rupiah pun berpindah. <span className="k-legal-en">(Prefer to talk this through in English? That is completely fine.)</span></p>
+      </section>
+
       {/* FAQ */}
       <section id="faq" className="k-band">
         <div className="k-wrap k-sec">
@@ -476,6 +525,16 @@ export default function Demo() {
         .k-grid{ display:grid; gap:24px; }
         .k-grid-3{ grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); }
         .k-grid-4{ grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); }
+        .k-tldr{ background:var(--k-surface); border:1px solid var(--k-line); border-left:4px solid var(--k-gold); border-radius:var(--k-r); padding:clamp(22px,4vw,34px); max-width:900px; margin:0 auto; box-shadow:0 1px 2px rgba(15,32,38,.05); }
+        .k-tldr-h{ font-size:1.24rem; margin-bottom:14px; }
+        .k-tldr-list{ list-style:none; padding:0; margin:0; display:grid; gap:10px; }
+        .k-tldr-list li{ position:relative; padding-left:22px; color:var(--k-ink-2); line-height:1.55; }
+        .k-tldr-list li::before{ content:""; position:absolute; left:2px; top:9px; width:7px; height:7px; border-radius:50%; background:var(--k-emerald); }
+        .k-tldr-list b{ color:var(--k-ink); font-weight:700; }
+        .k-tldr-note{ margin-top:16px; font-size:.86rem; color:var(--k-muted); border-top:1px solid var(--k-line); padding-top:12px; }
+        .k-legal-item{ background:var(--k-surface); border:1px solid var(--k-line); border-radius:var(--k-r); padding:24px; }
+        .k-legal-close{ max-width:70ch; margin:28px auto 0; text-align:center; color:var(--k-ink-2); line-height:1.7; }
+        .k-legal-en{ color:var(--k-muted); font-style:italic; }
 
         .k-serv{ padding:6px 0; }
         .k-serv-ic{ display:inline-grid; place-items:center; width:52px; height:52px; border-radius:50%; background:color-mix(in oklab, var(--k-emerald) 10%, var(--k-surface)); color:var(--k-emerald); margin-bottom:16px; border:1px solid color-mix(in oklab, var(--k-emerald) 18%, transparent); }
