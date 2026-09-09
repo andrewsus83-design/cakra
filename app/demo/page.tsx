@@ -525,8 +525,9 @@ export default function Demo() {
         .k-faq p{ margin:0; padding:0 2px 24px; color:var(--k-muted); font-size:1.02rem; line-height:1.68; max-width:62ch; }
 
         .k-cta{ position:relative; overflow:hidden; background:linear-gradient(120deg, var(--k-emerald-2), var(--k-emerald)); border-radius:var(--k-r); padding:clamp(44px,7vw,80px) clamp(24px,5vw,56px); text-align:center; box-shadow:0 40px 80px -44px var(--k-emerald); }
-        .k-cta-p{ color:rgba(255,255,255,.88); max-width:52ch; margin:12px auto 0; font-size:1.06rem; }
-        .k-cta-note{ color:rgba(255,255,255,.68); font-size:.85rem; margin-top:18px; }
+        .k-cta-p{ color:rgba(255,255,255,.88); max-width:52ch; margin:12px auto 0; font-size:1.06rem; line-height:1.65; }
+        .k-cta .k-center-row{ margin-top:32px; }
+        .k-cta-note{ color:rgba(255,255,255,.68); font-size:.85rem; margin-top:22px; }
 
         .k-connect{ display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap; padding:clamp(24px,3vw,34px); background:var(--k-surface); border:1px solid var(--k-line); border-radius:var(--k-r); }
         .k-social-row{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
