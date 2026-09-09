@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Manrope, Dancing_Script } from "next/font/google";
 import { SiteSkin } from "./SiteSkin";
+import { ListingGrid } from "./ListingGrid";
+import { LangToggle } from "./LangToggle";
 import { Decor } from "@/components/Decor";
 
 const display = Playfair_Display({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--k-font-display" });
@@ -185,6 +187,7 @@ export default function Demo() {
           <div className="k-nav-right">
             <nav className="k-links">{NAV.map(([l, h]) => <a key={l} href={h}>{l}</a>)}</nav>
             <a href="#kontak" className="k-btn k-btn-primary">Hubungi</a>
+            <LangToggle />
           </div>
         </div>
       </header>
@@ -264,23 +267,7 @@ export default function Demo() {
             <div><span className="k-kick">properti pilihan</span><h2 className="k-h2">Vila & properti premium Bali untuk dijual &amp; disewa.</h2></div>
             <a href="#kontak" className="k-btn k-btn-ghost">Minta daftar lengkap</a>
           </div>
-          <div className="k-grid k-grid-3">
-            {LISTINGS.map((p) => (
-              <article key={p.t} className="k-card">
-                <div className="k-card-media">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={p.img} alt={p.t} />
-                  <span className={`k-badge ${p.tag === "Disewa" ? "k-badge-gold" : ""}`}>{p.tag}</span>
-                </div>
-                <div className="k-card-body">
-                  <div className="k-price">{p.price}{p.per && <span className="k-per">{p.per}</span>}</div>
-                  <h3 className="k-card-t">{p.t}</h3>
-                  <div className="k-muted k-sm">{p.loc}, Bali</div>
-                  <div className="k-meta">{p.beds} KT · {p.baths} KM · {p.size} m²</div>
-                </div>
-              </article>
-            ))}
-          </div>
+          <ListingGrid listings={LISTINGS} wa={WA} email="halo@kirana.property" />
         </div>
       </section>
 
@@ -343,13 +330,19 @@ export default function Demo() {
         <div className="k-wrap k-sec">
           <div className="k-center"><span className="k-kick">kata klien</span><h2 className="k-h2">Dipercaya pembeli, pemilik &amp; investor.</h2></div>
           <div className="k-grid k-grid-3">
-            {TESTI.map((t) => (
-              <blockquote key={t.n} className="k-card k-testi">
-                <div className="k-stars">★★★★★</div>
-                <p className="k-quote">“{t.q}”</p>
-                <div className="k-testi-by"><b>{t.n}</b><br /><span className="k-muted k-sm">{t.r}</span></div>
-              </blockquote>
-            ))}
+            {TESTI.map((t) => {
+              const ini = t.n.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+              return (
+                <blockquote key={t.n} className="k-card k-testi">
+                  <div className="k-stars">★★★★★</div>
+                  <p className="k-quote">“{t.q}”</p>
+                  <div className="k-testi-by">
+                    <span className="k-avatar">{ini}</span>
+                    <span><b>{t.n}</b><br /><span className="k-muted k-sm">{t.r}</span></span>
+                  </div>
+                </blockquote>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -522,7 +515,10 @@ export default function Demo() {
         .k-mark{ width:54px; height:54px; border-radius:50%; background:var(--k-emerald); color:var(--k-gold);
           display:grid; place-items:center; font-family:var(--k-font-script), cursive; font-size:2rem; font-weight:700; line-height:1; padding-bottom:5px; box-shadow:0 8px 20px -10px var(--k-emerald); }
         .k-word{ font-family:var(--k-font-display), serif; font-weight:600; font-size:1.6rem; letter-spacing:.01em; }
-        .k-nav-right{ display:flex; align-items:center; gap:30px; }
+        .k-nav-right{ display:flex; align-items:center; gap:18px; }
+        .k-lang{ display:inline-flex; border:1px solid var(--k-line-2); border-radius:999px; overflow:hidden; flex:none; }
+        .k-lang button{ font:inherit; font-size:.78rem; font-weight:700; padding:.38rem .66rem; border:none; background:transparent; color:var(--k-ink-2); cursor:pointer; transition:.15s; }
+        .k-lang button.on{ background:var(--k-emerald); color:#fff; }
         .k-links{ display:flex; gap:28px; }
         .k-links a{ color:var(--k-ink-2); text-decoration:none; font-weight:500; font-size:.98rem; transition:color .15s; }
         .k-links a:hover{ color:var(--k-emerald); }
@@ -598,14 +594,31 @@ export default function Demo() {
         .k-card-t{ font-size:1.22rem; margin:4px 0 3px; }
         .k-meta{ color:var(--k-muted); font-size:.82rem; margin-top:8px; font-family:var(--font-mono, ui-monospace, monospace); letter-spacing:.01em; }
         .k-tagtext{ font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--k-gold); }
+        .k-card-btn{ cursor:pointer; font:inherit; text-align:left; color:inherit; width:100%; padding:0; display:block; }
+        .k-card-cta{ display:inline-flex; align-items:center; gap:6px; margin-top:12px; color:var(--k-emerald); font-weight:700; font-size:.84rem; }
+        .k-card:hover .k-card-cta{ color:var(--k-gold-2); }
+        .k-modal{ position:fixed; inset:0; z-index:100; background:rgba(15,32,38,.55); backdrop-filter:blur(3px); display:grid; place-items:center; padding:20px; }
+        .k-modal-in{ position:relative; width:min(440px,100%); background:var(--k-surface); border-radius:var(--k-r); overflow:hidden; box-shadow:0 40px 90px -30px rgba(0,0,0,.5); animation:kpop .2s ease; }
+        @keyframes kpop{ from{ transform:translateY(12px) scale(.98); opacity:0; } to{ transform:none; opacity:1; } }
+        .k-modal-x{ position:absolute; top:12px; right:12px; z-index:2; width:34px; height:34px; border-radius:50%; border:none; background:rgba(255,255,255,.92); color:var(--k-ink); cursor:pointer; font-size:1rem; box-shadow:0 2px 8px rgba(0,0,0,.2); }
+        .k-modal-media{ position:relative; aspect-ratio:16/10; }
+        .k-modal-media img{ width:100%; height:100%; object-fit:cover; }
+        .k-modal-body{ padding:22px 24px 26px; }
+        .k-modal-t{ font-size:1.4rem; margin:4px 0 4px; }
+        .k-modal-desc{ color:var(--k-muted); font-size:.92rem; line-height:1.55; margin:12px 0 18px; }
+        .k-modal-desc b{ color:var(--k-ink); }
+        .k-modal-actions{ display:flex; gap:10px; }
+        .k-modal-actions .k-btn{ flex:1; justify-content:center; }
 
         .k-areas{ display:flex; flex-wrap:wrap; gap:12px; justify-content:center; max-width:820px; margin:0 auto; }
         .k-area{ font-family:var(--k-font-display), serif; font-size:1.15rem; padding:.6rem 1.4rem; border:1px solid var(--k-line-2); border-radius:999px; color:var(--k-ink); background:var(--k-surface); transition:.15s; }
         .k-area:hover{ border-color:var(--k-emerald); color:var(--k-emerald); }
 
         .k-split{ display:grid; grid-template-columns:.9fr 1.1fr; gap:clamp(30px,5vw,64px); align-items:center; padding:clamp(60px,9vw,104px) clamp(18px,4vw,30px); }
-        .k-about-img{ border-radius:var(--k-r); overflow:hidden; aspect-ratio:4/3; box-shadow:0 20px 48px -28px rgba(15,32,38,.34); }
-        .k-about-img img{ width:100%; height:100%; object-fit:cover; }
+        .k-about-img{ border-radius:var(--k-r); overflow:hidden; aspect-ratio:4/3; background:var(--k-surface); border:1px solid var(--k-line); box-shadow:0 1px 2px rgba(15,32,38,.05); transition:transform .2s ease, box-shadow .2s ease; }
+        .k-about-img:hover{ transform:translateY(-4px); box-shadow:0 14px 34px -12px rgba(15,32,38,.22); }
+        .k-about-img img{ width:100%; height:100%; object-fit:cover; transition:transform .5s; }
+        .k-about-img:hover img{ transform:scale(1.04); }
         .k-profile-img{ position:relative; }
         .k-profile-cap{ position:absolute; left:0; right:0; bottom:0; padding:18px 20px; background:linear-gradient(0deg, rgba(15,32,38,.85), rgba(15,32,38,.15) 70%, transparent); color:#fff; }
         .k-profile-name{ font-family:var(--k-font-display), serif; font-weight:700; font-size:1.35rem; line-height:1.1; }
@@ -620,7 +633,8 @@ export default function Demo() {
         .k-testi{ padding:28px 28px 24px; }
         .k-stars{ color:var(--k-gold); letter-spacing:3px; margin-bottom:12px; }
         .k-quote{ font-family:var(--k-font-display), serif; font-size:1.16rem; line-height:1.5; font-style:italic; margin:0 0 16px; }
-        .k-testi-by{ font-size:.95rem; line-height:1.4; }
+        .k-testi-by{ display:flex; align-items:center; gap:12px; font-size:.95rem; line-height:1.35; }
+        .k-avatar{ flex:none; width:46px; height:46px; border-radius:50%; display:grid; place-items:center; background:linear-gradient(135deg, var(--k-emerald), var(--k-emerald-2)); color:#fff; font-family:var(--k-font-display), serif; font-weight:700; font-size:1.05rem; box-shadow:0 6px 16px -8px var(--k-emerald); }
 
         .k-faq-grid{ display:grid; grid-template-columns:1fr 1fr; gap:2px 52px; }
         .k-faq{ border-bottom:1px solid var(--k-line); }

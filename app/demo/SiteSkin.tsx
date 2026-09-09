@@ -36,7 +36,7 @@ export function SiteSkin() {
 
       // background mode (dual = template default, left untouched)
       if (cfg.bg === "gradient" && c.bg) {
-        root.style.background = `linear-gradient(165deg, ${c.bg}, color-mix(in oklab, ${c.go || c.bg} 14%, ${c.bg}))`;
+        root.style.background = `linear-gradient(165deg, color-mix(in oklab, ${c.em || c.bg} 14%, ${c.bg}), color-mix(in oklab, ${c.go || c.bg} 24%, ${c.bg}))`;
       } else if (cfg.bg === "mono" && c.bg) {
         root.style.background = c.bg;
         set("--k-surface", c.bg);
@@ -51,6 +51,20 @@ export function SiteSkin() {
         const paths = DECOR_SETS[cfg.set];
         root.querySelectorAll(".k-decor-item path").forEach((p, i) => p.setAttribute("d", paths[i % paths.length]));
       }
+
+      // density + card style → injected stylesheet (things CSS vars alone can't carry)
+      const DEN_PAD: Record<string, number> = { tight: 54, normal: 84, spacious: 116 };
+      const DEN_LH: Record<string, number> = { tight: 1.5, normal: 1.62, spacious: 1.78 };
+      const STY: Record<string, { b: string; s: string }> = {
+        lembut: { b: "1px solid var(--k-line)", s: "0 1px 2px rgba(15,32,38,.05)" },
+        minimalis: { b: "1px solid var(--k-line)", s: "none" },
+        tegas: { b: "1.5px solid var(--k-ink)", s: "5px 5px 0 var(--k-ink)" },
+        editorial: { b: "1px solid color-mix(in oklab, var(--k-ink) 14%, transparent)", s: "none" },
+      };
+      let css = "";
+      if (cfg.den && DEN_PAD[cfg.den]) css += `.kir .k-sec{padding-top:${DEN_PAD[cfg.den]}px;padding-bottom:${DEN_PAD[cfg.den]}px}.kir .k-split{padding-top:${DEN_PAD[cfg.den]}px;padding-bottom:${DEN_PAD[cfg.den]}px}.kir{line-height:${DEN_LH[cfg.den]}}`;
+      if (cfg.sty && STY[cfg.sty]) css += `.kir .k-card,.kir .k-legal-item,.kir .k-sum-item,.kir .k-connect{border:${STY[cfg.sty].b};box-shadow:${STY[cfg.sty].s}}`;
+      if (css) { let st = document.getElementById("cakra-skin-css") as HTMLStyleElement | null; if (!st) { st = document.createElement("style"); st.id = "cakra-skin-css"; document.head.appendChild(st); } st.textContent = css; }
 
       if (cfg.font) {
         if (!document.getElementById("cakra-skin-fonts")) {

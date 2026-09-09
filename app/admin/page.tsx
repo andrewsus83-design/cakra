@@ -1086,7 +1086,7 @@ function MemberDashboard() {
     col: { em: bPal.brand, go: bPal.accent, bg: bPal.bg, ink: bPal.ink },
     r: { r: bRad.card, s: bRad.btn },
     font: { d: bFont.display, b: bFont.body },
-    bg: builder.bg, dec: builder.decoration, set: builder.tone,
+    bg: builder.bg, dec: builder.decoration, set: builder.tone, den: builder.density, sty: builder.styleId,
     soc: { wa: builder.wa, ig: builder.instagram, tt: builder.tiktok, yt: builder.youtube, fb: builder.facebook },
   });
   const encodeSite = () => { try { return btoa(encodeURIComponent(JSON.stringify(siteCfg()))); } catch { return ""; } };
