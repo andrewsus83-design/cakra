@@ -275,14 +275,14 @@ export default function Demo() {
       </section>
 
       {/* WILAYAH */}
-      <section className="k-wrap k-sec">
+      <section id="wilayah" className="k-wrap k-sec">
         <div className="k-center">
           <span className="k-kick">wilayah</span>
           <h2 className="k-h2">Menguasai kawasan properti terbaik di Bali.</h2>
-          <p className="k-sub">Pengetahuan mendalam tentang harga, karakter, dan potensi tiap area — dari Canggu &amp; Pererenan hingga Uluwatu, Ubud, dan Sanur.</p>
+          <p className="k-sub">Pengetahuan mendalam tentang harga, karakter, dan potensi tiap area — dari Canggu &amp; Pererenan hingga Uluwatu, Ubud, dan Sanur. Klik kawasan untuk panduannya.</p>
         </div>
         <div className="k-areas">
-          {AREAS.map((a) => <span key={a} className="k-area">{a}</span>)}
+          {AREAS.map((a) => <a key={a} href={`/demo/area/${a.toLowerCase().replace(/\s+/g, "-")}`} className="k-area">{a}</a>)}
         </div>
       </section>
 
