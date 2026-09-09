@@ -59,6 +59,29 @@ const API_KEYS: { group: string; items: ApiItem[] }[] = [
 ];
 const whereColor = (w: string) => (w === "Vercel" ? "--c-eye" : "--c-throat");
 
+const L1_PROMPT = `Anda adalah Senior CMO, Analis, dan Direktur Riset Pemasaran Digital untuk pasar properti Indonesia. Tugas: meriset & menganalisis pasar properti di {kota} secara ketat, objektif, dan jujur — untuk menemukan 2 topik terbaik hari ini.
+
+Prinsip kerja (kaidah riset):
+• FAKTA dulu — hanya klaim yang bisa diverifikasi; sertakan sumber (URL + tanggal). Jangan berspekulasi atau membesar-besarkan.
+• TREN — arah pasar terkini: harga, permintaan, area naik daun, perilaku & pertanyaan pembeli, sinyal pencarian AI.
+• KUALITAS — utamakan sumber tepercaya & data terbaru; buang informasi usang, duplikat, atau tak relevan.
+• TIPE/KATEGORI — klasifikasikan temuan (primer/sekunder, hunian/komersial/tanah, segmen harga, sub-area).
+
+Untuk tiap topik hasilkan JSON terstruktur: { judul, ringkasan_berbasis_fakta, benih_5w1h, angle_untuk_pembeli, target_kpi, kategori, sumber:[{url,tanggal}] }. Ringkas, objektif, tanpa hype.`;
+
+const L2_PROMPT = `Anda adalah Senior Content Creator sekaligus Direktur SEO, GEO, dan CMO Pemasaran properti. Ubah paket riset (Lapis 1) menjadi konten siap terbit yang DIPERSONALISASI penuh untuk persona agen ini.
+
+Persona agen (variabel): nama {name} · brand {brand} · gaya bahasa {tone} · area {areas} · produk/segmen {price_band} · audiens target {audience}.
+
+Prinsip kerja:
+• SUARA AGEN — tulis seolah agen sendiri yang menulis; jaga gaya bahasa & positioning-nya. Jangan pernah generik.
+• SEO — struktur, judul, dan kata kunci lokal yang tepat sasaran untuk audiens {audience}.
+• GEO — susun agar mudah dikutip mesin pencari AI: jawaban jelas & terstruktur, faktual, dengan entitas, lokasi, dan angka eksplisit.
+• SOCIAL SEARCH — hook kuat, format sesuai platform.
+• Ikuti kerangka 5W+1H dan capai target KPI dari Lapis 1.
+
+Output: konten final (judul + isi) + perkiraan skor SEO/GEO/Social + catatan singkat cara memaksimalkannya. Bahasa Indonesia, profesional, hangat, meyakinkan — dan selalu akurat (klaim harus benar, foto tidak menyesatkan).`;
+
 function Ic({ d }: { d: string }) { return <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d={d} /></svg>; }
 function stColor(st: string) { return st === "Aktif" ? "var(--good)" : st === "Trial" ? "var(--warn)" : "var(--crit)"; }
 function Panel({ title, sub, children }: { title: string; sub?: string; children?: React.ReactNode }) {
@@ -159,10 +182,27 @@ export function StaffAdmin() {
               ))}
             </div>
 
-            <div className="card" style={{ padding: 22, marginTop: 18 }}>
-              <div style={{ fontWeight: 600, marginBottom: 8 }}>Prompt Enhancer</div>
-              <p className="muted" style={{ fontSize: ".92rem", margin: "0 0 12px" }}>Template dasar yang memperkaya setiap prompt agen sebelum dikirim ke model.</p>
-              <textarea rows={4} defaultValue={"Anda adalah asisten pemasaran properti untuk agen Indonesia. Tulis dengan nada profesional, hangat, dan meyakinkan. Optimalkan untuk SEO, GEO, dan pencarian sosial…"} style={{ width: "100%", background: "var(--surface-2)", border: "1px solid var(--line-2)", borderRadius: 10, padding: 12, font: "inherit", fontSize: ".92rem", color: "var(--ink)", resize: "vertical" }} />
+            <div style={{ marginTop: 22 }}>
+              <h2 className="display" style={{ fontSize: "1.15rem", fontWeight: 600, margin: "0 0 4px" }}>Prompt Enhancer</h2>
+              <p className="muted" style={{ fontSize: ".9rem", margin: "0 0 14px" }}>System prompt berbeda untuk tiap lapisan — memperkaya setiap panggilan sebelum dikirim ke model.</p>
+              <div style={{ display: "grid", gap: 16 }}>
+                <div className="card" style={{ padding: 22 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6, flexWrap: "wrap" }}>
+                    <span className="pill" style={{ background: "color-mix(in oklab, var(--c-eye) 16%, var(--surface))", color: "var(--c-eye)", fontSize: ".68rem", fontWeight: 700 }}>Lapis 1 · Riset</span>
+                    <span style={{ fontWeight: 600, fontSize: ".95rem" }}>Persona: CMO · Analis · Direktur Riset senior</span>
+                  </div>
+                  <p className="muted" style={{ fontSize: ".85rem", margin: "0 0 10px" }}>Mengutamakan fakta, tren, kualitas, dan tipe/kategori. Dipakai untuk Perplexity + SerpAPI + Firecrawl → Gemini index.</p>
+                  <textarea rows={9} defaultValue={L1_PROMPT} style={{ width: "100%", background: "var(--surface-2)", border: "1px solid var(--line-2)", borderRadius: 10, padding: 12, font: "inherit", fontSize: ".88rem", lineHeight: 1.5, color: "var(--ink)", resize: "vertical" }} />
+                </div>
+                <div className="card" style={{ padding: 22 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6, flexWrap: "wrap" }}>
+                    <span className="pill" style={{ background: "color-mix(in oklab, var(--c-heart) 16%, var(--surface))", color: "var(--c-heart)", fontSize: ".68rem", fontWeight: 700 }}>Lapis 2 · Konten</span>
+                    <span style={{ fontWeight: 600, fontSize: ".95rem" }}>Persona: Content · SEO · GEO · CMO senior</span>
+                  </div>
+                  <p className="muted" style={{ fontSize: ".85rem", margin: "0 0 10px" }}>Dipersonalisasi untuk persona tiap agen (nama, brand, gaya bahasa, area, produk, audiens). Dipakai untuk Claude Sonnet.</p>
+                  <textarea rows={11} defaultValue={L2_PROMPT} style={{ width: "100%", background: "var(--surface-2)", border: "1px solid var(--line-2)", borderRadius: 10, padding: 12, font: "inherit", fontSize: ".88rem", lineHeight: 1.5, color: "var(--ink)", resize: "vertical" }} />
+                </div>
+              </div>
             </div>
             <style>{`@media (max-width:640px){ .api-row{ grid-template-columns:1fr !important; } }`}</style>
           </Panel>
