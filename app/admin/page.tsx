@@ -4,10 +4,11 @@ import { CakraMark } from "@/components/CakraMark";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { StaffAdmin } from "./StaffAdmin";
 
-type Sec = "home" | "prospek" | "listing" | "editor" | "content" | "assets" | "profile";
+type Sec = "home" | "builder" | "prospek" | "listing" | "editor" | "content" | "assets" | "profile";
 
 const NAV: { id: Sec; label: string; icon: string }[] = [
   { id: "home", label: "Dashboard", icon: "M3 3h8v8H3zM13 3h8v5h-8zM13 10h8v11h-8zM3 13h8v8H3z" },
+  { id: "builder", label: "Web Builder", icon: "M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5Zm2 3v11h6V8H5Zm8 0v4h6V8h-6Zm6 6h-6v5h6v-5Z" },
   { id: "prospek", label: "Prospek", icon: "M4 4h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Zm0 10v5h16v-5h-4a3 3 0 0 1-6 0H4Z" },
   { id: "listing", label: "Listing", icon: "M4 5h16v3H4zM4 10.5h16v3H4zM4 16h16v3H4z" },
   { id: "editor", label: "Editor", icon: "M4 4h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Zm6 3v6l5-3z" },
@@ -92,6 +93,63 @@ const VOICES: Voice[] = [
   null,
 ];
 const VOICE_STYLES = ["Hangat", "Berwibawa", "Energetik", "Lembut", "Profesional", "Ceria"];
+
+// ---------- Web Builder (deterministic "machine" — no AI credits to build) ----------
+type BState = {
+  radius: string; bg: string; fontId: string; paletteId: string; density: string; styleId: string; tone: string;
+  brand: string; tagline: string; metaTitle: string; metaDesc: string; logo: string; domain: string;
+  wa: string; instagram: string; tiktok: string; youtube: string; facebook: string;
+};
+const BUILDER_DEFAULT: BState = {
+  radius: "semi", bg: "dual", fontId: "anggun", paletteId: "coastal", density: "normal", styleId: "lembut", tone: "normal",
+  brand: "Kirana", tagline: "Spesialis Properti Premium Bali",
+  metaTitle: "Kirana — Spesialis Properti Premium Bali (Jual & Sewa)",
+  metaDesc: "Vila & properti premium di Canggu, Seminyak, Uluwatu, Jimbaran & Ubud. Didampingi dari kurasi, negosiasi, hingga serah terima yang aman & legal.",
+  logo: "", domain: "kirana.cakra.xyz",
+  wa: "6281234567890", instagram: "kirana.property", tiktok: "kiranaproperty", youtube: "Kirana Property", facebook: "",
+};
+const B_RADII = [
+  { id: "kotak", label: "Kotak", card: 3, btn: 4, badge: 5 },
+  { id: "semi", label: "Semi bulat", card: 16, btn: 12, badge: 999 },
+  { id: "pill", label: "Rounded", card: 22, btn: 999, badge: 999 },
+] as const;
+const B_BGS = [
+  { id: "mono", label: "Mono" }, { id: "dual", label: "Dual" }, { id: "gradient", label: "Gradasi" },
+] as const;
+const B_FONTS = [
+  { id: "anggun", label: "Anggun", display: "'Playfair Display', Georgia, serif", body: "'Manrope', system-ui, sans-serif" },
+  { id: "modern", label: "Modern", display: "'Space Grotesk', system-ui, sans-serif", body: "'Inter', system-ui, sans-serif" },
+  { id: "editorial", label: "Editorial", display: "'Cormorant Garamond', Georgia, serif", body: "'Jost', system-ui, sans-serif" },
+  { id: "bersih", label: "Bersih", display: "'DM Serif Display', Georgia, serif", body: "'DM Sans', system-ui, sans-serif" },
+] as const;
+const B_PALETTES = [
+  { id: "coastal", label: "Coastal Calm", brand: "#357482", accent: "#B0812F", bg: "#F2F6F6", surface: "#FFFFFF", ink: "#1B2B2E" },
+  { id: "terracotta", label: "Sunset Terracotta", brand: "#B5533A", accent: "#C9902F", bg: "#FBF6F0", surface: "#FFFFFF", ink: "#2A1D17" },
+  { id: "noir", label: "Noir Luxe", brand: "#20201E", accent: "#C2A46B", bg: "#F5F3EF", surface: "#FFFFFF", ink: "#161412" },
+  { id: "emerald", label: "Tropical Emerald", brand: "#1F6E5A", accent: "#E0A100", bg: "#F1F7F4", surface: "#FFFFFF", ink: "#122A22" },
+  { id: "ocean", label: "Ocean Blue", brand: "#24506E", accent: "#C98A3B", bg: "#EFF4F8", surface: "#FFFFFF", ink: "#132433" },
+  { id: "rosewood", label: "Rosewood", brand: "#7A3B4E", accent: "#B98A2E", bg: "#FAF4F2", surface: "#FFFFFF", ink: "#2C1720" },
+] as const;
+const B_DENSITIES = [
+  { id: "tight", label: "Tight", pad: 22, gap: 12, lh: 1.45 },
+  { id: "normal", label: "Normal", pad: 32, gap: 18, lh: 1.6 },
+  { id: "spacious", label: "Spacious", pad: 46, gap: 26, lh: 1.75 },
+] as const;
+const B_STYLES = [
+  { id: "lembut", label: "Lembut", border: "1px solid rgba(0,0,0,.06)", shadow: "0 14px 34px -20px rgba(15,32,38,.22)", caps: false, ruled: false },
+  { id: "minimalis", label: "Minimalis", border: "1px solid rgba(0,0,0,.1)", shadow: "none", caps: false, ruled: false },
+  { id: "tegas", label: "Tegas", border: "1.5px solid var(--pv-ink)", shadow: "5px 5px 0 var(--pv-ink)", caps: true, ruled: false },
+  { id: "editorial", label: "Editorial", border: "1px solid color-mix(in oklab, var(--pv-ink) 14%, transparent)", shadow: "none", caps: true, ruled: true },
+] as const;
+const B_TONES = [
+  { id: "normal", label: "Normal" }, { id: "professional", label: "Professional" }, { id: "lux", label: "Lux" }, { id: "relax", label: "Relax" },
+] as const;
+const B_TONE_COPY: Record<string, { eyebrow: string; h1: string; sub: string; cta: string }> = {
+  normal: { eyebrow: "spesialis properti bali", h1: "Vila & properti premium Bali, dari tangan yang paham.", sub: "Jual, sewa, dan investasi properti premium di Bali — didampingi sampai serah terima yang aman.", cta: "Hubungi sekarang" },
+  professional: { eyebrow: "konsultan properti · bali", h1: "Solusi properti premium Bali yang terukur & tepercaya.", sub: "Pendampingan menyeluruh — analisa pasar, negosiasi, hingga legalitas — dengan standar profesional.", cta: "Jadwalkan konsultasi" },
+  lux: { eyebrow: "the finest bali estates", h1: "Kediaman istimewa untuk mereka yang paham nilai.", sub: "Koleksi vila dan estat pilihan di lokasi paling didambakan di Bali, dilayani penuh ketelitian.", cta: "Atur pertemuan privat" },
+  relax: { eyebrow: "cari vila di bali? santai aja", h1: "Cari vila impian di Bali jadi gampang & menyenangkan.", sub: "Ngobrol santai dulu — nanti aku bantu cariin vila yang pas, dari budget sampai lokasi.", cta: "Yuk, ngobrol" },
+};
 
 const SCORE = 76;
 
@@ -179,6 +237,27 @@ function MemberDashboard() {
   // voice creation (ElevenLabs) — 3 slots per client, permanent
   const [voiceGen, setVoiceGen] = useState<"idle" | "working" | "done">("idle");
   const [voiceStyle, setVoiceStyle] = useState("Hangat");
+
+  // Web Builder — deterministic template config (persisted locally; later → Supabase profile)
+  const [builder, setBuilder] = useState<BState>(BUILDER_DEFAULT);
+  const [builderSaved, setBuilderSaved] = useState(false);
+  const logoInput = useRef<HTMLInputElement>(null);
+  const setB = (patch: Partial<BState>) => { setBuilder((b) => ({ ...b, ...patch })); setBuilderSaved(false); };
+  useEffect(() => {
+    try { const raw = localStorage.getItem("cakra-builder"); if (raw) setBuilder((b) => ({ ...b, ...JSON.parse(raw) })); } catch {}
+  }, []);
+  useEffect(() => {
+    const id = "cakra-builder-fonts";
+    if (typeof document === "undefined" || document.getElementById(id)) return;
+    const l = document.createElement("link"); l.id = id; l.rel = "stylesheet";
+    l.href = "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=Cormorant+Garamond:wght@600;700&family=Jost:wght@400;500;600&family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap";
+    document.head.appendChild(l);
+  }, []);
+  const saveBuilder = () => { try { localStorage.setItem("cakra-builder", JSON.stringify(builder)); } catch {} setBuilderSaved(true); setTimeout(() => setBuilderSaved(false), 2000); };
+  const onLogo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0]; if (!f) return;
+    const rd = new FileReader(); rd.onload = () => setB({ logo: String(rd.result) }); rd.readAsDataURL(f);
+  };
 
   // promote the next queued job whenever nothing is rendering
   useEffect(() => {
@@ -294,7 +373,7 @@ function MemberDashboard() {
       <Card>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
           <H>Preview website</H>
-          <button style={btn("brand")}>Edit website</button>
+          <button style={btn("brand")} onClick={() => setSec("builder")}>Edit website</button>
         </div>
         <div style={{ borderRadius: 14, overflow: "hidden", border: "1px solid var(--line)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 12px", background: "var(--surface-2)", borderBottom: "1px solid var(--line)" }}>
@@ -932,8 +1011,201 @@ function MemberDashboard() {
     </div>
   );
 
+  // ---------- Web Builder ----------
+  const bRad = B_RADII.find((x) => x.id === builder.radius)!;
+  const bFont = B_FONTS.find((x) => x.id === builder.fontId)!;
+  const bPal = B_PALETTES.find((x) => x.id === builder.paletteId)!;
+  const bDen = B_DENSITIES.find((x) => x.id === builder.density)!;
+  const bSty = B_STYLES.find((x) => x.id === builder.styleId)!;
+  const bCopy = B_TONE_COPY[builder.tone];
+  const pageBg = builder.bg === "gradient" ? `linear-gradient(160deg, ${bPal.bg}, color-mix(in oklab, ${bPal.accent} 10%, ${bPal.bg}))` : bPal.bg;
+  const heroBg = builder.bg === "mono" ? bPal.brand : builder.bg === "gradient" ? `linear-gradient(135deg, ${bPal.accent}, ${bPal.brand} 62%)` : `linear-gradient(118deg, ${bPal.brand}, color-mix(in oklab, ${bPal.brand} 60%, #000))`;
+  const bandBg = builder.bg === "dual" ? `color-mix(in oklab, ${bPal.brand} 7%, ${bPal.surface})` : bPal.surface;
+  const pvVars = { "--pv-brand": bPal.brand, "--pv-accent": bPal.accent, "--pv-ink": bPal.ink, "--pv-bg": bPal.bg, "--pv-surface": bPal.surface } as React.CSSProperties;
+  const capCss = (): React.CSSProperties => ({ textTransform: bSty.caps ? "uppercase" : "none", letterSpacing: bSty.caps ? ".14em" : ".08em" });
+  const socialChips = [
+    ["Instagram", builder.instagram, "M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm5.5-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2ZM7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4Zm0 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7Z"],
+    ["TikTok", builder.tiktok, "M14 3c.3 2.2 1.7 3.9 4 4.2v2.5c-1.5 0-2.9-.5-4-1.3v5.9a5.3 5.3 0 1 1-5.3-5.3c.3 0 .6 0 .9.1v2.7a2.6 2.6 0 1 0 1.8 2.5V3H14Z"],
+    ["YouTube", builder.youtube, "M21.6 7.2a2.6 2.6 0 0 0-1.8-1.8C18 5 12 5 12 5s-6 0-7.8.4A2.6 2.6 0 0 0 2.4 7.2 27 27 0 0 0 2 12a27 27 0 0 0 .4 4.8 2.6 2.6 0 0 0 1.8 1.8C6 19 12 19 12 19s6 0 7.8-.4a2.6 2.6 0 0 0 1.8-1.8A27 27 0 0 0 22 12a27 27 0 0 0-.4-4.8ZM10 15V9l5 3-5 3Z"],
+    ["Facebook", builder.facebook, "M13 22v-8h2.7l.4-3H13V9c0-.9.3-1.5 1.6-1.5H16V4.9c-.3 0-1.2-.1-2.2-.1-2.2 0-3.8 1.3-3.8 3.9V11H7.5v3H10v8h3Z"],
+  ].filter((x) => x[1]) as [string, string, string][];
+
+  const segBtn = (on: boolean): React.CSSProperties => ({ font: "inherit", fontSize: ".82rem", fontWeight: 600, cursor: "pointer", padding: ".48rem .85rem", borderRadius: 10, border: `1px solid ${on ? "var(--brand)" : "var(--line-2)"}`, background: on ? "color-mix(in oklab, var(--brand) 12%, var(--surface))" : "transparent", color: on ? "var(--brand)" : "var(--ink-2)", transition: ".15s" });
+  const bInp: React.CSSProperties = { width: "100%", padding: ".6rem .75rem", borderRadius: 10, border: "1px solid var(--line-2)", background: "var(--surface-2)", color: "var(--ink)", font: "inherit", fontSize: ".88rem" };
+  const bField = (label: string, node: React.ReactNode, hint?: string) => (
+    <div style={{ marginBottom: 16 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
+        <span style={{ fontSize: ".82rem", fontWeight: 600, color: "var(--ink-2)" }}>{label}</span>
+        {hint && <span className="muted" style={{ fontSize: ".72rem" }}>{hint}</span>}
+      </div>
+      {node}
+    </div>
+  );
+
+  const Builder = (
+    <>
+      <style>{`
+        .bld-grid{ display:grid; grid-template-columns: minmax(320px,380px) minmax(0,1fr); gap:18px; align-items:start; }
+        .bld-preview{ position:sticky; top:80px; }
+        @media (max-width:960px){ .bld-grid{ grid-template-columns:1fr; } .bld-preview{ position:static; } }
+      `}</style>
+      <div className="bld-grid">
+        {/* ---------------- Controls ---------------- */}
+        <div style={{ display: "grid", gap: 16 }}>
+          <Card>
+            <H>Logo & meta situs</H>
+            <div style={{ display: "flex", gap: 14, alignItems: "center", marginBottom: 16 }}>
+              <span style={{ width: 60, height: 60, borderRadius: 14, flex: "none", display: "grid", placeItems: "center", overflow: "hidden", background: builder.logo ? "var(--surface-2)" : bPal.brand, color: "#fff", fontWeight: 700, fontSize: "1.5rem", border: "1px solid var(--line)" }}>
+                {builder.logo ? <img src={builder.logo} alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : (builder.brand[0] || "K")}
+              </span>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                <input ref={logoInput} type="file" accept="image/*" onChange={onLogo} style={{ display: "none" }} />
+                <button style={{ ...btn("ghost"), padding: ".5rem .9rem", fontSize: ".84rem" }} onClick={() => logoInput.current?.click()}>Unggah logo</button>
+                {builder.logo && <button style={{ ...btn("ghost"), padding: ".5rem .9rem", fontSize: ".84rem", color: "var(--muted)" }} onClick={() => setB({ logo: "" })}>Hapus</button>}
+              </div>
+            </div>
+            {bField("Nama brand", <input style={bInp} value={builder.brand} onChange={(e) => setB({ brand: e.target.value })} placeholder="Kirana" />)}
+            {bField("Tagline", <input style={bInp} value={builder.tagline} onChange={(e) => setB({ tagline: e.target.value })} placeholder="Spesialis Properti Premium Bali" />)}
+            {bField("Judul meta (title tag)", <input style={bInp} value={builder.metaTitle} onChange={(e) => setB({ metaTitle: e.target.value })} maxLength={70} />, `${builder.metaTitle.length}/60 ideal`)}
+            {bField("Deskripsi meta", <textarea style={{ ...bInp, resize: "vertical", minHeight: 74, lineHeight: 1.5 }} value={builder.metaDesc} onChange={(e) => setB({ metaDesc: e.target.value })} maxLength={180} />, `${builder.metaDesc.length}/155 ideal`)}
+          </Card>
+
+          <Card>
+            <H>Bentuk & tata letak</H>
+            {bField("Bentuk sudut", <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{B_RADII.map((o) => <button key={o.id} onClick={() => setB({ radius: o.id })} style={segBtn(builder.radius === o.id)}>{o.label}</button>)}</div>)}
+            {bField("Kerapatan", <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{B_DENSITIES.map((o) => <button key={o.id} onClick={() => setB({ density: o.id })} style={segBtn(builder.density === o.id)}>{o.label}</button>)}</div>, "Paragraf · jarak · padding")}
+            {bField("Gaya kartu", <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{B_STYLES.map((o) => <button key={o.id} onClick={() => setB({ styleId: o.id })} style={segBtn(builder.styleId === o.id)}>{o.label}</button>)}</div>)}
+          </Card>
+
+          <Card>
+            <H>Warna & huruf</H>
+            {bField("Latar", <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{B_BGS.map((o) => <button key={o.id} onClick={() => setB({ bg: o.id })} style={segBtn(builder.bg === o.id)}>{o.label}</button>)}</div>)}
+            {bField("Palet warna", <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>{B_PALETTES.map((p) => {
+              const on = builder.paletteId === p.id;
+              return <button key={p.id} onClick={() => setB({ paletteId: p.id })} style={{ display: "flex", alignItems: "center", gap: 9, padding: ".5rem .6rem", borderRadius: 10, cursor: "pointer", font: "inherit", fontSize: ".8rem", fontWeight: 600, textAlign: "left", border: `1px solid ${on ? "var(--brand)" : "var(--line-2)"}`, background: on ? "color-mix(in oklab, var(--brand) 10%, var(--surface))" : "transparent", color: "var(--ink)" }}>
+                <span style={{ display: "flex", flex: "none", boxShadow: "0 1px 3px rgba(0,0,0,.15)", borderRadius: 999, overflow: "hidden" }}><span style={{ width: 15, height: 15, background: p.brand }} /><span style={{ width: 15, height: 15, background: p.accent }} /><span style={{ width: 15, height: 15, background: p.ink }} /></span>
+                <span style={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.label}</span>
+              </button>;
+            })}</div>)}
+            {bField("Palet huruf", <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>{B_FONTS.map((f) => {
+              const on = builder.fontId === f.id;
+              return <button key={f.id} onClick={() => setB({ fontId: f.id })} style={{ display: "flex", alignItems: "center", gap: 10, padding: ".5rem .7rem", borderRadius: 10, cursor: "pointer", font: "inherit", fontWeight: 600, textAlign: "left", border: `1px solid ${on ? "var(--brand)" : "var(--line-2)"}`, background: on ? "color-mix(in oklab, var(--brand) 10%, var(--surface))" : "transparent", color: "var(--ink)" }}>
+                <span style={{ fontFamily: f.display, fontSize: "1.3rem", lineHeight: 1, flex: "none" }}>Aa</span>
+                <span style={{ fontSize: ".8rem", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{f.label}</span>
+              </button>;
+            })}</div>)}
+          </Card>
+
+          <Card>
+            <H>Gaya bahasa</H>
+            <p className="muted" style={{ fontSize: ".84rem", marginTop: -8, marginBottom: 12 }}>Menentukan nada seluruh teks & advertorial yang ditulis sistem untuk situs Anda.</p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{B_TONES.map((o) => <button key={o.id} onClick={() => setB({ tone: o.id })} style={segBtn(builder.tone === o.id)}>{o.label}</button>)}</div>
+          </Card>
+
+          <Card>
+            <H>Sosial & WhatsApp</H>
+            {bField("Nomor WhatsApp", <input style={bInp} value={builder.wa} onChange={(e) => setB({ wa: e.target.value.replace(/[^\d]/g, "") })} placeholder="6281234567890" />, "Format 62…")}
+            {bField("Instagram", <input style={bInp} value={builder.instagram} onChange={(e) => setB({ instagram: e.target.value.replace(/^@/, "") })} placeholder="username" />)}
+            {bField("TikTok", <input style={bInp} value={builder.tiktok} onChange={(e) => setB({ tiktok: e.target.value.replace(/^@/, "") })} placeholder="username" />)}
+            {bField("YouTube", <input style={bInp} value={builder.youtube} onChange={(e) => setB({ youtube: e.target.value })} placeholder="Nama channel" />)}
+            {bField("Facebook", <input style={bInp} value={builder.facebook} onChange={(e) => setB({ facebook: e.target.value })} placeholder="Halaman (opsional)" />)}
+          </Card>
+        </div>
+
+        {/* ---------------- Live preview ---------------- */}
+        <div className="bld-preview" style={{ display: "grid", gap: 14 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, flexWrap: "wrap" }}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: ".76rem", fontWeight: 700, color: "var(--good)", background: "color-mix(in oklab, var(--good) 12%, var(--surface))", padding: ".3rem .65rem", borderRadius: 999 }}><span style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--good)" }} /> Pratinjau langsung · realtime</span>
+            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+              {builderSaved && <span style={{ fontSize: ".8rem", fontWeight: 600, color: "var(--good)" }}>✓ Tersimpan</span>}
+              <button style={{ ...btn("ghost"), padding: ".5rem .9rem", fontSize: ".84rem" }} onClick={() => setBuilder(BUILDER_DEFAULT)}>Reset</button>
+              <button style={{ ...btn("brand"), padding: ".5rem 1.1rem", fontSize: ".84rem" }} onClick={saveBuilder}>Simpan & terapkan</button>
+            </div>
+          </div>
+
+          {/* browser frame */}
+          <div style={{ borderRadius: 16, overflow: "hidden", border: "1px solid var(--line)", boxShadow: "0 24px 60px -34px rgba(15,32,38,.4)", background: "var(--surface)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "9px 13px", background: "var(--surface-2)", borderBottom: "1px solid var(--line)" }}>
+              <span style={{ width: 9, height: 9, borderRadius: "50%", background: "var(--line-2)" }} /><span style={{ width: 9, height: 9, borderRadius: "50%", background: "var(--line-2)" }} /><span style={{ width: 9, height: 9, borderRadius: "50%", background: "var(--line-2)" }} />
+              <span className="mono" style={{ marginLeft: 10, fontSize: ".78rem", color: "var(--muted)" }}>{builder.domain}</span>
+            </div>
+            <div style={{ ...pvVars, maxHeight: 560, overflowY: "auto", fontFamily: bFont.body, color: bPal.ink, background: pageBg }}>
+              {/* nav */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: `12px ${bDen.pad}px`, background: bPal.surface, borderBottom: bSty.ruled ? `1px solid color-mix(in oklab, ${bPal.ink} 12%, transparent)` : "1px solid rgba(0,0,0,.05)" }}>
+                <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <span style={{ width: 26, height: 26, borderRadius: builder.radius === "kotak" ? 4 : 999, overflow: "hidden", flex: "none", display: "grid", placeItems: "center", background: bPal.brand, color: "#fff", fontWeight: 700, fontSize: ".8rem" }}>{builder.logo ? <img src={builder.logo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : (builder.brand[0] || "K")}</span>
+                  <span style={{ fontFamily: bFont.display, fontWeight: 700, fontSize: "1rem" }}>{builder.brand || "Brand"}</span>
+                </span>
+                <span style={{ display: "flex", gap: 14, fontSize: ".72rem", opacity: .8 }}><span>Beranda</span><span>Listing</span><span>Tentang</span></span>
+              </div>
+              {/* hero */}
+              <div style={{ background: heroBg, color: "#fff", padding: `${bDen.pad + 8}px ${bDen.pad}px` }}>
+                <div style={{ fontSize: ".72rem", fontWeight: 700, color: "rgba(255,255,255,.9)", ...capCss(), marginBottom: 10 }}>{bCopy.eyebrow}</div>
+                <div style={{ fontFamily: bFont.display, fontSize: "1.7rem", fontWeight: 700, lineHeight: 1.15, maxWidth: "18ch" }}>{bCopy.h1}</div>
+                <p style={{ fontSize: ".9rem", lineHeight: bDen.lh, color: "rgba(255,255,255,.86)", maxWidth: "40ch", marginTop: 12 }}>{bCopy.sub}</p>
+                <button style={{ marginTop: 16, border: "none", cursor: "default", padding: ".65rem 1.3rem", borderRadius: bRad.btn, background: bPal.accent, color: "#fff", fontWeight: 700, fontSize: ".86rem", fontFamily: bFont.body }}>{bCopy.cta}</button>
+              </div>
+              {/* listing */}
+              <div style={{ padding: `${bDen.pad}px`, background: bandBg }}>
+                <div style={{ fontSize: ".68rem", fontWeight: 700, color: bPal.accent, ...capCss(), marginBottom: 4 }}>Listing</div>
+                <div style={{ fontFamily: bFont.display, fontSize: "1.15rem", fontWeight: 700, marginBottom: bDen.gap }}>Vila & properti premium.</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: bDen.gap }}>
+                  {[["Vila Uluwatu Cliff", "Rp 14 M", "Uluwatu"], ["Vila Canggu Estate", "Rp 8,5 M", "Canggu"]].map(([t, price, loc]) => (
+                    <div key={t} style={{ borderRadius: bRad.card, overflow: "hidden", background: bPal.surface, border: bSty.border, boxShadow: bSty.shadow }}>
+                      <div style={{ position: "relative", height: 72, background: `linear-gradient(120deg, color-mix(in oklab, ${bPal.brand} 30%, #fff), color-mix(in oklab, ${bPal.accent} 30%, #fff))` }}>
+                        <span style={{ position: "absolute", top: 7, left: 7, fontSize: ".6rem", fontWeight: 700, color: "#fff", background: bPal.brand, padding: ".18rem .5rem", borderRadius: bRad.badge }}>DIJUAL</span>
+                      </div>
+                      <div style={{ padding: `${Math.round(bDen.pad * 0.4)}px` }}>
+                        <div style={{ fontFamily: bFont.display, fontWeight: 700, fontSize: ".84rem" }}>{t}</div>
+                        <div style={{ fontSize: ".7rem", opacity: .65, margin: "2px 0 6px" }}>{loc}, Bali</div>
+                        <div style={{ fontWeight: 700, fontSize: ".82rem", color: bPal.brand }}>{price}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {/* cta */}
+              <div style={{ padding: `${bDen.pad}px`, textAlign: "center", background: builder.bg === "mono" ? bPal.bg : bandBg }}>
+                <div style={{ fontFamily: bFont.display, fontSize: "1.2rem", fontWeight: 700, marginBottom: 6 }}>Siap menemukan properti Anda?</div>
+                <button style={{ border: "none", cursor: "default", padding: ".6rem 1.2rem", borderRadius: bRad.btn, background: bPal.brand, color: "#fff", fontWeight: 700, fontSize: ".82rem", fontFamily: bFont.body }}>WhatsApp {builder.brand}</button>
+              </div>
+              {/* footer */}
+              <div style={{ padding: `${Math.round(bDen.pad * 0.7)}px ${bDen.pad}px`, background: bPal.ink, color: "rgba(255,255,255,.8)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, flexWrap: "wrap" }}>
+                <span style={{ fontFamily: bFont.display, fontWeight: 700, color: "#fff", fontSize: ".9rem" }}>{builder.brand}</span>
+                <span style={{ display: "flex", gap: 8 }}>
+                  {socialChips.map(([label, , d]) => (
+                    <span key={label} title={label} style={{ width: 26, height: 26, borderRadius: builder.radius === "kotak" ? 5 : 999, display: "grid", placeItems: "center", background: "rgba(255,255,255,.14)", color: "#fff" }}><Ic d={d} s={14} /></span>
+                  ))}
+                  {builder.wa && <span title="WhatsApp" style={{ width: 26, height: 26, borderRadius: builder.radius === "kotak" ? 5 : 999, display: "grid", placeItems: "center", background: bPal.accent, color: "#fff" }}><Ic d="M20 4 3 11l6 2 2 6 3-5 4 3z" s={13} /></span>}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* SERP / meta-tag snippet */}
+          <Card style={{ padding: 16 }}>
+            <div style={{ fontSize: ".72rem", fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: ".08em", marginBottom: 10 }}>Pratinjau hasil pencarian & metatag</div>
+            <div style={{ padding: "12px 14px", borderRadius: 12, background: "var(--surface-2)", border: "1px solid var(--line)" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                <span style={{ width: 22, height: 22, borderRadius: 999, flex: "none", overflow: "hidden", display: "grid", placeItems: "center", background: bPal.brand, color: "#fff", fontWeight: 700, fontSize: ".7rem" }}>{builder.logo ? <img src={builder.logo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : (builder.brand[0] || "K")}</span>
+                <span style={{ minWidth: 0 }}><span style={{ display: "block", fontSize: ".78rem", fontWeight: 600, lineHeight: 1.1 }}>{builder.brand}</span><span className="mono" style={{ fontSize: ".72rem", color: "var(--muted)" }}>{builder.domain}</span></span>
+              </div>
+              <div style={{ color: "#1a0dab", fontSize: ".98rem", fontWeight: 500, lineHeight: 1.25, marginBottom: 2 }}>{builder.metaTitle || "Judul situs Anda"}</div>
+              <div className="muted" style={{ fontSize: ".82rem", lineHeight: 1.4 }}>{builder.metaDesc || "Deskripsi meta situs Anda akan tampil di sini."}</div>
+            </div>
+          </Card>
+
+          <div style={{ padding: "12px 14px", borderRadius: 12, background: "color-mix(in oklab, var(--brand) 7%, var(--surface))", border: "1px solid color-mix(in oklab, var(--brand) 20%, var(--line))", fontSize: ".82rem", color: "var(--ink-2)", lineHeight: 1.55 }}>
+            <strong>Ringan &amp; tanpa kredit.</strong> Semua perubahan hanya menata ulang template — bukan generate AI — jadi pratinjau berubah seketika. Kredit hanya dipakai saat menulis teks & advertorial (SEO/GEO/social).
+          </div>
+        </div>
+      </div>
+    </>
+  );
+
   const titles: Record<Sec, [string, string]> = {
     home: ["Dashboard", "Ringkasan performa Anda — pilih kanal untuk insight & analisanya."],
+    builder: ["Web Builder", "Atur tampilan situs Anda — perubahan langsung terlihat, tanpa kredit."],
     prospek: ["Prospek", "Balas dan kelola calon pembeli dari semua kanal."],
     listing: ["Listing", "Kelola properti Anda — buat, ubah, hapus, riwayat."],
     editor: ["Editor", "Buat video listing otomatis dan unggah materi."],
@@ -941,7 +1213,7 @@ function MemberDashboard() {
     assets: ["Aset", "Pustaka aset cakra untuk semua member."],
     profile: ["Profil & pengaturan", "Koneksi, tagihan, keamanan, dan legal."],
   };
-  const body = { home: Dashboard, prospek: Prospek, listing: Listing, editor: Editor, content: Content, assets: Assets, profile: Profile }[sec];
+  const body = { home: Dashboard, builder: Builder, prospek: Prospek, listing: Listing, editor: Editor, content: Content, assets: Assets, profile: Profile }[sec];
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg)" }}>
