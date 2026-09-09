@@ -105,9 +105,6 @@ type BState = {
 const IMAGE_SLOTS = [
   { key: "hero", label: "Foto hero", hint: "Gambar utama di atas" },
   { key: "about", label: "Foto tentang / agen", hint: "Untuk section profil" },
-  { key: "l1", label: "Listing 1", hint: "Kartu properti" },
-  { key: "l2", label: "Listing 2", hint: "Kartu properti" },
-  { key: "l3", label: "Listing 3", hint: "Kartu properti" },
 ] as const;
 const BUILDER_DEFAULT: BState = {
   radius: "semi", bg: "dual", decoration: "none", fontId: "anggun", paletteId: "coastal", density: "normal", styleId: "lembut", tone: "normal",
@@ -1154,7 +1151,8 @@ function MemberDashboard() {
           {acc("gambar", "Gambar situs", <>
             <p className="muted" style={{ fontSize: ".84rem", marginTop: -4, marginBottom: 14 }}>Ganti gambar situs kapan saja dengan foto Anda sendiri. Default memakai pustaka aset in-house cakra.</p>
             <div style={{ display: "grid", gap: 14 }}>{IMAGE_SLOTS.map((s) => imgSlot(s.key, s.label, s.hint))}</div>
-          </>, "5 slot")}
+            <p className="muted" style={{ fontSize: ".8rem", marginTop: 14, paddingTop: 12, borderTop: "1px solid var(--line)", lineHeight: 1.5 }}>📷 Foto listing otomatis mengikuti dari menu <b style={{ color: "var(--ink)" }}>Listing</b> — tidak perlu diunggah terpisah di sini.</p>
+          </>, "2 slot")}
 
           {acc("layout", "Bentuk & tata letak", <>
             {bField("Bentuk sudut", <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{B_RADII.map((o) => <button key={o.id} onClick={() => setB({ radius: o.id })} style={segBtn(builder.radius === o.id)}>{o.label}</button>)}</div>)}
@@ -1262,15 +1260,15 @@ function MemberDashboard() {
                 <div style={{ fontSize: ".68rem", fontWeight: 700, color: bPal.accent, ...capCss(), marginBottom: 4 }}>Listing</div>
                 <div style={{ fontFamily: bFont.display, fontSize: "1.15rem", fontWeight: 700, marginBottom: bDen.gap }}>Vila & properti premium.</div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: bDen.gap }}>
-                  {[["Vila Uluwatu Cliff", "Rp 14 M", "Uluwatu", "l1"], ["Vila Canggu Estate", "Rp 8,5 M", "Canggu", "l2"]].map(([t, price, loc, slot]) => (
-                    <div key={t} style={{ borderRadius: bRad.card, overflow: "hidden", background: bPal.surface, border: bSty.border, boxShadow: bSty.shadow }}>
-                      <div style={{ position: "relative", height: 72, background: builder.imgs[slot] ? `url(${builder.imgs[slot]}) center/cover` : `linear-gradient(120deg, color-mix(in oklab, ${bPal.brand} 30%, #fff), color-mix(in oklab, ${bPal.accent} 30%, #fff))` }}>
-                        <span style={{ position: "absolute", top: 7, left: 7, fontSize: ".6rem", fontWeight: 700, color: "#fff", background: bPal.brand, padding: ".18rem .5rem", borderRadius: bRad.badge }}>DIJUAL</span>
+                  {LISTINGS.slice(0, 2).map((l) => (
+                    <div key={l.t} style={{ borderRadius: bRad.card, overflow: "hidden", background: bPal.surface, border: bSty.border, boxShadow: bSty.shadow }}>
+                      <div style={{ position: "relative", height: 72, background: `url(${l.img}) center/cover` }}>
+                        <span style={{ position: "absolute", top: 7, left: 7, fontSize: ".6rem", fontWeight: 700, color: "#fff", background: l.st === "Disewa" ? bPal.accent : bPal.brand, padding: ".18rem .5rem", borderRadius: bRad.badge, textTransform: "uppercase" }}>{l.st}</span>
                       </div>
                       <div style={{ padding: `${Math.round(bDen.pad * 0.4)}px` }}>
-                        <div style={{ fontFamily: bFont.display, fontWeight: 700, fontSize: ".84rem" }}>{t}</div>
-                        <div style={{ fontSize: ".7rem", opacity: .65, margin: "2px 0 6px" }}>{loc}, Bali</div>
-                        <div style={{ fontWeight: 700, fontSize: ".82rem", color: bPal.brand }}>{price}</div>
+                        <div style={{ fontFamily: bFont.display, fontWeight: 700, fontSize: ".84rem" }}>{l.t}</div>
+                        <div style={{ fontSize: ".7rem", opacity: .65, margin: "2px 0 6px" }}>{l.loc}</div>
+                        <div style={{ fontWeight: 700, fontSize: ".82rem", color: bPal.brand }}>{l.price}</div>
                       </div>
                     </div>
                   ))}
