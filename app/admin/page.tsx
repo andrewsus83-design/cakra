@@ -827,12 +827,40 @@ function MemberDashboard() {
   const RAIL = ["M12 21 4 13a4.5 4.5 0 0 1 8-3 4.5 4.5 0 0 1 8 3z", "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z", "M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7M16 6l-4-4-4 4M12 2v13"];
   // Social-media style 9:16 content card (mimics the platform post UI)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const socialCard = (item: any, i: number, kind: "ready" | "history") => {
+  const contentCard = (item: any, i: number, kind: "ready" | "history") => {
     const pi = PLAT_ICON[item.plat] || PLAT_ICON.Blog;
     const clickable = kind === "ready";
+    const open = clickable ? () => { setContentModal(i); setContentSched(false); } : undefined;
+    // BLOG = article preview (not a social post)
+    if (item.plat === "Blog") {
+      return (
+        <div key={item.t} onClick={open} role={clickable ? "button" : undefined} tabIndex={clickable ? 0 : undefined} className={clickable ? "adm-thumb" : undefined}
+          style={{ gridColumn: "1 / -1", display: "flex", gap: 12, padding: 10, borderRadius: 12, background: "var(--surface-2)", border: "1px solid var(--line)", cursor: clickable ? "pointer" : "default" }}>
+          <div style={{ width: 132, aspectRatio: "16 / 9", borderRadius: 9, overflow: "hidden", flex: "none", background: "var(--surface)" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={item.img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", filter: kind === "history" && !item.posted ? "grayscale(.5)" : "none" }} />
+          </div>
+          <div style={{ minWidth: 0, flex: 1 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "center" }}>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: ".64rem", fontWeight: 700, color: "var(--brand)" }}><span style={{ display: "grid", placeItems: "center", width: 16, height: 16, borderRadius: 4, background: pi.c, color: "#fff" }}><Ic d={pi.d} s={10} /></span>Blog / Artikel</span>
+              {kind === "ready"
+                ? <span style={{ fontSize: ".6rem", fontWeight: 700, color: "var(--warn)", background: "color-mix(in oklab, var(--warn) 14%, var(--surface))", padding: ".18rem .5rem", borderRadius: 999 }}>Menunggu</span>
+                : <span className="muted mono" style={{ fontSize: ".72rem", whiteSpace: "nowrap" }}>{item.posted ? item.date : "Draf"}</span>}
+            </div>
+            <div style={{ fontWeight: 600, fontSize: ".92rem", lineHeight: 1.3, margin: "4px 0 3px" }}>{item.t}</div>
+            <div className="muted" style={{ fontSize: ".76rem" }}>{item.meta || (item.posted ? "Dipost ke blog" : "Belum dipost")}</div>
+            {clickable && <div style={{ marginTop: 6, fontSize: ".78rem", fontWeight: 600, color: "var(--brand)" }}>Kelola — publish, jadwalkan, tolak →</div>}
+          </div>
+        </div>
+      );
+    }
+    // SOCIAL platforms — correct AR per platform (YouTube 16:9, Facebook 1:1, TikTok/IG/Shorts 9:16)
+    const ar = PLAT_AR[item.plat] || "9 / 16";
+    const vertical = ar === "9 / 16";
+    const fullRow = ar === "16 / 9";
     return (
-      <div key={item.t} onClick={clickable ? () => { setContentModal(i); setContentSched(false); } : undefined} role={clickable ? "button" : undefined} tabIndex={clickable ? 0 : undefined}
-        style={{ position: "relative", aspectRatio: "9 / 16", borderRadius: 14, overflow: "hidden", border: "1px solid var(--line)", cursor: clickable ? "pointer" : "default", background: "var(--ink)", color: "#fff" }}>
+      <div key={item.t} onClick={open} role={clickable ? "button" : undefined} tabIndex={clickable ? 0 : undefined}
+        style={{ position: "relative", aspectRatio: ar, gridColumn: fullRow ? "1 / -1" : "auto", borderRadius: 14, overflow: "hidden", border: "1px solid var(--line)", cursor: clickable ? "pointer" : "default", background: "var(--ink)", color: "#fff" }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={item.img} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: kind === "history" && !item.posted ? "grayscale(.5) brightness(.8)" : "none" }} />
         <div style={{ position: "absolute", top: 0, left: 0, right: 0, padding: "10px 10px 22px", background: "linear-gradient(180deg, rgba(0,0,0,.55), transparent)", display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 6 }}>
@@ -841,10 +869,8 @@ function MemberDashboard() {
             ? <span style={{ fontSize: ".56rem", fontWeight: 700, background: "var(--warn)", color: "#fff", padding: ".2rem .45rem", borderRadius: 999 }}>Menunggu</span>
             : <span style={{ fontSize: ".56rem", fontWeight: 700, background: item.posted ? "var(--good)" : "rgba(255,255,255,.25)", color: "#fff", padding: ".2rem .45rem", borderRadius: 999 }}>{item.posted ? "Terbit" : "Draf"}</span>}
         </div>
-        <div style={{ position: "absolute", right: 7, bottom: 88, display: "grid", gap: 13, justifyItems: "center", filter: "drop-shadow(0 1px 3px rgba(0,0,0,.6))" }}>
-          {RAIL.map((d, k) => <Ic key={k} d={d} s={19} />)}
-        </div>
-        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, padding: "36px 12px 12px", background: "linear-gradient(0deg, rgba(0,0,0,.82), transparent)" }}>
+        {vertical && <div style={{ position: "absolute", right: 7, bottom: 88, display: "grid", gap: 13, justifyItems: "center", filter: "drop-shadow(0 1px 3px rgba(0,0,0,.6))" }}>{RAIL.map((d, k) => <Ic key={k} d={d} s={19} />)}</div>}
+        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, padding: `${vertical ? 36 : 26}px 12px 12px`, background: "linear-gradient(0deg, rgba(0,0,0,.82), transparent)" }}>
           <div style={{ fontWeight: 700, fontSize: ".74rem" }}>@kirana.property</div>
           <div style={{ fontSize: ".82rem", fontWeight: 600, lineHeight: 1.28, margin: "3px 0 4px", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{item.t}</div>
           <div style={{ fontSize: ".66rem", opacity: .82 }}>{item.meta || (item.posted ? item.date : "Belum dipost")}</div>
@@ -892,12 +918,12 @@ function MemberDashboard() {
           {CONTENT_PLATS.map((p) => { const on = contentFilter === p; return <button key={p} onClick={() => setContentFilter(p)} style={{ font: "inherit", fontSize: ".78rem", fontWeight: 600, cursor: "pointer", padding: ".34rem .7rem", borderRadius: 999, border: `1px solid ${on ? "var(--brand)" : "var(--line-2)"}`, background: on ? "color-mix(in oklab, var(--brand) 12%, var(--surface))" : "transparent", color: on ? "var(--brand)" : "var(--ink-2)" }}>{p}</button>; })}
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-          {READY_CONTENT.map((it, i) => (contentFilter === "Semua" || it.plat === contentFilter) ? socialCard(it, i, "ready") : null)}
+          {READY_CONTENT.map((it, i) => (contentFilter === "Semua" || it.plat === contentFilter) ? contentCard(it, i, "ready") : null)}
         </div>
         <h3 className="display" style={{ fontSize: "1.05rem", fontWeight: 600, margin: "24px 0 4px" }}>Riwayat</h3>
         <p className="muted" style={{ fontSize: ".82rem", marginBottom: 12 }}>Konten yang sudah diproduksi & statusnya.</p>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-          {CONTENT_HISTORY.map((h, i) => (contentFilter === "Semua" || h.plat === contentFilter) ? socialCard(h, i, "history") : null)}
+          {CONTENT_HISTORY.map((h, i) => (contentFilter === "Semua" || h.plat === contentFilter) ? contentCard(h, i, "history") : null)}
         </div>
       </Card>
     </div>
@@ -1593,11 +1619,13 @@ function MemberDashboard() {
 
       {contentModal !== null && (() => {
         const it = READY_CONTENT[contentModal];
+        const modalAr = PLAT_AR[it.plat] || "9 / 16";
+        const modalW = modalAr === "16 / 9" ? "min(560px, 94vw)" : modalAr === "1 / 1" ? "min(440px, 94vw)" : "min(340px, 94vw)";
         return (
           <div onClick={() => setContentModal(null)} style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(20,15,9,.55)", backdropFilter: "blur(3px)", display: "grid", placeItems: "center", padding: "clamp(8px,3vw,20px)" }}>
-            <div onClick={(e) => e.stopPropagation()} style={{ width: "min(340px, 94vw)", maxHeight: "92vh", overflow: "auto", background: "var(--surface)", borderRadius: 18, border: "1px solid var(--line)", boxShadow: "0 40px 100px rgba(20,15,9,.4)" }}>
-              {/* 9:16 social-media player */}
-              <div style={{ position: "relative", aspectRatio: "9 / 16", background: "var(--ink)", color: "#fff" }}>
+            <div onClick={(e) => e.stopPropagation()} style={{ width: modalW, maxHeight: "92vh", overflow: "auto", background: "var(--surface)", borderRadius: 18, border: "1px solid var(--line)", boxShadow: "0 40px 100px rgba(20,15,9,.4)" }}>
+              {/* player — aspect ratio matches the platform */}
+              <div style={{ position: "relative", aspectRatio: modalAr, background: "var(--ink)", color: "#fff" }}>
                 {(() => { const pi = PLAT_ICON[it.plat] || PLAT_ICON.Blog; return (<>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={it.img} alt={it.t} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
@@ -1605,7 +1633,7 @@ function MemberDashboard() {
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: ".66rem", fontWeight: 700, background: "rgba(0,0,0,.32)", backdropFilter: "blur(4px)", padding: ".24rem .6rem .24rem .3rem", borderRadius: 999 }}><span style={{ display: "grid", placeItems: "center", width: 18, height: 18, borderRadius: "50%", background: pi.c, color: "#fff" }}><Ic d={pi.d} s={11} /></span>{it.plat}</span>
                     <button onClick={() => setContentModal(null)} aria-label="Tutup" style={{ width: 32, height: 32, borderRadius: "50%", border: "none", cursor: "pointer", background: "rgba(0,0,0,.4)", backdropFilter: "blur(4px)", color: "#fff", fontSize: "1rem" }}>✕</button>
                   </div>
-                  <div style={{ position: "absolute", right: 9, bottom: 96, display: "grid", gap: 15, justifyItems: "center", filter: "drop-shadow(0 1px 3px rgba(0,0,0,.6))" }}>{RAIL.map((d, k) => <Ic key={k} d={d} s={23} />)}</div>
+                  {modalAr === "9 / 16" && <div style={{ position: "absolute", right: 9, bottom: 96, display: "grid", gap: 15, justifyItems: "center", filter: "drop-shadow(0 1px 3px rgba(0,0,0,.6))" }}>{RAIL.map((d, k) => <Ic key={k} d={d} s={23} />)}</div>}
                   <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, padding: "40px 14px 14px", background: "linear-gradient(0deg, rgba(0,0,0,.85), transparent)" }}>
                     <div style={{ fontWeight: 700, fontSize: ".82rem" }}>@kirana.property</div>
                     <div style={{ fontSize: ".92rem", fontWeight: 600, lineHeight: 1.3, margin: "4px 0 5px" }}>{it.t}</div>
@@ -1621,7 +1649,7 @@ function MemberDashboard() {
                       <button onClick={() => setContentSched(true)} style={{ ...btn("ghost"), justifyContent: "center", display: "flex", padding: ".85rem", fontSize: ".95rem" }}>Jadwalkan…</button>
                       <button onClick={() => setContentModal(null)} style={{ ...btn("ghost"), justifyContent: "center", display: "flex", padding: ".85rem", fontSize: ".95rem", color: "var(--crit)", borderColor: "color-mix(in oklab, var(--crit) 40%, var(--line-2))" }}>Tolak konten</button>
                     </div>
-                    {it.body && <details style={{ marginTop: 14 }}><summary style={{ cursor: "pointer", fontSize: ".82rem", fontWeight: 600, color: "var(--ink-2)" }}>Lihat naskah lengkap</summary><div style={{ marginTop: 10, padding: "12px 14px", borderRadius: 12, background: "var(--surface-2)", border: "1px solid var(--line)", maxHeight: 220, overflow: "auto", fontSize: ".88rem", lineHeight: 1.6, whiteSpace: "pre-line" }}>{it.body}</div></details>}
+                    {it.body && <details open={it.plat === "Blog"} style={{ marginTop: 14 }}><summary style={{ cursor: "pointer", fontSize: ".82rem", fontWeight: 600, color: "var(--ink-2)" }}>Lihat naskah lengkap</summary><div style={{ marginTop: 10, padding: "12px 14px", borderRadius: 12, background: "var(--surface-2)", border: "1px solid var(--line)", maxHeight: 220, overflow: "auto", fontSize: ".88rem", lineHeight: 1.6, whiteSpace: "pre-line" }}>{it.body}</div></details>}
                   </>
                 ) : (
                   <>
