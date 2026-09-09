@@ -10,7 +10,6 @@ type Sec = "home" | "builder" | "prospek" | "listing" | "editor" | "content" | "
 const NAV: { id: Sec; label: string; icon: string }[] = [
   { id: "home", label: "Dashboard", icon: "M3 3h8v8H3zM13 3h8v5h-8zM13 10h8v11h-8zM3 13h8v8H3z" },
   { id: "builder", label: "Web Builder", icon: "M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5Zm2 3v11h6V8H5Zm8 0v4h6V8h-6Zm6 6h-6v5h6v-5Z" },
-  { id: "prospek", label: "Prospek", icon: "M4 4h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Zm0 10v5h16v-5h-4a3 3 0 0 1-6 0H4Z" },
   { id: "listing", label: "Listing", icon: "M4 5h16v3H4zM4 10.5h16v3H4zM4 16h16v3H4z" },
   { id: "editor", label: "Editor", icon: "M4 4h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Zm6 3v6l5-3z" },
   { id: "content", label: "Konten", icon: "M6 2h9l5 5v14.2A.8.8 0 0 1 19.2 22H6a.8.8 0 0 1-.8-.8V2.8A.8.8 0 0 1 6 2Zm2 9h8v1.8H8zm0 4h8v1.8H8z" },
@@ -27,6 +26,7 @@ const LEAD_STATUSES = ["Semua", "Baru", "Dihubungi", "Viewing", "Nego"] as const
 const LEAD_TONE: Record<string, string> = { Baru: "--c-heart", Dihubungi: "--c-eye", Viewing: "--c-throat", Nego: "--c-solar", Closing: "--c-sacral" };
 // Phase-2 features — shown in the nav as "Soon", not yet functional
 const COMING: { label: string; icon: string }[] = [
+  { label: "Prospek", icon: "M4 4h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Zm0 10v5h16v-5h-4a3 3 0 0 1-6 0H4Z" },
   { label: "Inbox", icon: "M4 6h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm.4 2 7.6 4.6L19.6 8H4.4Z" },
   { label: "Ads Management", icon: "M4 9v6h3l5 4V5L7 9H4Zm12-2a5 5 0 0 1 0 10v-2a3 3 0 0 0 0-6V7Z" },
   { label: "Calendar", icon: "M7 2v2H5a1 1 0 0 0-1 1v15a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1h-2V2h-2v2H9V2H7Zm-1 6h12v11H6V8Z" },
@@ -172,7 +172,7 @@ const CHANNELS = [
 ] as const;
 type DashTab = (typeof CHANNELS)[number]["id"];
 const INSIGHTS: { tag: string; tone: string; t: string; b: string; when: string; act: [string, Sec] }[] = [
-  { tag: "Peluang", tone: "--c-heart", t: "3 prospek belum ditindaklanjuti lebih dari 48 jam", b: "Respon cepat menaikkan konversi hingga 7×. Balas sekarang untuk menjaga peluang tetap hangat.", when: "Kemarin", act: ["Balas prospek →", "prospek"] },
+  { tag: "Peluang", tone: "--c-heart", t: "Situs Anda siap dioptimalkan untuk SEO & GEO", b: "Perkuat teks dan struktur agar lebih mudah ditemukan pembeli dan dikutip mesin pencari AI.", when: "Kemarin", act: ["Buka Web Builder →", "builder"] },
   { tag: "Sorotan", tone: "--c-solar", t: "Listing Vila Uluwatu naik 32% minggu ini", b: "Kunjungan halaman melonjak setelah reels tur dipublikasikan. Pertimbangkan promosi berbayar selagi momentum tinggi.", when: "2 jam lalu", act: ["Lihat listing →", "listing"] },
   { tag: "Insight", tone: "--c-eye", t: "Pencarian “vila Canggu dekat pantai” meningkat", b: "Volume pencarian area ini +18% bulan ini. Buat konten khusus untuk menangkap minat pembeli.", when: "Kemarin", act: ["Buat konten →", "content"] },
   { tag: "Sorotan", tone: "--c-throat", t: "Reels Anda menembus 12.400 penayangan", b: "Video pendek jadi kanal pertumbuhan tercepat Anda bulan ini — jadwalkan 2 lagi minggu depan.", when: "3 hari lalu", act: ["Buat reels →", "editor"] },
