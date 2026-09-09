@@ -268,14 +268,40 @@ function MemberDashboard() {
   // slot images (data URLs) can be large — keep them out of localStorage to avoid quota errors; they sync to Supabase once the backend is live
   const persistable = ({ imgs, ...rest }: BState) => rest;
   const saveBuilder = () => { try { localStorage.setItem("cakra-builder", JSON.stringify(persistable(builder))); } catch {} setBuilderSaved(true); setTimeout(() => setBuilderSaved(false), 2000); };
-  const onLogo = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // convert any upload to optimized WebP (capped dimensions), with graceful fallback
+  const fileToWebp = (file: File, maxW: number, quality = 0.82): Promise<string> =>
+    new Promise((resolve) => {
+      const fallback = () => { const rd = new FileReader(); rd.onload = () => resolve(String(rd.result)); rd.readAsDataURL(file); };
+      try {
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = () => {
+          try {
+            const scale = Math.min(1, maxW / (img.naturalWidth || maxW));
+            const w = Math.max(1, Math.round((img.naturalWidth || maxW) * scale));
+            const h = Math.max(1, Math.round((img.naturalHeight || maxW) * scale));
+            const c = document.createElement("canvas"); c.width = w; c.height = h;
+            const ctx = c.getContext("2d");
+            if (!ctx) { URL.revokeObjectURL(url); return fallback(); }
+            ctx.drawImage(img, 0, 0, w, h);
+            let out = c.toDataURL("image/webp", quality);
+            if (!out.startsWith("data:image/webp")) out = c.toDataURL("image/jpeg", quality); // browsers without webp encode
+            URL.revokeObjectURL(url); resolve(out);
+          } catch { URL.revokeObjectURL(url); fallback(); }
+        };
+        img.onerror = () => { URL.revokeObjectURL(url); fallback(); };
+        img.src = url;
+      } catch { fallback(); }
+    });
+  const onLogo = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0]; if (!f) return;
-    const rd = new FileReader(); rd.onload = () => setB({ logo: String(rd.result) }); rd.readAsDataURL(f);
+    setB({ logo: await fileToWebp(f, 320, 0.9) });
   };
   const [accOpen, setAccOpen] = useState<Record<string, boolean>>({ logo: true });
-  const onImg = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onImg = (key: string) => async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0]; if (!f) return;
-    const rd = new FileReader(); rd.onload = () => { setBuilder((b) => ({ ...b, imgs: { ...b.imgs, [key]: String(rd.result) } })); setBuilderSaved(false); }; rd.readAsDataURL(f);
+    const url = await fileToWebp(f, 1600, 0.82);
+    setBuilder((b) => ({ ...b, imgs: { ...b.imgs, [key]: url } })); setBuilderSaved(false);
   };
   const clearImg = (key: string) => setBuilder((b) => { const n = { ...b.imgs }; delete n[key]; return { ...b, imgs: n }; });
 
