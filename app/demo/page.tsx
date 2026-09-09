@@ -172,6 +172,7 @@ export default function Demo() {
   return (
     <div className={`${display.variable} ${body.variable} ${script.variable} kir`} id="top">
       <SiteSkin />
+      <Decor color="var(--k-emerald)" />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* DEMO RIBBON — this is a sample site built with cakra */}
@@ -193,7 +194,6 @@ export default function Demo() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/hero-top.webp" alt="Vila premium Bali saat golden hour" className="k-hero-img" />
         <div className="k-hero-scrim" />
-        <Decor />
         <div className="k-wrap k-hero-in">
           <span className="k-kick k-kick-light">spesialis properti bali</span>
           <h1 className="k-h1">Vila & properti premium Bali, dari tangan yang benar-benar paham.</h1>
@@ -485,7 +485,7 @@ export default function Demo() {
           --k-bg:#F2F6F6; --k-surface:#FFFFFF; --k-ink:#1E2A2E; --k-ink-2:#33454B; --k-muted:#5E7178;
           --k-line:#E5ECEC; --k-line-2:#CBD9D9; --k-emerald:#357482; --k-emerald-2:#265863; --k-gold:#B0812F; --k-gold-2:#957026;
           --k-r:16px; --k-r-sm:12px;
-          background:var(--k-bg); color:var(--k-ink); min-height:100vh;
+          background:var(--k-bg); color:var(--k-ink); min-height:100vh; position:relative; isolation:isolate;
           font-family:var(--k-font-body), system-ui, sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased;
         }
         .kir h1,.kir h2,.kir h3{ font-family:var(--k-font-display), Georgia, serif; margin:0; letter-spacing:-.01em; font-weight:600; }

@@ -42,9 +42,9 @@ export function SiteSkin() {
         set("--k-surface", c.bg);
       }
 
-      // background decoration density → data-decor on the hero
+      // background decoration density → data-decor on the page root (behind all content)
       if (cfg.dec && cfg.dec !== "none") {
-        root.querySelector(".k-hero")?.setAttribute("data-decor", String(cfg.dec));
+        root.setAttribute("data-decor", String(cfg.dec));
       }
       // swap decoration motifs to match the tone/style set
       if (cfg.set && DECOR_SETS[cfg.set]) {

@@ -128,10 +128,10 @@ img { max-width: 100%; display: block; }
 .btn-on-photo:hover { background: color-mix(in oklab, var(--surface) 74%, transparent); }
 
 /* ── Web Builder decoration layer — density via ancestor [data-decor] ── */
-.k-decor { display: none; position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.k-decor { display: none; position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: -1; }
 .k-decor-item { position: absolute; }
 .k-decor-item svg { display: block; }
 [data-decor="low"] > .k-decor, [data-decor="high"] > .k-decor { display: block; }
-[data-decor="low"] > .k-decor { opacity: .2; }
-[data-decor="high"] > .k-decor { opacity: .42; }
+[data-decor="low"] > .k-decor { opacity: .09; }
+[data-decor="high"] > .k-decor { opacity: .18; }
 [data-decor="low"] > .k-decor .k-decor-item:nth-child(n+8) { display: none; }

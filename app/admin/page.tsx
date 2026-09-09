@@ -1260,7 +1260,8 @@ function MemberDashboard() {
               <span style={{ width: 9, height: 9, borderRadius: "50%", background: "var(--line-2)" }} /><span style={{ width: 9, height: 9, borderRadius: "50%", background: "var(--line-2)" }} /><span style={{ width: 9, height: 9, borderRadius: "50%", background: "var(--line-2)" }} />
               <span className="mono" style={{ marginLeft: 10, fontSize: ".78rem", color: "var(--muted)" }}>{builder.domain}</span>
             </div>
-            <div style={{ ...pvVars, maxHeight: 560, overflowY: "auto", fontFamily: bFont.body, color: bPal.ink, background: pageBg }}>
+            <div data-decor={builder.decoration} style={{ ...pvVars, position: "relative", isolation: "isolate", fontFamily: bFont.body, color: bPal.ink, background: pageBg }}>
+              <Decor set={builder.tone} color="var(--pv-brand)" />
               {/* nav */}
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: `12px ${bDen.pad}px`, background: bPal.surface, borderBottom: bSty.ruled ? `1px solid color-mix(in oklab, ${bPal.ink} 12%, transparent)` : "1px solid rgba(0,0,0,.05)" }}>
                 <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -1270,8 +1271,7 @@ function MemberDashboard() {
                 <span style={{ display: "flex", gap: 14, fontSize: ".72rem", opacity: .8 }}><span>Beranda</span><span>Listing</span><span>Tentang</span></span>
               </div>
               {/* hero */}
-              <div data-decor={builder.decoration} style={{ position: "relative", overflow: "hidden", background: builder.imgs.hero ? `linear-gradient(115deg, rgba(15,32,38,.82), rgba(15,32,38,.42)), url(${builder.imgs.hero}) center/cover` : heroBg, color: "#fff", padding: `${bDen.pad + 8}px ${bDen.pad}px` }}>
-                <Decor set={builder.tone} />
+              <div style={{ position: "relative", overflow: "hidden", background: builder.imgs.hero ? `linear-gradient(115deg, rgba(15,32,38,.82), rgba(15,32,38,.42)), url(${builder.imgs.hero}) center/cover` : heroBg, color: "#fff", padding: `${bDen.pad + 8}px ${bDen.pad}px` }}>
                 <div style={{ position: "relative" }}>
                 <div style={{ fontSize: ".72rem", fontWeight: 700, color: "rgba(255,255,255,.9)", ...capCss(), marginBottom: 10 }}>{bCopy.eyebrow}</div>
                 <div style={{ fontFamily: bFont.display, fontSize: "1.7rem", fontWeight: 700, lineHeight: 1.15, maxWidth: "18ch" }}>{bCopy.h1}</div>
