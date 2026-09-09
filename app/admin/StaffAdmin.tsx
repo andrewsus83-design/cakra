@@ -31,11 +31,32 @@ const STATS = [
   { l: "Total listing", v: "1.240", d: "+86 minggu ini", c: "--c-throat" },
   { l: "MRR", v: "Rp 42 jt", d: "+8% MoM", c: "--c-solar" },
 ];
-const INTEGRATIONS = [
-  ["Kling 3", "Video AI", true], ["ElevenLabs", "Voice AI", true], ["Firecrawl", "Web scraping", true],
-  ["Perplexity", "Riset AI", true], ["Gemini", "LLM", true], ["Claude", "LLM", true],
-  ["OpenAI", "LLM", false], ["Apify", "Otomasi data", false],
+type ApiItem = { name: string; purpose: string; env: string; where: ("Vercel" | "Supabase")[]; ph?: string };
+const API_KEYS: { group: string; items: ApiItem[] }[] = [
+  { group: "Backend & infra", items: [
+    { name: "Supabase URL", purpose: "Project URL", env: "NEXT_PUBLIC_SUPABASE_URL", where: ["Vercel"], ph: "https://xxxx.supabase.co" },
+    { name: "Supabase anon key", purpose: "Kunci klien publik", env: "NEXT_PUBLIC_SUPABASE_ANON_KEY", where: ["Vercel"] },
+    { name: "Supabase service role", purpose: "Rahasia server/edge", env: "SUPABASE_SERVICE_ROLE_KEY", where: ["Supabase"] },
+  ] },
+  { group: "Layer 1 — Riset (per kota, cached)", items: [
+    { name: "Perplexity", purpose: "Riset & sumber · 20/15 base Sonar", env: "PERPLEXITY_API_KEY", where: ["Supabase"] },
+    { name: "SerpAPI", purpose: "Pencarian sumber · 8/6 · free tier", env: "SERPAPI_API_KEY", where: ["Supabase"] },
+    { name: "Firecrawl", purpose: "Scrape halaman · 34/25 basic · free tier", env: "FIRECRAWL_API_KEY", where: ["Supabase"] },
+  ] },
+  { group: "Layer 2–3 — Index & konten", items: [
+    { name: "Gemini", purpose: "Indexing · Flash-Lite", env: "GEMINI_API_KEY", where: ["Supabase"] },
+    { name: "Anthropic (Claude Sonnet)", purpose: "Komposisi konten · cron (MCP untuk interaktif)", env: "ANTHROPIC_API_KEY", where: ["Supabase"] },
+  ] },
+  { group: "Email & analytics", items: [
+    { name: "Resend", purpose: "Email transaksional + buletin", env: "RESEND_API_KEY", where: ["Supabase"] },
+    { name: "GA4 Measurement ID", purpose: "Google Analytics", env: "NEXT_PUBLIC_GA_ID", where: ["Vercel"], ph: "G-XXXXXXXXXX" },
+  ] },
+  { group: "Video & voice (#5)", items: [
+    { name: "OpenART", purpose: "Render video AI (Kling)", env: "OPENART_API_KEY", where: ["Supabase"] },
+    { name: "ElevenLabs", purpose: "Voice karakter", env: "ELEVENLABS_API_KEY", where: ["Supabase"] },
+  ] },
 ];
+const whereColor = (w: string) => (w === "Vercel" ? "--c-eye" : "--c-throat");
 
 function Ic({ d }: { d: string }) { return <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d={d} /></svg>; }
 function stColor(st: string) { return st === "Aktif" ? "var(--good)" : st === "Trial" ? "var(--warn)" : "var(--crit)"; }
@@ -48,6 +69,8 @@ function Placeholder({ title, sub, note }: { title: string; sub: string; note: s
 
 export function StaffAdmin() {
   const [sec, setSec] = useState<Section>("dashboard");
+  const [keys, setKeys] = useState<Record<string, string>>({});
+  const [saved, setSaved] = useState(false);
 
   const Members = (
     <div className="card" style={{ overflow: "hidden" }}>
@@ -96,20 +119,51 @@ export function StaffAdmin() {
       case "member": return <Panel title="Member" sub="Kelola agen yang terdaftar di cakra.">{Members}</Panel>;
       case "llm":
         return (
-          <Panel title="LLM & API" sub="Integrasi model AI dan layanan pihak ketiga + prompt enhancer.">
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 16, marginBottom: 26 }}>
-              {INTEGRATIONS.map(([n, d, on]) => (
-                <div key={n as string} className="card" style={{ padding: 18, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-                  <div><div style={{ fontWeight: 600 }}>{n}</div><div className="muted" style={{ fontSize: ".82rem" }}>{d}</div></div>
-                  <span style={{ fontSize: ".78rem", fontWeight: 700, color: on ? "var(--good)" : "var(--muted)", background: on ? "color-mix(in oklab, var(--good) 14%, var(--surface))" : "var(--surface-2)", padding: ".28rem .6rem", borderRadius: 999 }}>{on ? "Terhubung" : "Belum"}</span>
+          <Panel title="LLM & API" sub="Kunci API untuk seluruh platform — masukkan sekali, dipakai bersama Supabase & Vercel.">
+            <div className="card" style={{ padding: "14px 18px", marginBottom: 18, background: "color-mix(in oklab, var(--brand) 7%, var(--surface))", borderColor: "color-mix(in oklab, var(--brand) 22%, var(--line))", display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+              <span style={{ fontSize: ".9rem", flex: 1, minWidth: 240 }}>
+                Isi setiap kunci sekali di sini. Tag <b style={{ color: "var(--c-eye)" }}>Vercel</b> = build env (NEXT_PUBLIC_*), <b style={{ color: "var(--c-throat)" }}>Supabase</b> = Edge Function secret tempat pipeline berjalan. Nama env sama di kedua platform.
+              </span>
+              <button onClick={() => { setSaved(true); setTimeout(() => setSaved(false), 2200); }} style={{ background: "var(--brand)", color: "#fff", border: "none", borderRadius: 10, padding: ".6rem 1.2rem", font: "inherit", fontWeight: 600, fontSize: ".9rem", cursor: "pointer", flex: "none" }}>{saved ? "✓ Tersimpan" : "Simpan semua"}</button>
+            </div>
+            {saved && <p style={{ fontSize: ".82rem", color: "var(--good)", margin: "0 0 14px" }}>Kunci akan disinkron ke Supabase Edge secrets & Vercel env saat backend aktif.</p>}
+            <div style={{ display: "grid", gap: 18 }}>
+              {API_KEYS.map((grp) => (
+                <div key={grp.group} className="card" style={{ padding: 20 }}>
+                  <div className="eyebrow" style={{ marginBottom: 12 }}>{grp.group}</div>
+                  <div style={{ display: "grid", gap: 12 }}>
+                    {grp.items.map((it) => {
+                      const filled = !!keys[it.env];
+                      return (
+                        <div key={it.env} style={{ display: "grid", gridTemplateColumns: "minmax(180px, 1fr) 1.4fr", gap: 14, alignItems: "center" }} className="api-row">
+                          <div style={{ minWidth: 0 }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                              <span style={{ fontWeight: 600, fontSize: ".95rem" }}>{it.name}</span>
+                              {it.where.map((w) => (
+                                <span key={w} style={{ fontSize: ".64rem", fontWeight: 700, color: `var(${whereColor(w)})`, background: `color-mix(in oklab, var(${whereColor(w)}) 14%, var(--surface))`, padding: ".12rem .45rem", borderRadius: 999 }}>{w}</span>
+                              ))}
+                            </div>
+                            <div className="muted" style={{ fontSize: ".8rem", marginTop: 2 }}>{it.purpose}</div>
+                            <div className="mono muted" style={{ fontSize: ".72rem", marginTop: 2 }}>{it.env}</div>
+                          </div>
+                          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                            <input type="password" value={keys[it.env] || ""} placeholder={it.ph || "•••••••••••• (tempel kunci)"} onChange={(e) => setKeys((k) => ({ ...k, [it.env]: e.target.value }))} style={{ flex: 1, minWidth: 0, background: "var(--surface-2)", border: "1px solid var(--line-2)", borderRadius: 9, padding: ".55rem .8rem", font: "inherit", fontSize: ".86rem", color: "var(--ink)" }} />
+                            <span style={{ flex: "none", width: 9, height: 9, borderRadius: "50%", background: filled ? "var(--good)" : "var(--line-2)" }} title={filled ? "Terisi" : "Kosong"} />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               ))}
             </div>
-            <div className="card" style={{ padding: 22 }}>
+
+            <div className="card" style={{ padding: 22, marginTop: 18 }}>
               <div style={{ fontWeight: 600, marginBottom: 8 }}>Prompt Enhancer</div>
               <p className="muted" style={{ fontSize: ".92rem", margin: "0 0 12px" }}>Template dasar yang memperkaya setiap prompt agen sebelum dikirim ke model.</p>
               <textarea rows={4} defaultValue={"Anda adalah asisten pemasaran properti untuk agen Indonesia. Tulis dengan nada profesional, hangat, dan meyakinkan. Optimalkan untuk SEO, GEO, dan pencarian sosial…"} style={{ width: "100%", background: "var(--surface-2)", border: "1px solid var(--line-2)", borderRadius: 10, padding: 12, font: "inherit", fontSize: ".92rem", color: "var(--ink)", resize: "vertical" }} />
             </div>
+            <style>{`@media (max-width:640px){ .api-row{ grid-template-columns:1fr !important; } }`}</style>
           </Panel>
         );
       case "assets": return <Placeholder title="Assets" sub="Pustaka gambar & audio bebas royalti untuk semua member." note="Kelola aset pustaka cakra — unggah, kategorikan, bagikan ke member." />;
