@@ -290,7 +290,10 @@ export default function Home() {
 
       {/* TESTIMONIALS */}
       <section className="wrap" style={{ padding: "72px 0 40px" }}>
-        <SectionTitle hand="kata mereka" max="22ch">Agen yang bertumbuh bersama cakra.</SectionTitle>
+        <SectionTitle hand="agen perintis" max="24ch">Dibangun bersama angkatan pertama agen cakra.</SectionTitle>
+        <p className="lead" style={{ textAlign: "center", margin: "-30px auto 40px", maxWidth: "58ch" }}>
+          Kami sedang memilih agen papan atas sebagai angkatan perintis. Berikut gambaran hasil yang kami targetkan bersama mereka.
+        </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 24 }}>
           {TESTI.map((t) => (
             <div key={t.n} className="card" style={{ padding: 30, display: "flex", flexDirection: "column" }}>
@@ -306,6 +309,9 @@ export default function Home() {
             </div>
           ))}
         </div>
+        <p className="muted" style={{ textAlign: "center", marginTop: 20, fontSize: ".8rem" }}>
+          Ilustrasi hasil yang ditargetkan; testimoni terverifikasi dari agen perintis akan tampil di sini.
+        </p>
       </section>
 
       {/* BLOG FROM HUB */}
