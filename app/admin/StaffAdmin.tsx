@@ -44,16 +44,17 @@ const API_KEYS: { group: string; items: ApiItem[] }[] = [
     { name: "Firecrawl", purpose: "Scrape halaman · 34/25 basic · free tier", env: "FIRECRAWL_API_KEY", where: ["Supabase"] },
   ] },
   { group: "Layer 2–3 — Index & konten", items: [
-    { name: "Gemini", purpose: "Indexing · Flash-Lite", env: "GEMINI_API_KEY", where: ["Supabase"] },
+    { name: "Gemini (Google AI Studio)", purpose: "Index Flash-Lite · Nano Banana 2 gambar (batch + real-time) · Kling 3 via Studio", env: "GEMINI_API_KEY", where: ["Supabase"] },
     { name: "Anthropic (Claude Sonnet)", purpose: "Komposisi konten · cron (MCP untuk interaktif)", env: "ANTHROPIC_API_KEY", where: ["Supabase"] },
   ] },
   { group: "Email & analytics", items: [
     { name: "Resend", purpose: "Email transaksional + buletin", env: "RESEND_API_KEY", where: ["Supabase"] },
     { name: "GA4 Measurement ID", purpose: "Google Analytics", env: "NEXT_PUBLIC_GA_ID", where: ["Vercel"], ph: "G-XXXXXXXXXX" },
   ] },
-  { group: "Video & voice (#5)", items: [
-    { name: "OpenART", purpose: "Render video AI (Kling)", env: "OPENART_API_KEY", where: ["Supabase"] },
-    { name: "ElevenLabs", purpose: "Voice karakter", env: "ELEVENLABS_API_KEY", where: ["Supabase"] },
+  { group: "Media generation (gambar #4 · video #5)", items: [
+    { name: "Nano Banana 2 (gambar)", purpose: "Batch in-house + real-time member · pakai kunci Gemini di atas", env: "GEMINI_API_KEY", where: ["Supabase"] },
+    { name: "Kling 3 (video)", purpose: "Render video · API langsung + via Google AI Studio", env: "KLING_API_KEY", where: ["Supabase"] },
+    { name: "ElevenLabs (voice)", purpose: "Voice karakter · 3 permanen per agen", env: "ELEVENLABS_API_KEY", where: ["Supabase"] },
   ] },
 ];
 const whereColor = (w: string) => (w === "Vercel" ? "--c-eye" : "--c-throat");
