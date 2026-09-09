@@ -82,6 +82,14 @@ const CONTENT_HISTORY = [
 ];
 const CONTENT_PLATS = ["Semua", "Blog", "TikTok", "Instagram", "YouTube", "Facebook", "Shorts"] as const;
 const PLAT_AR: Record<string, string> = { Blog: "16 / 9", TikTok: "9 / 16", Instagram: "9 / 16", YouTube: "16 / 9", Facebook: "1 / 1", Shorts: "9 / 16" };
+const PLAT_ICON: Record<string, { d: string; c: string }> = {
+  Blog: { d: "M6 2h9l5 5v14.2A.8.8 0 0 1 19.2 22H6a.8.8 0 0 1-.8-.8V2.8A.8.8 0 0 1 6 2Zm2 9h8v1.8H8zm0 4h8v1.8H8z", c: "#357482" },
+  TikTok: { d: "M14 3c.3 2.2 1.7 3.9 4 4.2v2.5c-1.5 0-2.9-.5-4-1.3v5.9a5.3 5.3 0 1 1-5.3-5.3c.3 0 .6 0 .9.1v2.7a2.6 2.6 0 1 0 1.8 2.5V3H14Z", c: "#111" },
+  Instagram: { d: "M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm5.5-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2ZM7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4Zm0 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7Z", c: "#E1306C" },
+  YouTube: { d: "M21.6 7.2a2.6 2.6 0 0 0-1.8-1.8C18 5 12 5 12 5s-6 0-7.8.4A2.6 2.6 0 0 0 2.4 7.2 27 27 0 0 0 2 12a27 27 0 0 0 .4 4.8 2.6 2.6 0 0 0 1.8 1.8C6 19 12 19 12 19s6 0 7.8-.4a2.6 2.6 0 0 0 1.8-1.8A27 27 0 0 0 22 12a27 27 0 0 0-.4-4.8ZM10 15V9l5 3-5 3Z", c: "#FF0000" },
+  Facebook: { d: "M13 22v-8h2.7l.4-3H13V9c0-.9.3-1.5 1.6-1.5H16V4.9c-.3 0-1.2-.1-2.2-.1-2.2 0-3.8 1.3-3.8 3.9V11H7.5v3H10v8h3Z", c: "#1877F2" },
+  Shorts: { d: "M8 4h8a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4Zm2 5.5v5l4.5-2.5z", c: "#FF0000" },
+};
 // 6 pertanyaan singkat — cukup untuk menulis advertorial/skrip/isi situs yang optimal (SEO/GEO/social/local)
 const AI_QUESTIONS = [
   { key: "audience", q: "Siapa target pembeli/penyewa utama Anda?", ph: "mis. pembeli asing (hak pakai/PT PMA), investor, keluarga lokal, penyewa jangka panjang" },
@@ -816,6 +824,35 @@ function MemberDashboard() {
   );
 
   const platFmt = PLATFORMS.find((p) => p.id === platform)?.fmt ?? "1:1";
+  const RAIL = ["M12 21 4 13a4.5 4.5 0 0 1 8-3 4.5 4.5 0 0 1 8 3z", "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z", "M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7M16 6l-4-4-4 4M12 2v13"];
+  // Social-media style 9:16 content card (mimics the platform post UI)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const socialCard = (item: any, i: number, kind: "ready" | "history") => {
+    const pi = PLAT_ICON[item.plat] || PLAT_ICON.Blog;
+    const clickable = kind === "ready";
+    return (
+      <div key={item.t} onClick={clickable ? () => { setContentModal(i); setContentSched(false); } : undefined} role={clickable ? "button" : undefined} tabIndex={clickable ? 0 : undefined}
+        style={{ position: "relative", aspectRatio: "9 / 16", borderRadius: 14, overflow: "hidden", border: "1px solid var(--line)", cursor: clickable ? "pointer" : "default", background: "var(--ink)", color: "#fff" }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={item.img} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: kind === "history" && !item.posted ? "grayscale(.5) brightness(.8)" : "none" }} />
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, padding: "10px 10px 22px", background: "linear-gradient(180deg, rgba(0,0,0,.55), transparent)", display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 6 }}>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: ".6rem", fontWeight: 700, background: "rgba(0,0,0,.32)", backdropFilter: "blur(4px)", padding: ".2rem .5rem .2rem .26rem", borderRadius: 999 }}><span style={{ display: "grid", placeItems: "center", width: 16, height: 16, borderRadius: "50%", background: pi.c, color: "#fff" }}><Ic d={pi.d} s={10} /></span>{item.plat}</span>
+          {kind === "ready"
+            ? <span style={{ fontSize: ".56rem", fontWeight: 700, background: "var(--warn)", color: "#fff", padding: ".2rem .45rem", borderRadius: 999 }}>Menunggu</span>
+            : <span style={{ fontSize: ".56rem", fontWeight: 700, background: item.posted ? "var(--good)" : "rgba(255,255,255,.25)", color: "#fff", padding: ".2rem .45rem", borderRadius: 999 }}>{item.posted ? "Terbit" : "Draf"}</span>}
+        </div>
+        <div style={{ position: "absolute", right: 7, bottom: 88, display: "grid", gap: 13, justifyItems: "center", filter: "drop-shadow(0 1px 3px rgba(0,0,0,.6))" }}>
+          {RAIL.map((d, k) => <Ic key={k} d={d} s={19} />)}
+        </div>
+        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, padding: "36px 12px 12px", background: "linear-gradient(0deg, rgba(0,0,0,.82), transparent)" }}>
+          <div style={{ fontWeight: 700, fontSize: ".74rem" }}>@kirana.property</div>
+          <div style={{ fontSize: ".82rem", fontWeight: 600, lineHeight: 1.28, margin: "3px 0 4px", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{item.t}</div>
+          <div style={{ fontSize: ".66rem", opacity: .82 }}>{item.meta || (item.posted ? item.date : "Belum dipost")}</div>
+        </div>
+      </div>
+    );
+  };
+
   const Content = (
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18, alignItems: "start" }} className="adm-2">
       {/* LEFT: write */}
@@ -854,49 +891,13 @@ function MemberDashboard() {
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 14 }}>
           {CONTENT_PLATS.map((p) => { const on = contentFilter === p; return <button key={p} onClick={() => setContentFilter(p)} style={{ font: "inherit", fontSize: ".78rem", fontWeight: 600, cursor: "pointer", padding: ".34rem .7rem", borderRadius: 999, border: `1px solid ${on ? "var(--brand)" : "var(--line-2)"}`, background: on ? "color-mix(in oklab, var(--brand) 12%, var(--surface))" : "transparent", color: on ? "var(--brand)" : "var(--ink-2)" }}>{p}</button>; })}
         </div>
-        <div style={{ display: "grid", gap: 12 }}>
-          {READY_CONTENT.map((it, i) => (contentFilter === "Semua" || it.plat === contentFilter) ? (
-            <button key={it.t} onClick={() => { setContentModal(i); setContentSched(false); }} className="adm-thumb" style={{ display: "flex", gap: 12, padding: 10, borderRadius: 12, background: "var(--surface-2)", border: "1px solid var(--line)", cursor: "pointer", font: "inherit", textAlign: "left", width: "100%" }}>
-              <div style={{ width: 96, aspectRatio: PLAT_AR[it.plat] || "16 / 9", borderRadius: 9, overflow: "hidden", flex: "none", background: "var(--surface)" }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={it.img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-              </div>
-              <div style={{ minWidth: 0, flex: 1, display: "flex", flexDirection: "column" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "baseline" }}>
-                  <span style={{ fontSize: ".66rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: ".05em" }}>{it.c}</span>
-                  <span style={{ fontSize: ".62rem", fontWeight: 700, color: "var(--warn)", background: "color-mix(in oklab, var(--warn) 14%, var(--surface))", padding: ".18rem .5rem", borderRadius: 999 }}>Menunggu</span>
-                </div>
-                <div style={{ fontWeight: 600, fontSize: ".94rem", lineHeight: 1.28, margin: "3px 0 4px" }}>{it.t}</div>
-                <div className="muted mono" style={{ fontSize: ".74rem" }}>{it.meta}</div>
-                <div style={{ marginTop: "auto", paddingTop: 8, fontSize: ".8rem", fontWeight: 600, color: "var(--brand)" }}>Kelola — publish, jadwalkan, tolak →</div>
-              </div>
-            </button>
-          ) : null)}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          {READY_CONTENT.map((it, i) => (contentFilter === "Semua" || it.plat === contentFilter) ? socialCard(it, i, "ready") : null)}
         </div>
         <h3 className="display" style={{ fontSize: "1.05rem", fontWeight: 600, margin: "24px 0 4px" }}>Riwayat</h3>
-        <p className="muted" style={{ fontSize: ".82rem", marginBottom: 12 }}>Kapan dipost ke blog & status bagikan/unduh.</p>
-        <div style={{ display: "grid", gap: 12 }}>
-          {CONTENT_HISTORY.map((h) => (contentFilter === "Semua" || h.plat === contentFilter) ? (
-            <div key={h.t} style={{ display: "flex", gap: 12, padding: 10, borderRadius: 12, background: "var(--surface-2)", border: "1px solid var(--line)" }}>
-              <div style={{ width: 96, aspectRatio: PLAT_AR[h.plat] || "16 / 9", borderRadius: 9, overflow: "hidden", flex: "none", position: "relative", background: "var(--surface)" }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={h.img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", filter: h.posted ? "none" : "grayscale(.5)" }} />
-                {!h.posted && <span style={{ position: "absolute", inset: 0, background: "rgba(20,15,9,.35)", color: "#fff", display: "grid", placeItems: "center", fontSize: ".68rem", fontWeight: 700 }}>DRAF</span>}
-              </div>
-              <div style={{ minWidth: 0, flex: 1 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "baseline" }}>
-                  <span style={{ fontSize: ".66rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: ".05em" }}>{h.c}</span>
-                  <span className="muted mono" style={{ fontSize: ".74rem", whiteSpace: "nowrap" }}>{h.posted ? h.date : "Belum dipost"}</span>
-                </div>
-                <div style={{ fontWeight: 600, fontSize: ".94rem", lineHeight: 1.28, margin: "2px 0 8px" }}>{h.t}</div>
-                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                  <span style={tag(h.posted)}>{h.posted ? "Dipost ke blog" : "Belum dipost"}</span>
-                  <span style={tag(h.shared)}>{h.shared ? "Dibagikan" : "Belum dibagikan"}</span>
-                  <span style={tag(h.down)}>{h.down ? "Diunduh" : "Belum diunduh"}</span>
-                </div>
-              </div>
-            </div>
-          ) : null)}
+        <p className="muted" style={{ fontSize: ".82rem", marginBottom: 12 }}>Konten yang sudah diproduksi & statusnya.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          {CONTENT_HISTORY.map((h, i) => (contentFilter === "Semua" || h.plat === contentFilter) ? socialCard(h, i, "history") : null)}
         </div>
       </Card>
     </div>
@@ -1416,7 +1417,8 @@ function MemberDashboard() {
                 <button onClick={() => setAiModal(false)} style={btn("ghost")}>Nanti</button>
               </div>
             )}
-            <p className="muted" style={{ fontSize: ".76rem", marginTop: 14, lineHeight: 1.5 }}>Fitur Pro · digabung otomatis dengan brand, lokasi & gaya bahasa Anda untuk hasil paling relevan.</p>
+            <div style={{ marginTop: 14, padding: "10px 12px", borderRadius: 10, background: "color-mix(in oklab, var(--warn) 9%, var(--surface))", border: "1px solid color-mix(in oklab, var(--warn) 24%, var(--line))", fontSize: ".8rem", color: "var(--ink-2)", lineHeight: 1.5 }}>⏳ SEO, GEO &amp; mesin pencari butuh waktu untuk beradaptasi dengan situs/portal Anda — jangan terlalu sering gonta-ganti agar hasilnya optimal.</div>
+            <p className="muted" style={{ fontSize: ".76rem", marginTop: 12, lineHeight: 1.5 }}>Fitur Pro · digabung otomatis dengan brand, lokasi & gaya bahasa Anda untuk hasil paling relevan.</p>
           </div>
         </div>
       )}
@@ -1593,25 +1595,33 @@ function MemberDashboard() {
         const it = READY_CONTENT[contentModal];
         return (
           <div onClick={() => setContentModal(null)} style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(20,15,9,.55)", backdropFilter: "blur(3px)", display: "grid", placeItems: "center", padding: 20 }}>
-            <div onClick={(e) => e.stopPropagation()} style={{ width: "min(480px, 94vw)", maxHeight: "90vh", overflow: "auto", background: "var(--surface)", borderRadius: 18, border: "1px solid var(--line)", boxShadow: "0 40px 100px rgba(20,15,9,.4)" }}>
-              <div style={{ position: "relative", aspectRatio: PLAT_AR[it.plat] || "16 / 9", width: PLAT_AR[it.plat] === "9 / 16" ? "min(100%, 264px)" : "100%", margin: "0 auto", background: "var(--ink)" }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={it.img} alt={it.t} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-                <span style={{ position: "absolute", top: 12, left: 12, fontSize: ".64rem", fontWeight: 700, letterSpacing: ".05em", textTransform: "uppercase", padding: ".24rem .6rem", borderRadius: 999, color: "#fff", background: "var(--brand)" }}>{it.c}</span>
-                <button onClick={() => setContentModal(null)} aria-label="Tutup" style={{ position: "absolute", top: 12, right: 12, width: 34, height: 34, borderRadius: "50%", border: "none", cursor: "pointer", background: "rgba(255,255,255,.92)", color: "var(--ink)", fontSize: "1rem", display: "grid", placeItems: "center" }}>✕</button>
+            <div onClick={(e) => e.stopPropagation()} style={{ width: "min(340px, 94vw)", maxHeight: "92vh", overflow: "auto", background: "var(--surface)", borderRadius: 18, border: "1px solid var(--line)", boxShadow: "0 40px 100px rgba(20,15,9,.4)" }}>
+              {/* 9:16 social-media player */}
+              <div style={{ position: "relative", aspectRatio: "9 / 16", background: "var(--ink)", color: "#fff" }}>
+                {(() => { const pi = PLAT_ICON[it.plat] || PLAT_ICON.Blog; return (<>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={it.img} alt={it.t} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+                  <div style={{ position: "absolute", top: 0, left: 0, right: 0, padding: "12px 12px 26px", background: "linear-gradient(180deg, rgba(0,0,0,.55), transparent)", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: ".66rem", fontWeight: 700, background: "rgba(0,0,0,.32)", backdropFilter: "blur(4px)", padding: ".24rem .6rem .24rem .3rem", borderRadius: 999 }}><span style={{ display: "grid", placeItems: "center", width: 18, height: 18, borderRadius: "50%", background: pi.c, color: "#fff" }}><Ic d={pi.d} s={11} /></span>{it.plat}</span>
+                    <button onClick={() => setContentModal(null)} aria-label="Tutup" style={{ width: 32, height: 32, borderRadius: "50%", border: "none", cursor: "pointer", background: "rgba(0,0,0,.4)", backdropFilter: "blur(4px)", color: "#fff", fontSize: "1rem" }}>✕</button>
+                  </div>
+                  <div style={{ position: "absolute", right: 9, bottom: 96, display: "grid", gap: 15, justifyItems: "center", filter: "drop-shadow(0 1px 3px rgba(0,0,0,.6))" }}>{RAIL.map((d, k) => <Ic key={k} d={d} s={23} />)}</div>
+                  <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, padding: "40px 14px 14px", background: "linear-gradient(0deg, rgba(0,0,0,.85), transparent)" }}>
+                    <div style={{ fontWeight: 700, fontSize: ".82rem" }}>@kirana.property</div>
+                    <div style={{ fontSize: ".92rem", fontWeight: 600, lineHeight: 1.3, margin: "4px 0 5px" }}>{it.t}</div>
+                    <div style={{ fontSize: ".72rem", opacity: .85 }}>{it.meta}</div>
+                  </div>
+                </>); })()}
               </div>
-              <div style={{ padding: 22 }}>
-                <div className="muted mono" style={{ fontSize: ".74rem" }}>{it.meta}</div>
-                <h3 className="display" style={{ fontSize: "1.25rem", fontWeight: 700, margin: "4px 0 0" }}>{it.t}</h3>
+              <div style={{ padding: 18 }}>
                 {!contentSched ? (
                   <>
-                    <div style={{ margin: "12px 0 14px", padding: "14px 16px", borderRadius: 12, background: "var(--surface-2)", border: "1px solid var(--line)", maxHeight: 240, overflow: "auto", fontSize: ".9rem", lineHeight: 1.65, color: "var(--ink)", whiteSpace: "pre-line" }}>{it.body}</div>
-                    <p className="muted" style={{ fontSize: ".86rem", margin: "0 0 14px" }}>Konten ini siap diterbitkan. Pilih tindakan.</p>
                     <div style={{ display: "grid", gap: 10 }}>
                       <button onClick={() => setContentModal(null)} style={{ ...btn("brand"), justifyContent: "center", display: "flex", padding: ".85rem", fontSize: ".95rem" }}>Publish sekarang</button>
                       <button onClick={() => setContentSched(true)} style={{ ...btn("ghost"), justifyContent: "center", display: "flex", padding: ".85rem", fontSize: ".95rem" }}>Jadwalkan…</button>
                       <button onClick={() => setContentModal(null)} style={{ ...btn("ghost"), justifyContent: "center", display: "flex", padding: ".85rem", fontSize: ".95rem", color: "var(--crit)", borderColor: "color-mix(in oklab, var(--crit) 40%, var(--line-2))" }}>Tolak konten</button>
                     </div>
+                    {it.body && <details style={{ marginTop: 14 }}><summary style={{ cursor: "pointer", fontSize: ".82rem", fontWeight: 600, color: "var(--ink-2)" }}>Lihat naskah lengkap</summary><div style={{ marginTop: 10, padding: "12px 14px", borderRadius: 12, background: "var(--surface-2)", border: "1px solid var(--line)", maxHeight: 220, overflow: "auto", fontSize: ".88rem", lineHeight: 1.6, whiteSpace: "pre-line" }}>{it.body}</div></details>}
                   </>
                 ) : (
                   <>
