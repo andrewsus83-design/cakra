@@ -1271,7 +1271,7 @@ function MemberDashboard() {
         {/* ---------------- Live preview ---------------- */}
         <div className="bld-preview" style={{ display: "grid", gap: 14 }}>
           {/* Premium AI upsell — above the publish action */}
-          <div style={{ position: "relative", overflow: "hidden", borderRadius: 16, padding: "18px 20px", background: "linear-gradient(125deg, #16292E 0%, #0E1F23 58%, #1A3238 100%)", border: "1px solid rgba(231,200,146,.28)", boxShadow: "0 22px 55px -26px rgba(15,32,38,.65)" }}>
+          <div style={{ position: "relative", overflow: "hidden", borderRadius: 16, padding: "18px 20px", background: "linear-gradient(125deg, #16292E 0%, #0E1F23 58%, #1A3238 100%)", border: "1px solid rgba(231,200,146,.28)" }}>
             <div style={{ position: "absolute", inset: 0, background: "radial-gradient(130px 130px at 90% -12%, rgba(231,200,146,.24), transparent 70%)", pointerEvents: "none" }} />
             <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 14, flexWrap: "wrap" }}>
               <div style={{ minWidth: 0, flex: 1 }}>
@@ -1289,10 +1289,10 @@ function MemberDashboard() {
             <span style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: ".76rem", fontWeight: 700, color: "var(--good)", background: "color-mix(in oklab, var(--good) 12%, var(--surface))", padding: ".3rem .65rem", borderRadius: 999 }}><span style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--good)" }} /> Pratinjau langsung · realtime</span>
             <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
               {builderSaved && !published && <span style={{ fontSize: ".8rem", fontWeight: 600, color: "var(--good)" }}>✓ Tersimpan</span>}
-              <button style={{ ...btn("ghost"), padding: ".5rem .85rem", fontSize: ".84rem" }} onClick={() => { setBuilder(BUILDER_DEFAULT); clearLocks(); }}>Reset</button>
-              <button style={{ ...btn("ghost"), padding: ".5rem .85rem", fontSize: ".84rem" }} onClick={saveBuilder}>Simpan draf</button>
-              <button style={{ ...btn("ghost"), padding: ".5rem .85rem", fontSize: ".84rem" }} onClick={viewLive}>Lihat situs ↗</button>
-              <button style={{ ...btn("brand"), padding: ".5rem 1.15rem", fontSize: ".84rem" }} onClick={publishSite}>Terbitkan situs</button>
+              <button style={{ ...btn("ghost"), background: "var(--surface-2)", padding: ".55rem .9rem", fontSize: ".84rem" }} onClick={() => { setBuilder(BUILDER_DEFAULT); clearLocks(); }}>Reset</button>
+              <button style={{ ...btn("ghost"), background: "var(--surface-2)", padding: ".55rem .9rem", fontSize: ".84rem" }} onClick={saveBuilder}>Simpan draf</button>
+              <button style={{ ...btn("ghost"), background: "color-mix(in oklab, var(--brand) 10%, var(--surface))", color: "var(--brand)", borderColor: "color-mix(in oklab, var(--brand) 40%, var(--line-2))", padding: ".55rem .9rem", fontSize: ".84rem" }} onClick={viewLive}>Lihat situs ↗</button>
+              <button style={{ ...btn("brand"), padding: ".55rem 1.25rem", fontSize: ".86rem", boxShadow: "0 10px 22px -10px color-mix(in oklab, var(--brand) 60%, transparent)" }} onClick={publishSite}>Terbitkan situs</button>
             </div>
           </div>
 

@@ -41,6 +41,13 @@ export function SiteSkin() {
         root.style.background = c.bg;
         set("--k-surface", c.bg);
       }
+      // make the mode obvious on the hero (biggest surface) by tinting its scrim
+      const scrim = root.querySelector(".k-hero-scrim") as HTMLElement | null;
+      if (scrim && c.em) {
+        if (cfg.bg === "gradient") scrim.style.background = `linear-gradient(120deg, color-mix(in oklab, ${c.em} 86%, transparent), color-mix(in oklab, ${c.go || c.em} 56%, transparent) 66%, color-mix(in oklab, ${c.em} 16%, transparent))`;
+        else if (cfg.bg === "mono") scrim.style.background = `linear-gradient(115deg, color-mix(in oklab, ${c.em} 82%, transparent), color-mix(in oklab, ${c.em} 40%, transparent))`;
+        // dual keeps the default dark scrim
+      }
 
       // background decoration density → data-decor on the page root (behind all content)
       if (cfg.dec && cfg.dec !== "none") {
