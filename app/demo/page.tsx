@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Manrope, Dancing_Script } from "next/font/google";
 import { SiteSkin } from "./SiteSkin";
+import { Decor } from "@/components/Decor";
 
 const display = Playfair_Display({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--k-font-display" });
 const body = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], variable: "--k-font-body" });
@@ -183,6 +184,7 @@ export default function Demo() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/hero-top.webp" alt="Vila premium Bali saat golden hour" className="k-hero-img" />
         <div className="k-hero-scrim" />
+        <Decor />
         <div className="k-wrap k-hero-in">
           <span className="k-kick k-kick-light">spesialis properti bali</span>
           <h1 className="k-h1">Vila & properti premium Bali, dari tangan yang benar-benar paham.</h1>

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { CakraMark } from "@/components/CakraMark";
+import { Decor } from "@/components/Decor";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { StaffAdmin } from "./StaffAdmin";
 
@@ -96,12 +97,12 @@ const VOICE_STYLES = ["Hangat", "Berwibawa", "Energetik", "Lembut", "Profesional
 
 // ---------- Web Builder (deterministic "machine" — no AI credits to build) ----------
 type BState = {
-  radius: string; bg: string; fontId: string; paletteId: string; density: string; styleId: string; tone: string;
+  radius: string; bg: string; decoration: string; fontId: string; paletteId: string; density: string; styleId: string; tone: string;
   brand: string; tagline: string; metaTitle: string; metaDesc: string; logo: string; domain: string;
   wa: string; instagram: string; tiktok: string; youtube: string; facebook: string;
 };
 const BUILDER_DEFAULT: BState = {
-  radius: "semi", bg: "dual", fontId: "anggun", paletteId: "coastal", density: "normal", styleId: "lembut", tone: "normal",
+  radius: "semi", bg: "dual", decoration: "none", fontId: "anggun", paletteId: "coastal", density: "normal", styleId: "lembut", tone: "normal",
   brand: "Kirana", tagline: "Spesialis Properti Premium Bali",
   metaTitle: "Kirana — Spesialis Properti Premium Bali (Jual & Sewa)",
   metaDesc: "Vila & properti premium di Canggu, Seminyak, Uluwatu, Jimbaran & Ubud. Didampingi dari kurasi, negosiasi, hingga serah terima yang aman & legal.",
@@ -115,6 +116,9 @@ const B_RADII = [
 ] as const;
 const B_BGS = [
   { id: "mono", label: "Mono" }, { id: "dual", label: "Dual" }, { id: "gradient", label: "Gradasi" },
+] as const;
+const B_DECOR = [
+  { id: "none", label: "Tanpa" }, { id: "low", label: "Sedikit" }, { id: "high", label: "Banyak" },
 ] as const;
 const B_FONTS = [
   { id: "anggun", label: "Anggun", display: "'Playfair Display', Georgia, serif", body: "'Manrope', system-ui, sans-serif" },
@@ -1020,9 +1024,13 @@ function MemberDashboard() {
   const bDen = B_DENSITIES.find((x) => x.id === builder.density)!;
   const bSty = B_STYLES.find((x) => x.id === builder.styleId)!;
   const bCopy = B_TONE_COPY[builder.tone];
-  const pageBg = builder.bg === "gradient" ? `linear-gradient(160deg, ${bPal.bg}, color-mix(in oklab, ${bPal.accent} 10%, ${bPal.bg}))` : bPal.bg;
+  const pageBg = builder.bg === "gradient"
+    ? `linear-gradient(160deg, ${bPal.bg}, color-mix(in oklab, ${bPal.accent} 13%, ${bPal.bg}))`
+    : builder.bg === "dual"
+    ? `linear-gradient(180deg, ${bPal.bg}, color-mix(in oklab, ${bPal.brand} 6%, ${bPal.bg}))`
+    : bPal.bg;
   const heroBg = builder.bg === "mono" ? bPal.brand : builder.bg === "gradient" ? `linear-gradient(135deg, ${bPal.accent}, ${bPal.brand} 62%)` : `linear-gradient(118deg, ${bPal.brand}, color-mix(in oklab, ${bPal.brand} 60%, #000))`;
-  const bandBg = builder.bg === "dual" ? `color-mix(in oklab, ${bPal.brand} 7%, ${bPal.surface})` : bPal.surface;
+  const bandBg = builder.bg === "mono" ? bPal.bg : builder.bg === "gradient" ? "transparent" : bPal.surface;
   const pvVars = { "--pv-brand": bPal.brand, "--pv-accent": bPal.accent, "--pv-ink": bPal.ink, "--pv-bg": bPal.bg, "--pv-surface": bPal.surface } as React.CSSProperties;
   const capCss = (): React.CSSProperties => ({ textTransform: bSty.caps ? "uppercase" : "none", letterSpacing: bSty.caps ? ".14em" : ".08em" });
   const socialChips = [
@@ -1040,6 +1048,7 @@ function MemberDashboard() {
     col: { em: bPal.brand, go: bPal.accent, bg: bPal.bg, ink: bPal.ink },
     r: { r: bRad.card, s: bRad.btn },
     font: { d: bFont.display, b: bFont.body },
+    bg: builder.bg, dec: builder.decoration,
     soc: { wa: builder.wa, ig: builder.instagram, tt: builder.tiktok, yt: builder.youtube, fb: builder.facebook },
   });
   const encodeSite = () => { try { return btoa(encodeURIComponent(JSON.stringify(siteCfg()))); } catch { return ""; } };
@@ -1105,6 +1114,7 @@ function MemberDashboard() {
           <Card>
             <H>Warna & huruf</H>
             {bField("Latar", <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{B_BGS.map((o) => <button key={o.id} onClick={() => setB({ bg: o.id })} style={segBtn(builder.bg === o.id)}>{o.label}</button>)}</div>)}
+            {bField("Dekorasi latar", <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{B_DECOR.map((o) => <button key={o.id} onClick={() => setB({ decoration: o.id })} style={segBtn(builder.decoration === o.id)}>{o.label}</button>)}</div>, "Pesawat kertas, pena, titik…")}
             {bField("Palet warna", <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>{B_PALETTES.map((p) => {
               const on = builder.paletteId === p.id;
               return <button key={p.id} onClick={() => setB({ paletteId: p.id })} style={{ display: "flex", alignItems: "center", gap: 9, padding: ".5rem .6rem", borderRadius: 10, cursor: "pointer", font: "inherit", fontSize: ".8rem", fontWeight: 600, textAlign: "left", border: `1px solid ${on ? "var(--brand)" : "var(--line-2)"}`, background: on ? "color-mix(in oklab, var(--brand) 10%, var(--surface))" : "transparent", color: "var(--ink)" }}>
@@ -1177,11 +1187,14 @@ function MemberDashboard() {
                 <span style={{ display: "flex", gap: 14, fontSize: ".72rem", opacity: .8 }}><span>Beranda</span><span>Listing</span><span>Tentang</span></span>
               </div>
               {/* hero */}
-              <div style={{ background: heroBg, color: "#fff", padding: `${bDen.pad + 8}px ${bDen.pad}px` }}>
+              <div data-decor={builder.decoration} style={{ position: "relative", overflow: "hidden", background: heroBg, color: "#fff", padding: `${bDen.pad + 8}px ${bDen.pad}px` }}>
+                <Decor />
+                <div style={{ position: "relative" }}>
                 <div style={{ fontSize: ".72rem", fontWeight: 700, color: "rgba(255,255,255,.9)", ...capCss(), marginBottom: 10 }}>{bCopy.eyebrow}</div>
                 <div style={{ fontFamily: bFont.display, fontSize: "1.7rem", fontWeight: 700, lineHeight: 1.15, maxWidth: "18ch" }}>{bCopy.h1}</div>
                 <p style={{ fontSize: ".9rem", lineHeight: bDen.lh, color: "rgba(255,255,255,.86)", maxWidth: "40ch", marginTop: 12 }}>{bCopy.sub}</p>
                 <button style={{ marginTop: 16, border: "none", cursor: "default", padding: ".65rem 1.3rem", borderRadius: bRad.btn, background: bPal.accent, color: "#fff", fontWeight: 700, fontSize: ".86rem", fontFamily: bFont.body }}>{bCopy.cta}</button>
+                </div>
               </div>
               {/* listing */}
               <div style={{ padding: `${bDen.pad}px`, background: bandBg }}>

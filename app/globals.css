@@ -126,3 +126,12 @@ img { max-width: 100%; display: block; }
 .btn-on-photo { background: color-mix(in oklab, var(--surface) 50%, transparent); color: var(--ink);
   border: 1px solid color-mix(in oklab, var(--ink) 22%, transparent); backdrop-filter: blur(6px); }
 .btn-on-photo:hover { background: color-mix(in oklab, var(--surface) 74%, transparent); }
+
+/* ── Web Builder decoration layer — density via ancestor [data-decor] ── */
+.k-decor { display: none; position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.k-decor-item { position: absolute; }
+.k-decor-item svg { display: block; }
+[data-decor="low"] > .k-decor, [data-decor="high"] > .k-decor { display: block; }
+[data-decor="low"] > .k-decor { opacity: .12; }
+[data-decor="high"] > .k-decor { opacity: .28; }
+[data-decor="low"] > .k-decor .k-decor-item:nth-child(n+8) { display: none; }

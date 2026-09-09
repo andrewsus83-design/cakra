@@ -33,6 +33,19 @@ export function SiteSkin() {
         set("--k-r-sm", cfg.r.s >= 999 ? "999px" : `${cfg.r.s}px`);
       }
 
+      // background mode (dual = template default, left untouched)
+      if (cfg.bg === "gradient" && c.bg) {
+        root.style.background = `linear-gradient(165deg, ${c.bg}, color-mix(in oklab, ${c.go || c.bg} 14%, ${c.bg}))`;
+      } else if (cfg.bg === "mono" && c.bg) {
+        root.style.background = c.bg;
+        set("--k-surface", c.bg);
+      }
+
+      // background decoration density → data-decor on the hero
+      if (cfg.dec && cfg.dec !== "none") {
+        root.querySelector(".k-hero")?.setAttribute("data-decor", String(cfg.dec));
+      }
+
       if (cfg.font) {
         if (!document.getElementById("cakra-skin-fonts")) {
           const l = document.createElement("link");
