@@ -34,6 +34,9 @@ const API_KEYS: { group: string; items: ApiItem[] }[] = [
     { name: "SerpAPI", purpose: "Pencarian sumber · 8/6 · free tier", env: "SERPAPI_API_KEY", where: ["Supabase"] },
     { name: "Firecrawl", purpose: "Scrape halaman · 34/25 basic · free tier", env: "FIRECRAWL_API_KEY", where: ["Supabase"] },
   ] },
+  { group: "Learning engine — ingest & render", items: [
+    { name: "Apify", purpose: "Instagram reel scraper · ingest 100+ video/agen (Step 1) · ~$1/1k reels + transkrip", env: "APIFY_TOKEN", where: ["Supabase"], ph: "apify_api_..." },
+  ] },
   { group: "Layer 2–3 — Index & konten", items: [
     { name: "Gemini (Google AI Studio)", purpose: "Index Flash-Lite · Nano Banana 2 gambar (batch + real-time) · Kling 3 via Studio", env: "GEMINI_API_KEY", where: ["Supabase"] },
     { name: "Anthropic (Claude Sonnet)", purpose: "Komposisi konten · cron (MCP untuk interaktif)", env: "ANTHROPIC_API_KEY", where: ["Supabase"] },
