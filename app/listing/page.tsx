@@ -1,28 +1,17 @@
 "use client";
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { publicAllListings } from "@/lib/supabase";
 
 type Listing = {
   id: number; title: string; area: string; city: string; status: "jual" | "sewa";
-  price: number; beds: number; baths: number; size: number; img: string; agent: string; featured?: boolean;
+  price: number; priceLabel?: string; beds: number; baths: number; size: number; img: string; agent: string; subdomain?: string; featured?: boolean;
 };
 
-const LISTINGS: Listing[] = [
-  { id: 1, title: "Vila Puri Senja", area: "Canggu", city: "Bali", status: "jual", price: 8_500_000_000, beds: 4, baths: 4, size: 320, img: "/about/hero.webp", agent: "Andi Pratama", featured: true },
-  { id: 2, title: "Rumah Modern Dago", area: "Dago", city: "Bandung", status: "jual", price: 4_200_000_000, beds: 4, baths: 3, size: 260, img: "/hero.webp", agent: "Sarah Wijaya" },
-  { id: 3, title: "Apartemen SCBD Suites", area: "SCBD", city: "Jakarta", status: "sewa", price: 180_000_000, beds: 2, baths: 2, size: 96, img: "/about/invite.webp", agent: "Budi Santoso" },
-  { id: 4, title: "Townhouse Kemang", area: "Kemang", city: "Jakarta", status: "jual", price: 6_800_000_000, beds: 3, baths: 3, size: 210, img: "/punch.webp", agent: "Andi Pratama", featured: true },
-  { id: 5, title: "Vila Ubud Retreat", area: "Ubud", city: "Bali", status: "jual", price: 12_000_000_000, beds: 5, baths: 5, size: 480, img: "/about/transform.webp", agent: "Made Surya", featured: true },
-  { id: 6, title: "Rumah Cluster BSD", area: "BSD City", city: "Tangerang", status: "jual", price: 2_400_000_000, beds: 3, baths: 2, size: 140, img: "/blog-0.webp", agent: "Sarah Wijaya" },
-  { id: 7, title: "Loft Menteng", area: "Menteng", city: "Jakarta", status: "sewa", price: 240_000_000, beds: 2, baths: 2, size: 120, img: "/blog-1.webp", agent: "Budi Santoso" },
-  { id: 8, title: "Vila Jimbaran Bay", area: "Jimbaran", city: "Bali", status: "jual", price: 9_300_000_000, beds: 4, baths: 4, size: 360, img: "/hero-top.webp", agent: "Made Surya", featured: true },
-  { id: 9, title: "Rumah Sentul City", area: "Sentul", city: "Bogor", status: "jual", price: 1_800_000_000, beds: 3, baths: 2, size: 130, img: "/blog-2.webp", agent: "Sarah Wijaya" },
-  { id: 10, title: "Penthouse Thamrin", area: "Thamrin", city: "Jakarta", status: "sewa", price: 480_000_000, beds: 3, baths: 3, size: 180, img: "/about/vision.webp", agent: "Budi Santoso" },
-  { id: 11, title: "Rumah Sanur Garden", area: "Sanur", city: "Bali", status: "jual", price: 5_600_000_000, beds: 4, baths: 3, size: 300, img: "/blog-1.webp", agent: "Made Surya" },
-  { id: 12, title: "Cluster Summarecon", area: "Summarecon", city: "Bekasi", status: "jual", price: 1_500_000_000, beds: 2, baths: 2, size: 98, img: "/hero.webp", agent: "Andi Pratama" },
-];
+// The public marketplace shows only real agent listings an admin has approved for the public
+// feed (via publicAllListings). No editorial/dummy seed — an empty feed shows a clean empty state.
+const SEED: Listing[] = [];
 
-const CITIES = ["Semua", ...Array.from(new Set(LISTINGS.map((l) => l.city)))];
 const PRICE_BANDS = [
   { label: "Semua harga", min: 0, max: Infinity },
   { label: "< Rp 2 M", min: 0, max: 2_000_000_000 },
@@ -50,19 +39,46 @@ export default function Page() {
   const [city, setCity] = useState("Semua");
   const [band, setBand] = useState(0);
   const [saved, setSaved] = useState<Record<number, boolean>>({});
+  const [data, setData] = useState<Listing[]>(SEED);
   const railRef = useRef<HTMLDivElement>(null);
 
-  const featured = LISTINGS.filter((l) => l.featured);
+  // Load the general marketplace — agent listings an admin has approved for the public feed.
+  // Falls back to the editorial SEED set when nothing is approved yet, so the page never looks empty.
+  useEffect(() => {
+    publicAllListings(120).then((rows) => {
+      if (!rows.length) return;
+      const mapped: Listing[] = rows.map((r: any, i: number) => ({
+        id: i + 1,
+        title: r.title || "Properti",
+        area: r.area || r.location || "",
+        city: r.agent_city || r.location || "—",
+        status: String(r.status) === "disewa" ? "sewa" : "jual",
+        price: Number(r.price) || 0,
+        priceLabel: r.price_label || undefined,
+        beds: r.beds || 0, baths: r.baths || 0, size: Number(r.size_m2) || 0,
+        img: (Array.isArray(r.images) && r.images[0]) || "/hero.webp",
+        agent: r.agent_brand || r.agent_name || "Agen cakra",
+        subdomain: r.agent_subdomain || undefined,
+        featured: i < 5,
+      }));
+      setData(mapped);
+      setCity("Semua");
+    });
+  }, []);
+
+  const CITIES = useMemo(() => ["Semua", ...Array.from(new Set(data.map((l) => l.city).filter(Boolean)))], [data]);
+  const priceText = (l: Listing) => l.priceLabel || rp(l.price);
+  const featured = data.filter((l) => l.featured);
   const filtered = useMemo(
     () =>
-      LISTINGS.filter((l) => {
+      data.filter((l) => {
         if (status !== "semua" && l.status !== status) return false;
         if (city !== "Semua" && l.city !== city) return false;
         const b = PRICE_BANDS[band];
         if (l.price < b.min || l.price >= b.max) return false;
         return true;
       }),
-    [status, city, band]
+    [data, status, city, band]
   );
 
   const scrollRail = (dir: number) => railRef.current?.scrollBy({ left: dir * 420, behavior: "smooth" });
@@ -79,7 +95,7 @@ export default function Page() {
       </section>
 
       {/* featured carousel */}
-      <section className="wrap" style={{ padding: "18px 0 8px" }}>
+      {featured.length > 0 && <section className="wrap" style={{ padding: "18px 0 8px" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
           <div className="eyebrow">Featured</div>
           <div style={{ display: "flex", gap: 8 }}>
@@ -100,12 +116,12 @@ export default function Page() {
                 </div>
                 <h3 className="display" style={{ color: "#fff", fontSize: "1.7rem", fontWeight: 700, margin: 0 }}>{l.title}</h3>
                 <div style={{ color: "rgba(255,255,255,.9)", fontSize: ".95rem", marginTop: 4 }}>{l.area}, {l.city}</div>
-                <div className="mono" style={{ color: "#fff", fontSize: "1.25rem", fontWeight: 700, marginTop: 10 }}>{rp(l.price)}{l.status === "sewa" && <span style={{ fontSize: ".8rem", fontWeight: 500 }}> /thn</span>}</div>
+                <div className="mono" style={{ color: "#fff", fontSize: "1.25rem", fontWeight: 700, marginTop: 10 }}>{priceText(l)}{l.status === "sewa" && !l.priceLabel && <span style={{ fontSize: ".8rem", fontWeight: 500 }}> /thn</span>}</div>
               </div>
             </article>
           ))}
         </div>
-      </section>
+      </section>}
 
       {/* filters */}
       <section className="wrap" style={{ padding: "26px 0 8px" }}>
@@ -152,15 +168,15 @@ export default function Page() {
                   <div className="muted" style={{ fontSize: ".92rem", marginTop: 2 }}>{l.area}, {l.city}</div>
                   <div className="muted" style={{ fontSize: ".88rem", marginTop: 1 }}>{l.beds} KT · {l.baths} KM · {l.size} m²</div>
                   <div style={{ marginTop: 7, fontSize: "1.02rem", color: "var(--ink)" }}>
-                    <b className="mono">{rp(l.price)}</b>
-                    {l.status === "sewa" ? <span className="muted" style={{ fontWeight: 500 }}> /thn</span> : <span className="muted" style={{ fontSize: ".88rem", fontWeight: 500 }}> · {l.agent}</span>}
+                    <b className="mono">{priceText(l)}</b>
+                    {l.status === "sewa" ? <span className="muted" style={{ fontWeight: 500 }}>{l.priceLabel ? "" : " /thn"}</span> : <span className="muted" style={{ fontSize: ".88rem", fontWeight: 500 }}> · {l.agent}</span>}
                   </div>
                 </div>
               </article>
             );
           })}
         </div>
-        {filtered.length === 0 && <p className="muted" style={{ textAlign: "center", padding: "40px 0" }}>Tidak ada properti yang cocok dengan filter Anda.</p>}
+        {filtered.length === 0 && <p className="muted" style={{ textAlign: "center", padding: "56px 0" }}>{data.length === 0 ? "Belum ada listing publik — properti dari para agen cakra akan tampil di sini." : "Tidak ada properti yang cocok dengan filter Anda."}</p>}
       </section>
 
       <style>{`

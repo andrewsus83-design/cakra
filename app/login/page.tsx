@@ -1,10 +1,21 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { CakraMark } from "@/components/CakraMark";
+import { auth } from "@/lib/supabase";
 
+// Functional login card on the marketing hero. Password sign-in sets the session, then we hand off to
+// /admin where AuthGate resolves it (2FA challenge/enroll if needed) and renders the dashboard. The
+// "Lupa sandi?" link opens an inline reset-request that calls the send-reset Edge Function (Resend).
 export default function Login() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [mode, setMode] = useState<"in" | "forgot">("in");
+  const [email, setEmail] = useState("");
+  const [pw, setPw] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  const [sent, setSent] = useState(false);
+
   useEffect(() => {
     let t: "light" | "dark" = "light";
     try { const s = localStorage.getItem("cakra-theme"); t = s === "dark" || s === "light" ? s : window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } catch {}
@@ -12,6 +23,24 @@ export default function Login() {
     document.documentElement.setAttribute("data-theme", t);
   }, []);
   const toggleTheme = () => { const n = theme === "dark" ? "light" : "dark"; setTheme(n); document.documentElement.setAttribute("data-theme", n); try { localStorage.setItem("cakra-theme", n); } catch {} };
+
+  const submitLogin = async (e: FormEvent) => {
+    e.preventDefault(); setErr(null); setBusy(true);
+    try {
+      await auth.signIn(email.trim(), pw);
+      window.location.href = "/admin"; // AuthGate resolves the session (+2FA) and routes to the dashboard
+    } catch (e: any) { setErr(e?.message || "Email atau kata sandi salah."); setBusy(false); }
+  };
+
+  const submitForgot = async (e: FormEvent) => {
+    e.preventDefault(); setErr(null); setBusy(true);
+    try { await auth.recover(email.trim()); setSent(true); }
+    catch (e: any) { setErr(e?.message || "Gagal mengirim. Coba lagi."); }
+    finally { setBusy(false); }
+  };
+
+  const goForgot = () => { setMode("forgot"); setErr(null); setSent(false); };
+  const goLogin = () => { setMode("in"); setErr(null); setSent(false); };
 
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 100, overflow: "auto", display: "flex", flexDirection: "column" }}>
@@ -38,31 +67,58 @@ export default function Login() {
 
       <div style={{ position: "relative", flex: 1, display: "grid", placeItems: "center", padding: "10px 24px 60px" }}>
         <div className="card" style={{ padding: "clamp(26px,4vw,40px)", width: "min(440px, 94vw)", boxShadow: "0 30px 80px rgba(20,15,9,.28)" }}>
-          <p className="hand" style={{ color: "var(--brand)", fontSize: "1.7rem", transform: "rotate(-2deg)", margin: 0 }}>selamat datang kembali</p>
-          <h1 className="display" style={{ fontSize: "clamp(1.8rem,4vw,2.3rem)", fontWeight: 700, lineHeight: 1.1, margin: "4px 0 6px" }}>Masuk ke dashboard</h1>
-          <p className="muted" style={{ fontSize: ".95rem", margin: "0 0 22px" }}>Lanjutkan mengelola website, listing, dan konten Anda.</p>
-          <form style={{ display: "grid", gap: 16 }}>
-            <label style={{ display: "grid", gap: 7 }}>
-              <span className="lg-lab">Email</span>
-              <input className="lg-input" type="email" placeholder="anda@email.com" />
-            </label>
-            <label style={{ display: "grid", gap: 7 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                <span className="lg-lab">Kata sandi</span>
-                <a href="#" className="gold" style={{ fontSize: ".8rem", textDecoration: "none" }}>Lupa sandi?</a>
+          {mode === "in" ? (
+            <>
+              <p className="hand" style={{ color: "var(--brand)", fontSize: "1.7rem", transform: "rotate(-2deg)", margin: 0 }}>selamat datang kembali</p>
+              <h1 className="display" style={{ fontSize: "clamp(1.8rem,4vw,2.3rem)", fontWeight: 700, lineHeight: 1.1, margin: "4px 0 6px" }}>Masuk ke dashboard</h1>
+              <p className="muted" style={{ fontSize: ".95rem", margin: "0 0 22px" }}>Lanjutkan mengelola website, listing, dan konten Anda.</p>
+              <form onSubmit={submitLogin} style={{ display: "grid", gap: 16 }}>
+                <label style={{ display: "grid", gap: 7 }}>
+                  <span className="lg-lab">Email</span>
+                  <input className="lg-input" type="email" required autoComplete="email" placeholder="anda@email.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+                </label>
+                <label style={{ display: "grid", gap: 7 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                    <span className="lg-lab">Kata sandi</span>
+                    <button type="button" onClick={goForgot} className="gold" style={{ background: "none", border: "none", padding: 0, font: "inherit", fontSize: ".8rem", cursor: "pointer" }}>Lupa sandi?</button>
+                  </div>
+                  <input className="lg-input" type="password" required minLength={6} autoComplete="current-password" placeholder="••••••••" value={pw} onChange={(e) => setPw(e.target.value)} />
+                </label>
+                {err && <p className="lg-err">{err}</p>}
+                <button type="submit" disabled={busy} className="btn btn-brand" style={{ justifyContent: "center", padding: ".95rem", fontSize: "1.02rem", marginTop: 4, opacity: busy ? .7 : 1 }}>{busy ? "Memproses…" : "Masuk →"}</button>
+              </form>
+              <p className="muted" style={{ fontSize: ".8rem", textAlign: "center", marginTop: 12 }}>Data Anda milik Anda · aman &amp; tidak dijual</p>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "20px 0" }}>
+                <span style={{ flex: 1, height: 1, background: "var(--line)" }} /><span className="muted" style={{ fontSize: ".8rem" }}>atau</span><span style={{ flex: 1, height: 1, background: "var(--line)" }} />
               </div>
-              <input className="lg-input" type="password" placeholder="••••••••" />
-            </label>
-            <Link href="/admin" className="btn btn-brand" style={{ justifyContent: "center", padding: ".95rem", fontSize: "1.02rem", marginTop: 4 }}>Masuk →</Link>
-          </form>
-          <p className="muted" style={{ fontSize: ".8rem", textAlign: "center", marginTop: 12 }}>Data Anda milik Anda · aman &amp; tidak dijual</p>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "20px 0" }}>
-            <span style={{ flex: 1, height: 1, background: "var(--line)" }} /><span className="muted" style={{ fontSize: ".8rem" }}>atau</span><span style={{ flex: 1, height: 1, background: "var(--line)" }} />
-          </div>
-          <Link href="/onboarding" className="btn btn-ghost" style={{ width: "100%", justifyContent: "center", padding: ".85rem" }}>Mulai dengan onboarding</Link>
-          <p className="muted" style={{ fontSize: ".86rem", marginTop: 18, textAlign: "center" }}>
-            Belum punya akun? <Link href="/signup" className="gold" style={{ textDecoration: "none" }}>Daftar</Link>
-          </p>
+              <Link href="/onboarding" className="btn btn-ghost" style={{ width: "100%", justifyContent: "center", padding: ".85rem" }}>Mulai dengan onboarding</Link>
+              <p className="muted" style={{ fontSize: ".86rem", marginTop: 18, textAlign: "center" }}>
+                Belum punya akun? <Link href="/signup" className="gold" style={{ textDecoration: "none" }}>Daftar</Link>
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="hand" style={{ color: "var(--brand)", fontSize: "1.7rem", transform: "rotate(-2deg)", margin: 0 }}>tenang</p>
+              <h1 className="display" style={{ fontSize: "clamp(1.8rem,4vw,2.3rem)", fontWeight: 700, lineHeight: 1.1, margin: "4px 0 6px" }}>Reset kata sandi</h1>
+              <p className="muted" style={{ fontSize: ".95rem", margin: "0 0 22px" }}>Masukkan email terdaftar Anda — kami kirim link untuk membuat kata sandi baru.</p>
+              {sent ? (
+                <div style={{ display: "grid", gap: 14 }}>
+                  <p style={{ background: "color-mix(in oklab, var(--good) 16%, transparent)", border: "1px solid color-mix(in oklab, var(--good) 45%, transparent)", color: "var(--ink)", padding: "12px 14px", borderRadius: 11, fontSize: ".9rem", margin: 0 }}>Jika email terdaftar, link reset sudah dikirim. Cek inbox &amp; folder spam.</p>
+                  <button type="button" onClick={goLogin} className="btn btn-brand" style={{ justifyContent: "center", padding: ".9rem", fontSize: "1.02rem" }}>← Kembali ke masuk</button>
+                </div>
+              ) : (
+                <form onSubmit={submitForgot} style={{ display: "grid", gap: 16 }}>
+                  <label style={{ display: "grid", gap: 7 }}>
+                    <span className="lg-lab">Email</span>
+                    <input className="lg-input" type="email" required autoComplete="email" placeholder="anda@email.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+                  </label>
+                  {err && <p className="lg-err">{err}</p>}
+                  <button type="submit" disabled={busy} className="btn btn-brand" style={{ justifyContent: "center", padding: ".95rem", fontSize: "1.02rem", marginTop: 4, opacity: busy ? .7 : 1 }}>{busy ? "Mengirim…" : "Kirim link reset →"}</button>
+                </form>
+              )}
+              {!sent && <p className="muted" style={{ fontSize: ".86rem", marginTop: 18, textAlign: "center" }}><button type="button" onClick={goLogin} className="gold" style={{ background: "none", border: "none", padding: 0, font: "inherit", cursor: "pointer" }}>← Kembali ke masuk</button></p>}
+            </>
+          )}
         </div>
       </div>
 
@@ -71,6 +127,7 @@ export default function Login() {
         .lg-input{ width:100%; background:var(--surface-2); border:1.5px solid var(--line-2); border-radius:11px; color:var(--ink); padding:.8rem 1rem; font:inherit; font-size:1rem; outline:none; transition:border-color .2s; }
         .lg-input::placeholder{ color:color-mix(in oklab, var(--muted) 60%, transparent); }
         .lg-input:focus{ border-color:var(--brand); }
+        .lg-err{ background:color-mix(in oklab, var(--crit) 12%, transparent); border:1px solid color-mix(in oklab, var(--crit) 45%, transparent); color:var(--crit); padding:11px 13px; border-radius:11px; font-size:.88rem; margin:0; }
       `}</style>
     </div>
   );

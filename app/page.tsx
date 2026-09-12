@@ -48,10 +48,10 @@ const POSTS = [
   { cat: "Ditemukan", title: "SEO lokal & pencarian AI untuk agen", ex: "Agar nama Anda muncul saat calon pembeli mencari “agen properti di area Anda” — di Google dan AI.", read: "6 menit", img: "/blog-2.webp" },
 ];
 
-const TESTI = [
-  { q: "Website saya jadi dalam satu sore, dan sekarang muncul di Google saat orang mencari agen di area saya. Klien bilang situs saya yang paling profesional.", n: "Andi Pratama", r: "Agen properti · Jakarta Selatan", c: "--c-eye" },
-  { q: "Video listing yang dulu makan waktu seminggu, kini jadi dalam hitungan menit. Closing pertama dari reels cakra datang di minggu kedua.", n: "Sarah Wijaya", r: "Agen vila · Bali", c: "--c-heart" },
-  { q: "Skor Cakra membuat saya tahu persis apa yang harus dikerjakan tiap minggu. Kehadiran online saya naik, dan lead pun ikut naik.", n: "Budi Santoso", r: "Agen properti · Surabaya", c: "--c-throat" },
+const OUTCOMES: [string, string, string][] = [
+  ["Website siap dalam satu sore", "Situs profesional Anda sendiri — muncul di Google saat orang mencari agen di area Anda.", "--c-eye"],
+  ["Video listing dalam hitungan menit", "Foto & deskripsi menjadi film properti 45–90 detik, bukan lagi proyek seminggu.", "--c-heart"],
+  ["Tahu langkah Anda tiap minggu", "Skor Cakra menunjukkan apa yang harus dikerjakan agar kehadiran & lead terus naik.", "--c-throat"],
 ];
 
 export default function Home() {
@@ -75,7 +75,7 @@ export default function Home() {
             cakra membangun website profesional Anda, memproduksi video dan artikel listing dengan AI, lalu membuat Anda
             mudah ditemukan di Google, pencarian AI, dan media sosial — agar Anda jadi agen yang tak bisa diabaikan.
           </p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 36, justifyContent: "center" }}>
+          <div className="hero-cta" style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 36, justifyContent: "center" }}>
             <Link href="/onboarding" className="btn btn-brand" style={{ fontSize: "1.05rem", padding: ".95rem 1.8rem" }}>Mulai sekarang</Link>
             <Link href="/demo" className="btn btn-on-photo" style={{ fontSize: "1.05rem", padding: ".95rem 1.8rem" }}>Lihat contoh website →</Link>
           </div>
@@ -155,25 +155,25 @@ export default function Home() {
 
       {/* SHOWCASE — the live sample agent site (proof) */}
       <section className="wrap" style={{ padding: "24px 0 80px" }}>
-        <SectionTitle hand="bukti hidup" max="24ch">Situs agen sungguhan, dibuat cakra.</SectionTitle>
+        <SectionTitle hand="lihat contohnya" max="24ch">Contoh situs agen, dibuat cakra.</SectionTitle>
         <Link href="/demo" className="card" style={{ display: "block", overflow: "hidden", padding: 0, textDecoration: "none", color: "inherit" }}>
           <div style={{ display: "flex", gap: 6, padding: "13px 18px", borderBottom: "1px solid var(--line)", alignItems: "center" }}>
             <i style={{ width: 10, height: 10, borderRadius: 999, background: "var(--line-2)" }} />
             <i style={{ width: 10, height: 10, borderRadius: 999, background: "var(--line-2)" }} />
             <i style={{ width: 10, height: 10, borderRadius: 999, background: "var(--line-2)" }} />
-            <span className="mono muted" style={{ marginLeft: 8, fontSize: ".78rem" }}>kirana.cakra.xyz</span>
+            <span className="mono muted" style={{ marginLeft: 8, fontSize: ".78rem" }}>cakra.xyz/demo</span>
             <span className="pill" style={{ marginLeft: "auto", fontSize: ".72rem", fontWeight: 700, color: "var(--good)", background: "color-mix(in oklab, var(--good) 14%, var(--surface))" }}>● live</span>
           </div>
-          <div style={{ position: "relative", aspectRatio: "16 / 7.6", background: "var(--surface-2)" }}>
+          <div data-showcase-media style={{ position: "relative", aspectRatio: "16 / 7.6", background: "var(--surface-2)" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/hero.webp" alt="Contoh website agen properti Kirana Sutanto yang dibuat dengan cakra" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <img src="/hero.webp" alt="Contoh situs agen properti yang dibuat dengan cakra" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, color-mix(in oklab, #1a130a 62%, transparent), transparent 60%)" }} />
-            <div style={{ position: "absolute", left: "6%", bottom: "13%", maxWidth: "46ch", color: "#fff" }}>
-              <span className="eyebrow" style={{ color: "#f0e6cf" }}>Kirana Sutanto · Spesialis Vila Bali</span>
+            <div data-showcase-cap style={{ position: "absolute", left: "6%", bottom: "13%", maxWidth: "46ch", color: "#fff" }}>
+              <span className="eyebrow" style={{ color: "#f0e6cf" }}>Situs contoh · dibuat dengan cakra</span>
               <h3 className="display" style={{ fontSize: "clamp(1.8rem, 3.4vw, 2.7rem)", fontWeight: 600, margin: "10px 0 6px", color: "#fff" }}>
-                Vila tepi tebing yang menjual dirinya sendiri.
+                Situs properti yang menjual dirinya sendiri.
               </h3>
-              <span className="hand" style={{ fontSize: "1.6rem", color: "#e9cf9a" }}>ini situs nyata buatan cakra — buka &amp; jelajahi →</span>
+              <span className="hand" style={{ fontSize: "1.6rem", color: "#e9cf9a" }}>contoh situs buatan cakra — buka &amp; jelajahi →</span>
             </div>
           </div>
         </Link>
@@ -230,13 +230,13 @@ export default function Home() {
       <section className="wrap" style={{ padding: "56px 0 24px" }}>
         <SectionTitle hand="harga jujur" max="24ch">Satu harga, semua alat kehadiran Anda.</SectionTitle>
         <p className="lead" style={{ textAlign: "center", margin: "-30px auto 40px", maxWidth: "60ch" }}>
-          Rp 300rb/bulan untuk website, listing, studio video & konten AI, dan Skor Cakra. Business — otomasi, analitik, WhatsApp & ads — segera hadir.
+          Rp 300rb/bulan — website + optimasi AI, 12 listing, Editor Studio, dan konten harian. Business &amp; Agency (100 listing, inbox terpadu, analitik sosial, kalender, prospek) segera hadir.
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20, alignItems: "stretch" }}>
           {[
-            { name: "Pro", price: "Rp 300rb", per: "/bulan", note: "paling populer", feats: ["Website + domain sendiri", "Listing tak terbatas", "Studio video & konten AI", "GEO penuh + jadwal otomatis"], cta: "Mulai sekarang", href: "/onboarding", hi: true, soon: false },
-            { name: "Business", price: "Segera hadir", per: "", note: "coming soon", feats: ["Otomasi media sosial", "Analitik mendalam", "Integrasi WhatsApp", "Manajemen & analitik ads"], cta: "Beri tahu saya", href: "/contact", hi: false, soon: true },
-            { name: "Studio / Agensi", price: "Hubungi kami", per: "", note: "untuk tim & brand", feats: ["Multi-seat & peran tim", "Pustaka brand & aset bersama", "Analitik tim"], cta: "Bicara dengan kami", href: "/contact", hi: false, soon: false },
+            { name: "Pro", price: "Rp 300rb", per: "/bulan", note: "paling populer", feats: ["Website + optimasi AI (SEO/GEO/social)", "12 listing live + testimoni & profil", "Editor Studio — 10 build/bulan", "Konten harian — 2 per hari"], cta: "Mulai sekarang", href: "/onboarding", hi: true, soon: false },
+            { name: "Business", price: "Segera hadir", per: "", note: "coming soon", feats: ["Semua di Pro, plus:", "100 listing + halaman per menu & advertorial", "20 build/bulan · 3 konten/hari", "Inbox terpadu, analitik sosial, kalender, prospek"], cta: "Beri tahu saya", href: "/contact", hi: false, soon: true },
+            { name: "Agency", price: "Segera hadir", per: "", note: "untuk tim & brand", feats: ["Semua di Business, untuk banyak agen", "Multi-seat & peran tim", "Pustaka brand & aset bersama", "Analitik tim"], cta: "Beri tahu saya", href: "/contact", hi: false, soon: true },
           ].map((t) => (
             <div key={t.name} className="card" style={{ padding: "28px 26px", display: "flex", flexDirection: "column", position: "relative", borderColor: t.hi ? "var(--brand)" : "var(--line)", borderWidth: t.hi ? 2 : 1, background: t.hi ? "color-mix(in oklab, var(--brand) 6%, var(--surface))" : "var(--surface)", opacity: t.soon ? 0.92 : 1 }}>
               {t.hi && <span className="pill" style={{ position: "absolute", top: -12, left: "50%", transform: "translateX(-50%)", background: "var(--brand)", color: "#fff", fontSize: ".72rem", fontWeight: 700 }}>Paling populer</span>}
@@ -288,30 +288,23 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
+      {/* OUTCOMES — what cakra is built to deliver (no fabricated testimonials) */}
       <section className="wrap" style={{ padding: "72px 0 40px" }}>
-        <SectionTitle hand="agen perintis" max="24ch">Dibangun bersama angkatan pertama agen cakra.</SectionTitle>
+        <SectionTitle hand="untuk agen perintis" max="24ch">Dibangun untuk satu hasil: Anda lebih mudah ditemukan & dipercaya.</SectionTitle>
         <p className="lead" style={{ textAlign: "center", margin: "-30px auto 40px", maxWidth: "58ch" }}>
-          Kami sedang memilih agen papan atas sebagai angkatan perintis. Berikut gambaran hasil yang kami targetkan bersama mereka.
+          Inilah yang cakra bangun untuk setiap agen — website, konten, dan skor kehadiran yang bekerja bersama.
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 24 }}>
-          {TESTI.map((t) => (
-            <div key={t.n} className="card" style={{ padding: 30, display: "flex", flexDirection: "column" }}>
-              <div style={{ color: "var(--brand)", letterSpacing: 3, marginBottom: 14, fontSize: "1rem" }} aria-label="5 dari 5 bintang">★★★★★</div>
-              <p className="display" style={{ fontSize: "1.18rem", lineHeight: 1.5, fontStyle: "italic", margin: "0 0 22px", fontWeight: 500 }}>“{t.q}”</p>
-              <div style={{ marginTop: "auto", display: "flex", alignItems: "center", gap: 12 }}>
-                <span style={{ width: 44, height: 44, borderRadius: "50%", flex: "none", display: "grid", placeItems: "center", background: `var(${t.c})`, color: "#fff", fontWeight: 700, fontSize: "1.05rem" }}>{t.n.charAt(0)}</span>
-                <div>
-                  <div style={{ fontWeight: 600, fontSize: ".98rem" }}>{t.n}</div>
-                  <div className="muted" style={{ fontSize: ".84rem" }}>{t.r}</div>
-                </div>
-              </div>
+          {OUTCOMES.map(([t, d, c]) => (
+            <div key={t} className="card" style={{ padding: 30, display: "flex", flexDirection: "column" }}>
+              <span style={{ width: 44, height: 44, borderRadius: 12, flex: "none", display: "grid", placeItems: "center", background: `color-mix(in oklab, var(${c}) 16%, var(--surface))`, color: `var(${c})`, marginBottom: 16 }} aria-hidden="true">
+                <svg viewBox="0 0 24 24" width={22} height={22} fill="currentColor"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.42z" /></svg>
+              </span>
+              <h3 className="display" style={{ fontSize: "1.28rem", fontWeight: 600, margin: "0 0 8px", lineHeight: 1.25 }}>{t}</h3>
+              <p className="muted" style={{ fontSize: "1rem", lineHeight: 1.55, margin: 0 }}>{d}</p>
             </div>
           ))}
         </div>
-        <p className="muted" style={{ textAlign: "center", marginTop: 20, fontSize: ".8rem" }}>
-          Ilustrasi hasil yang ditargetkan; testimoni terverifikasi dari agen perintis akan tampil di sini.
-        </p>
       </section>
 
       {/* BLOG FROM HUB */}
@@ -377,6 +370,17 @@ export default function Home() {
           [data-sub]{ grid-template-columns:1fr !important; }
           .journey{ grid-template-columns:repeat(2,1fr); gap:30px; }
           .jline{ display:none; }
+        }
+        @media (max-width: 640px){
+          /* equal, full-width hero CTAs stacked */
+          .hero-cta{ flex-direction:column; align-items:stretch; }
+          .hero-cta .btn{ width:100%; justify-content:center; }
+          /* "bukti hidup" showcase: taller frame + contained, smaller caption so text never overflows */
+          [data-showcase-media]{ aspect-ratio:4 / 3.4 !important; }
+          [data-showcase-cap]{ left:5% !important; right:5%; bottom:8% !important; max-width:none !important; }
+          [data-showcase-cap] h3{ font-size:1.28rem !important; margin:6px 0 4px !important; }
+          [data-showcase-cap] .hand{ font-size:1.02rem !important; }
+          [data-showcase-cap] .eyebrow{ font-size:.72rem !important; }
         }
       `}</style>
     </main>

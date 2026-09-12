@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Manrope, Dancing_Script } from "next/font/google";
 import { SiteSkin } from "./SiteSkin";
 import { ListingGrid } from "./ListingGrid";
@@ -9,15 +9,24 @@ const display = Playfair_Display({ subsets: ["latin"], weight: ["500", "600", "7
 const body = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], variable: "--k-font-body" });
 const script = Dancing_Script({ subsets: ["latin"], weight: ["600", "700"], variable: "--k-font-script" });
 
+// Agent sites are always LIGHT — force a single light theme-color for this route so the mobile
+// status bar matches the nav (server-rendered, survives dark mode, no reliance on client JS).
+export const viewport: Viewport = {
+  themeColor: "#F2F6F6",
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 export const metadata: Metadata = {
-  title: "Kirana — Spesialis Properti Premium Bali (Jual & Sewa Rp 3 M+)",
+  title: "Situs Agen Properti — dibuat dengan cakra",
   description:
-    "Kirana Sutanto — 10+ tahun spesialis vila & properti premium di Bali, untuk jual maupun sewa mulai Rp 3 miliar. Dari kurasi hingga serah terima, ditemani setiap langkah.",
-  keywords: ["agen properti Bali", "vila premium Bali", "jual vila Bali", "sewa vila Bali", "investasi properti Bali", "Kirana Sutanto", "properti mewah Bali"],
+    "Contoh situs agen properti yang dibuat dengan cakra — website, listing, dan konten yang dioptimasi untuk pencarian.",
+  keywords: ["agen properti", "situs agen properti", "website properti", "cakra"],
   alternates: { canonical: "/demo" },
   openGraph: {
-    title: "Kirana — Spesialis Properti Premium Bali",
-    description: "Vila & properti premium Bali untuk jual maupun sewa, mulai Rp 3 miliar. 10+ tahun pengalaman bersama Kirana Sutanto.",
+    title: "Situs Agen Properti — dibuat dengan cakra",
+    description: "Contoh situs agen properti yang dibuat dengan cakra.",
     type: "website",
     url: "https://cakra.xyz/demo",
     images: [{ url: "/about/transform.webp", width: 1200, height: 800, alt: "Vila premium Bali" }],
@@ -26,18 +35,18 @@ export const metadata: Metadata = {
 
 // Pre-filled WhatsApp / email so every generated agent site captures leads out of the box.
 const WA = "6281100000000";
-const WA_MSG = encodeURIComponent("Halo Kirana, saya tertarik dengan properti Anda di Bali. Boleh saya minta info lebih lanjut?");
+const WA_MSG = encodeURIComponent("Halo, saya tertarik dengan properti Anda. Boleh saya minta info lebih lanjut?");
 const WA_LINK = `https://wa.me/${WA}?text=${WA_MSG}`;
-const EMAIL_LINK = "mailto:halo@kirana.property?subject=" + encodeURIComponent("Pertanyaan properti Bali");
+const EMAIL_LINK = "mailto:halo@cakra.xyz?subject=" + encodeURIComponent("Pertanyaan properti Bali");
 
 // Social + Google Business — optional per agent, editable in the dashboard. Empty ones are hidden.
 const SOCIALS: { label: string; href: string; d: string }[] = [
-  { label: "Instagram", href: "https://instagram.com/kirana.property", d: "M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm5.5-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2ZM7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4Zm0 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7Z" },
-  { label: "TikTok", href: "https://tiktok.com/@kiranaproperty", d: "M14 3c.3 2.2 1.7 3.9 4 4.2v2.5c-1.5 0-2.9-.5-4-1.3v5.9a5.3 5.3 0 1 1-5.3-5.3c.3 0 .6 0 .9.1v2.7a2.6 2.6 0 1 0 1.8 2.5V3H14Z" },
-  { label: "YouTube", href: "https://youtube.com/@kiranaproperty", d: "M21.6 7.2a2.6 2.6 0 0 0-1.8-1.8C18 5 12 5 12 5s-6 0-7.8.4A2.6 2.6 0 0 0 2.4 7.2 27 27 0 0 0 2 12a27 27 0 0 0 .4 4.8 2.6 2.6 0 0 0 1.8 1.8C6 19 12 19 12 19s6 0 7.8-.4a2.6 2.6 0 0 0 1.8-1.8A27 27 0 0 0 22 12a27 27 0 0 0-.4-4.8ZM10 15V9l5 3-5 3Z" },
-  { label: "Facebook", href: "https://facebook.com/kirana.property", d: "M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.7l-.4 2.9h-2.3v7A10 10 0 0 0 22 12Z" },
+  { label: "Instagram", href: "#", d: "M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm5.5-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2ZM7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4Zm0 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7Z" },
+  { label: "TikTok", href: "#", d: "M14 3c.3 2.2 1.7 3.9 4 4.2v2.5c-1.5 0-2.9-.5-4-1.3v5.9a5.3 5.3 0 1 1-5.3-5.3c.3 0 .6 0 .9.1v2.7a2.6 2.6 0 1 0 1.8 2.5V3H14Z" },
+  { label: "YouTube", href: "#", d: "M21.6 7.2a2.6 2.6 0 0 0-1.8-1.8C18 5 12 5 12 5s-6 0-7.8.4A2.6 2.6 0 0 0 2.4 7.2 27 27 0 0 0 2 12a27 27 0 0 0 .4 4.8 2.6 2.6 0 0 0 1.8 1.8C6 19 12 19 12 19s6 0 7.8-.4a2.6 2.6 0 0 0 1.8-1.8A27 27 0 0 0 22 12a27 27 0 0 0-.4-4.8ZM10 15V9l5 3-5 3Z" },
+  { label: "Facebook", href: "#", d: "M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.7l-.4 2.9h-2.3v7A10 10 0 0 0 22 12Z" },
 ];
-const GOOGLE_PROFILE = "https://g.page/kirana-property";
+const GOOGLE_PROFILE = "#";
 
 const NAV = [["Beranda", "#top"], ["Tentang", "#tentang"], ["Listing", "#listing"], ["Hub", "#hub"], ["FAQ", "#faq"]];
 
@@ -198,14 +207,14 @@ export default function Demo() {
         <img src="/hero-top.webp" alt="Vila premium Bali saat golden hour" className="k-hero-img" />
         <div className="k-hero-scrim" />
         <div className="k-wrap k-hero-in">
-          <span className="k-kick k-kick-light">spesialis properti bali</span>
-          <h1 className="k-h1">Vila & properti premium Bali, dari tangan yang benar-benar paham.</h1>
-          <p className="k-lead">Kirana Sutanto — 10+ tahun spesialis vila & properti premium di Bali: Canggu, Seminyak, Uluwatu, Jimbaran, hingga Ubud. Untuk dijual maupun disewa mulai Rp 3 miliar, didampingi dari kurasi dan negosiasi hingga serah terima yang aman & legal.</p>
+          <span className="k-kick k-kick-light" data-site="kicker">spesialis properti bali</span>
+          <h1 className="k-h1" data-site="hero-h1">Vila & properti premium Bali, dari tangan yang benar-benar paham.</h1>
+          <p className="k-lead" data-site="hero-lead">Kirana Sutanto — 10+ tahun spesialis vila & properti premium di Bali: Canggu, Seminyak, Uluwatu, Jimbaran, hingga Ubud. Untuk dijual maupun disewa mulai Rp 3 miliar, didampingi dari kurasi dan negosiasi hingga serah terima yang aman & legal.</p>
           <div className="k-row">
             <a href="#listing" className="k-btn k-btn-gold k-lg">Lihat properti</a>
-            <a href="#kontak" className="k-btn k-btn-glass k-lg">Hubungi Kirana</a>
+            <a href="#kontak" className="k-btn k-btn-glass k-lg" data-site="contact-btn">Hubungi Kirana</a>
           </div>
-          <p className="k-hero-note">Fokus Rp 3 M+ · Jual &amp; sewa · Bali Selatan &amp; Ubud</p>
+          <p className="k-hero-note" data-site="hero-note">Fokus Rp 3 M+ · Jual &amp; sewa · Bali Selatan &amp; Ubud</p>
         </div>
       </section>
 
@@ -221,9 +230,9 @@ export default function Demo() {
         <div className="k-sum">
           <div className="k-sum-head">
             <span className="k-kick">ringkas</span>
-            <h2 className="k-sum-h">Yang perlu Anda tahu tentang properti premium Bali bersama Kirana</h2>
+            <h2 className="k-sum-h" data-site="ringkasan-h">Yang perlu Anda tahu tentang properti premium Bali bersama Kirana</h2>
           </div>
-          <div className="k-sum-grid">
+          <div className="k-sum-grid" data-site="ringkasan">
             {([
               ["M12 2v3M12 19v3M2 12h3M19 12h3M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10Z", "Fokus", "Vila & properti premium Bali mulai Rp 3 miliar ke atas — untuk dijual maupun disewa."],
               ["M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11zM12 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z", "Kawasan", "Canggu, Pererenan, Seminyak, Uluwatu, Jimbaran, Nusa Dua, Sanur, dan Ubud."],
@@ -249,7 +258,7 @@ export default function Demo() {
           <h2 className="k-h2">Satu ahli untuk jual, sewa, dan investasi properti Bali.</h2>
           <p className="k-sub">Membeli vila, menyewa untuk musim ini, menyewakan aset, atau berinvestasi jangka panjang — semuanya ditangani dengan standar dan ketelitian yang sama.</p>
         </div>
-        <div className="k-grid k-grid-4">
+        <div className="k-serv-grid" data-site="services">
           {LAYANAN.map((s) => (
             <div key={s.t} className="k-serv">
               <span className="k-serv-ic"><Ic d={s.i} s={22} /></span>
@@ -263,11 +272,11 @@ export default function Demo() {
       {/* LISTING */}
       <section id="listing" className="k-band">
         <div className="k-wrap k-sec">
-          <div className="k-head">
-            <div><span className="k-kick">properti pilihan</span><h2 className="k-h2">Vila & properti premium Bali untuk dijual &amp; disewa.</h2></div>
-            <a href="#kontak" className="k-btn k-btn-ghost">Minta daftar lengkap</a>
+          <div className="k-head k-head-center">
+            <div><span className="k-kick">properti pilihan</span><h2 className="k-h2" data-site="listing-h">Vila & properti premium Bali untuk dijual &amp; disewa.</h2></div>
           </div>
-          <ListingGrid listings={LISTINGS} wa={WA} email="halo@kirana.property" />
+          <ListingGrid listings={LISTINGS} wa={WA} email="halo@cakra.xyz" />
+          <div className="k-listing-cta"><a href="#kontak" className="k-btn k-btn-ghost">Minta daftar lengkap</a></div>
         </div>
       </section>
 
@@ -276,11 +285,13 @@ export default function Demo() {
         <div className="k-center">
           <span className="k-kick">wilayah</span>
           <h2 className="k-h2">Menguasai kawasan properti terbaik di Bali.</h2>
-          <p className="k-sub">Pengetahuan mendalam tentang harga, karakter, dan potensi tiap area — dari Canggu &amp; Pererenan hingga Uluwatu, Ubud, dan Sanur. Klik kawasan untuk panduannya.</p>
+          <p className="k-sub" data-site="area-intro">Pengetahuan mendalam tentang harga, karakter, dan potensi tiap area — dari Canggu &amp; Pererenan hingga Uluwatu, Ubud, dan Sanur. Klik kawasan untuk panduannya.</p>
         </div>
-        <div className="k-areas">
+        <div className="k-areas" data-site="areas">
           {AREAS.map((a) => <a key={a} href={`/demo/area/${a.toLowerCase().replace(/\s+/g, "-")}`} className="k-area">{a}</a>)}
         </div>
+        {/* Location + map — populated by SiteSkin from location{} for a real agent; hidden otherwise */}
+        <div className="k-loc" data-site="location-block" hidden />
       </section>
 
       {/* TENTANG — profil agen (SEO: Person + ProfilePage schema) */}
@@ -289,18 +300,18 @@ export default function Demo() {
           <div className="k-card k-profile-card">
             <div className="k-card-media">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/about/origin.webp" alt="Kirana Sutanto — agen properti spesialis vila premium Bali" />
+              <img src="/about/origin.webp" alt="Foto profil agen properti" />
             </div>
             <div className="k-card-body">
-              <div className="k-profile-name">Kirana Sutanto</div>
-              <div className="k-profile-role">Agen Properti · Spesialis Vila Bali · 10+ tahun</div>
+              <div className="k-profile-name" data-site="profile-name">Kirana Sutanto</div>
+              <div className="k-profile-role" data-site="profile-role">Agen Properti · Spesialis Vila Bali · 10+ tahun</div>
             </div>
           </div>
           <div>
             <span className="k-kick">profil agen</span>
-            <h2 className="k-h2">Kirana Sutanto — kepercayaan lebih dulu.</h2>
-            <p className="k-muted k-p">Lebih dari satu dekade di pasar properti premium Bali mengajarkan saya bahwa transaksi terbaik lahir dari kejujuran dan kesabaran. Saya bantu Anda memahami nilai, legalitas, dan potensi setiap properti — sebelum Anda menandatangani apa pun.</p>
-            <ul className="k-list">
+            <h2 className="k-h2" data-site="about-h">Kirana Sutanto — kepercayaan lebih dulu.</h2>
+            <p className="k-muted k-p" data-site="about-body">Lebih dari satu dekade di pasar properti premium Bali mengajarkan saya bahwa transaksi terbaik lahir dari kejujuran dan kesabaran. Saya bantu Anda memahami nilai, legalitas, dan potensi setiap properti — sebelum Anda menandatangani apa pun.</p>
+            <ul className="k-list" data-site="about-diff">
               {["Fokus properti premium Rp 3 miliar ke atas", "Pendampingan penuh: survei, negosiasi, hingga notaris", "Jaringan pemilik, pengembang, dan penyewa tepercaya", "Data pasar & simulasi imbal hasil yang realistis"].map((x) => (
                 <li key={x}><span className="k-check"><Ic d="M20 6 9 17l-5-5" s={15} /></span>{x}</li>
               ))}
@@ -377,7 +388,7 @@ export default function Demo() {
         <div className="k-center">
           <span className="k-kick">untuk pembeli internasional</span>
           <h2 className="k-h2">Membeli vila di Bali sebagai orang asing — dengan struktur yang benar.</h2>
-          <p className="k-sub">Warga negara asing tidak dapat memegang Hak Milik (freehold), tetapi ada beberapa jalur kepemilikan yang sah dan lazim digunakan — masing-masing dengan konsekuensi, biaya, dan tingkat kendali yang berbeda.</p>
+          <p className="k-sub" data-site="foreign-body">Warga negara asing tidak dapat memegang Hak Milik (freehold), tetapi ada beberapa jalur kepemilikan yang sah dan lazim digunakan — masing-masing dengan konsekuensi, biaya, dan tingkat kendali yang berbeda.</p>
         </div>
         <div className="k-grid k-grid-3">
           {([
@@ -413,7 +424,7 @@ export default function Demo() {
       <section id="faq" className="k-band">
         <div className="k-wrap k-sec">
           <div className="k-center"><span className="k-kick">faq</span><h2 className="k-h2">Pertanyaan yang sering diajukan.</h2></div>
-          <div className="k-faq-grid">
+          <div className="k-faq-grid" data-site="faq">
             {FAQS.map(([q, a]) => (
               <details key={q} className="k-faq">
                 <summary>{q}<span className="k-chev"><Ic d="m6 9 6 6 6-6" /></span></summary>
@@ -427,14 +438,14 @@ export default function Demo() {
       {/* KONTAK */}
       <section id="kontak" className="k-wrap k-sec">
         <div className="k-cta">
-          <span className="k-kick" style={{ color: "var(--k-gold)" }}>hubungi kirana</span>
-          <h2 className="k-h2" style={{ color: "#fff" }}>Siap menemukan vila premium Anda di Bali?</h2>
-          <p className="k-cta-p">Ceritakan kebutuhan Anda — memiliki vila impian, menyewa untuk musim ini, menyewakan aset, atau berinvestasi. Saya balas cepat, biasanya di hari yang sama.</p>
+          <span className="k-kick" style={{ color: "var(--k-gold)" }}>hubungi kami</span>
+          <h2 className="k-h2" style={{ color: "#fff" }} data-site="cta-h">Siap menemukan vila premium Anda di Bali?</h2>
+          <p className="k-cta-p" data-site="cta-p">Ceritakan kebutuhan Anda — memiliki vila impian, menyewa untuk musim ini, menyewakan aset, atau berinvestasi. Saya balas cepat, biasanya di hari yang sama.</p>
           <div className="k-row k-center-row">
             <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="k-btn k-btn-gold k-lg"><Ic d="M20 4 3 11l6 2 2 6 3-5 4 3z" /> WhatsApp Kirana</a>
-            <a href={EMAIL_LINK} className="k-btn k-btn-glass k-lg">halo@kirana.property</a>
+            <a href={EMAIL_LINK} className="k-btn k-btn-glass k-lg" data-site="email-btn">halo@cakra.xyz</a>
           </div>
-          <p className="k-cta-note">Kantor: Jl. Pantai Berawa, Canggu · Sen–Sab, 09.00–19.00 WITA</p>
+          <p className="k-cta-note" data-site="contact-note">Kantor: Jl. Pantai Berawa, Canggu · Sen–Sab, 09.00–19.00 WITA</p>
         </div>
       </section>
 
@@ -471,8 +482,8 @@ export default function Demo() {
       </footer>
 
       {/* Sticky WhatsApp lead capture — standard on every cakra agent site */}
-      <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="k-fab" aria-label="Chat WhatsApp dengan Kirana">
-        <Ic d="M20 4 3 11l6 2 2 6 3-5 4 3z" s={26} />
+      <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="k-fab" aria-label="Chat via WhatsApp">
+        <svg viewBox="0 0 24 24" width={30} height={30} fill="currentColor" aria-hidden="true"><path d="M12.04 2.01c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.86 9.86 0 0 0 4.78 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01a9.82 9.82 0 0 0-7.01-2.91Zm0 1.67c2.2 0 4.27.86 5.83 2.42a8.2 8.2 0 0 1 2.41 5.82c0 4.54-3.7 8.24-8.25 8.24-1.48 0-2.93-.4-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24Zm-3.6 4.02c-.17 0-.45.06-.68.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.72 4.31 3.81.6.26 1.07.41 1.44.53.6.19 1.15.16 1.58.1.48-.07 1.48-.6 1.69-1.19.21-.58.21-1.08.15-1.19-.06-.1-.23-.17-.48-.29-.25-.13-1.48-.73-1.71-.82-.23-.08-.4-.12-.56.13-.17.25-.64.81-.79.98-.14.16-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.23-1.48-1.38-1.73-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.42.08-.16.04-.31-.02-.43-.06-.12-.55-1.36-.76-1.86-.2-.48-.4-.42-.55-.43-.14 0-.31-.01-.47-.01Z" /></svg>
       </a>
 
       <style>{`
@@ -506,7 +517,7 @@ export default function Demo() {
         .k-btn-primary:hover{ background:var(--k-emerald-2); }
         .k-btn-gold{ background:var(--k-gold); color:#fff; }
         .k-btn-gold:hover{ background:var(--k-gold-2); }
-        .k-btn-ghost{ background:transparent; color:var(--k-ink); border-color:var(--k-line-2); }
+        .k-btn-ghost{ background:transparent; color:var(--k-ink); border-color:var(--k-ink); }
         .k-btn-ghost:hover{ border-color:var(--k-emerald); color:var(--k-emerald); }
         .k-btn-glass{ background:rgba(255,255,255,.12); color:#fff; border-color:rgba(255,255,255,.45); backdrop-filter:blur(6px); }
         .k-btn-glass:hover{ background:rgba(255,255,255,.22); }
@@ -542,6 +553,8 @@ export default function Demo() {
         .k-sec{ padding:clamp(60px,9vw,104px) clamp(18px,4vw,30px); }
         .k-band{ background:var(--k-surface); border-top:1px solid var(--k-line); border-bottom:1px solid var(--k-line); }
         .k-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:20px; margin-bottom:32px; flex-wrap:wrap; }
+        .k-head-center{ flex-direction:column; align-items:center; text-align:center; }
+        .k-listing-cta{ text-align:center; margin-top:36px; }
 
         .k-grid{ display:grid; gap:24px; }
         .k-grid-3{ grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); }
@@ -557,7 +570,7 @@ export default function Demo() {
         .k-legal-ic{ display:inline-grid; place-items:center; width:46px; height:46px; border-radius:12px; background:color-mix(in oklab, var(--k-gold) 12%, var(--k-surface)); color:var(--k-gold-2); border:1px solid color-mix(in oklab, var(--k-gold) 22%, transparent); margin-bottom:14px; }
         .k-legal-lead{ text-align:center; max-width:62ch; margin:38px auto 22px; font-size:1.12rem; color:var(--k-ink-2); line-height:1.6; }
         .k-legal-assure{ background:linear-gradient(125deg, var(--k-emerald-2), var(--k-emerald)); color:#fff; border-radius:var(--k-r); padding:clamp(28px,4vw,44px); box-shadow:0 30px 60px -38px var(--k-emerald); }
-        .k-legal-assure-h{ color:#fff; font-size:clamp(1.3rem,2.4vw,1.7rem); text-align:center; margin-bottom:26px; }
+        .k-legal-assure-h{ color:#fff; font-size:clamp(1.6rem,3vw,2.2rem); text-align:center; margin-bottom:48px; line-height:1.25; }
         .k-legal-checks{ display:grid; grid-template-columns:repeat(2,1fr); gap:16px 28px; max-width:840px; margin:0 auto; }
         .k-legal-check{ display:flex; gap:12px; align-items:flex-start; }
         .k-legal-check .k-check{ background:rgba(255,255,255,.16); color:#fff; flex:none; margin-top:1px; }
@@ -568,18 +581,20 @@ export default function Demo() {
         .k-sum{ max-width:1040px; margin:0 auto; }
         .k-sum-head{ text-align:center; max-width:60ch; margin:0 auto 34px; }
         .k-sum-h{ font-size:clamp(1.5rem,2.9vw,2.1rem); line-height:1.18; }
-        .k-sum-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
-        .k-sum-item{ display:flex; gap:14px; align-items:flex-start; padding:22px 20px; background:var(--k-surface); border:1px solid var(--k-line); border-radius:var(--k-r); box-shadow:0 1px 2px rgba(15,32,38,.05); transition:transform .2s ease, box-shadow .2s ease; }
-        .k-sum-item:hover{ transform:translateY(-3px); box-shadow:0 14px 30px -16px rgba(15,32,38,.2); }
-        .k-sum-ic{ flex:none; width:44px; height:44px; border-radius:12px; display:grid; place-items:center; background:color-mix(in oklab, var(--k-emerald) 12%, var(--k-surface)); color:var(--k-emerald); border:1px solid color-mix(in oklab, var(--k-emerald) 18%, transparent); }
+        .k-sum-grid{ display:flex; flex-wrap:wrap; justify-content:center; gap:20px; max-width:1120px; margin:0 auto; }
+        .k-sum-item{ flex:1 1 300px; max-width:360px; display:flex; flex-direction:column; align-items:center; text-align:center; padding:26px 24px; background:var(--k-surface); border:1px solid var(--k-line); border-radius:var(--k-r); box-shadow:0 12px 34px -24px rgba(15,32,38,.24); transition:transform .18s ease, box-shadow .18s ease; }
+        .k-sum-item:hover{ transform:translateY(-3px); box-shadow:0 20px 46px -26px rgba(15,32,38,.32); }
+        .k-sum-ic{ flex:none; width:50px; height:50px; border-radius:14px; display:grid; place-items:center; margin-bottom:14px; background:color-mix(in oklab, var(--k-emerald) 12%, var(--k-surface)); color:var(--k-emerald); border:1px solid color-mix(in oklab, var(--k-emerald) 20%, transparent); }
         .k-sum-label{ font-family:var(--k-font-display), serif; font-weight:700; font-size:1.02rem; margin-bottom:3px; color:var(--k-ink); }
         .k-sum-text{ font-size:.9rem; color:var(--k-muted); line-height:1.5; }
         .k-sum-note{ text-align:center; margin:28px auto 0; max-width:66ch; font-size:.86rem; color:var(--k-ink-2); background:color-mix(in oklab, var(--k-gold) 9%, var(--k-surface)); border:1px solid color-mix(in oklab, var(--k-gold) 24%, var(--k-line)); border-radius:14px; padding:12px 22px; }
         @media(max-width:860px){ .k-sum-grid{ grid-template-columns:1fr 1fr; } }
         @media(max-width:560px){ .k-sum-grid{ grid-template-columns:1fr; } .k-legal-checks{ grid-template-columns:1fr; } }
 
-        .k-serv{ padding:6px 0; }
-        .k-serv-ic{ display:inline-grid; place-items:center; width:52px; height:52px; border-radius:50%; background:color-mix(in oklab, var(--k-emerald) 10%, var(--k-surface)); color:var(--k-emerald); margin-bottom:16px; border:1px solid color-mix(in oklab, var(--k-emerald) 18%, transparent); }
+        .k-serv-grid{ display:flex; flex-wrap:wrap; justify-content:center; gap:20px; max-width:1120px; margin-left:auto; margin-right:auto; }
+        .k-serv{ flex:1 1 300px; max-width:360px; padding:26px 24px; background:var(--k-surface); border:1px solid var(--k-line); border-radius:var(--k-r); box-shadow:0 12px 34px -24px rgba(15,32,38,.24); transition:transform .18s ease, box-shadow .18s ease; }
+        .k-serv:hover{ transform:translateY(-3px); box-shadow:0 20px 46px -26px rgba(15,32,38,.32); }
+        .k-serv-ic{ display:inline-grid; place-items:center; width:50px; height:50px; border-radius:14px; background:color-mix(in oklab, var(--k-emerald) 12%, var(--k-surface)); color:var(--k-emerald); margin-bottom:16px; border:1px solid color-mix(in oklab, var(--k-emerald) 20%, transparent); }
         .k-serv-t{ font-size:1.3rem; margin-bottom:6px; }
 
         .k-card{ background:var(--k-surface); border:1px solid var(--k-line); border-radius:var(--k-r); overflow:hidden; box-shadow:0 1px 2px rgba(15,32,38,.05); transition:transform .2s ease, box-shadow .2s ease; }
@@ -616,6 +631,14 @@ export default function Demo() {
         .k-area{ font-family:var(--k-font-display), serif; font-size:1.15rem; padding:.6rem 1.4rem; border:1px solid var(--k-line-2); border-radius:999px; color:var(--k-ink); background:var(--k-surface); transition:.15s; }
         .k-area:hover{ border-color:var(--k-emerald); color:var(--k-emerald); }
 
+        .k-loc{ max-width:1040px; margin:38px auto 0; }
+        .k-loc-h{ font-size:1.3rem; margin-bottom:8px; text-align:center; }
+        .k-loc-addr{ text-align:center; color:var(--k-muted); font-size:.98rem; max-width:64ch; margin:0 auto; line-height:1.55; }
+        .k-loc-map{ position:relative; aspect-ratio:16/9; border-radius:var(--k-r); overflow:hidden; border:1px solid var(--k-line); margin-top:18px; box-shadow:0 1px 2px rgba(15,32,38,.05); }
+        .k-loc-map iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+        .k-loc-chips{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:16px; }
+        .k-loc-chip{ font-size:.85rem; padding:.42rem .95rem; border:1px solid var(--k-line-2); border-radius:999px; color:var(--k-ink-2); background:var(--k-surface); }
+
         .k-split{ display:grid; grid-template-columns:.9fr 1.1fr; gap:clamp(30px,5vw,64px); align-items:center; padding:clamp(60px,9vw,104px) clamp(18px,4vw,30px); }
         .k-about-img{ border-radius:var(--k-r); overflow:hidden; aspect-ratio:4/3; background:var(--k-surface); border:1px solid var(--k-line); box-shadow:0 1px 2px rgba(15,32,38,.05); transition:transform .2s ease, box-shadow .2s ease; }
         .k-about-img:hover{ transform:translateY(-4px); box-shadow:0 14px 34px -12px rgba(15,32,38,.22); }
@@ -631,7 +654,7 @@ export default function Demo() {
         .k-check{ flex:none; width:24px; height:24px; border-radius:50%; background:color-mix(in oklab, var(--k-emerald) 12%, var(--k-surface)); color:var(--k-emerald); display:grid; place-items:center; margin-top:2px; }
 
         .k-step-n{ font-family:var(--k-font-display), serif; font-size:2.4rem; font-weight:700; color:var(--k-gold); line-height:1; margin-bottom:12px; }
-        .k-step{ border-top:2px solid var(--k-line); padding-top:20px; }
+        .k-step{ border-top:2px solid var(--k-ink); padding-top:20px; }
 
         .k-testi{ padding:28px 28px 24px; }
         .k-stars{ color:var(--k-gold); letter-spacing:3px; margin-bottom:12px; }
@@ -640,7 +663,7 @@ export default function Demo() {
         .k-avatar{ flex:none; width:46px; height:46px; border-radius:50%; display:grid; place-items:center; background:linear-gradient(135deg, var(--k-emerald), var(--k-emerald-2)); color:#fff; font-family:var(--k-font-display), serif; font-weight:700; font-size:1.05rem; box-shadow:0 6px 16px -8px var(--k-emerald); }
 
         .k-faq-grid{ display:grid; grid-template-columns:1fr 1fr; gap:2px 52px; }
-        .k-faq{ border-bottom:1px solid var(--k-line); }
+        .k-faq{ border-bottom:1px solid var(--k-ink); }
         .k-faq summary{ list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:22px 2px; font-weight:600; font-size:1.1rem; color:var(--k-ink); }
         .k-faq summary::-webkit-details-marker{ display:none; }
         .k-faq summary:hover{ color:var(--k-emerald); }
@@ -679,10 +702,15 @@ export default function Demo() {
 
         @media (max-width: 900px){ .k-links, .k-foot-links{ display:none; } .k-stats{ grid-template-columns:1fr 1fr; } .k-stat:nth-child(2){ border-right:none; } .k-stat{ border-bottom:1px solid var(--k-line); } .k-split{ grid-template-columns:1fr; } .k-about-img{ order:-1; } .k-faq-grid{ grid-template-columns:1fr; } }
         @media (max-width: 640px){
-          .k-wrap{ padding-left:8px; padding-right:8px; }
-          .k-sec{ padding:44px 8px; }
-          .k-hero-in{ padding:52px 8px 58px; }
-          .k-split{ padding:36px 8px; gap:24px; }
+          /* cakra.xyz mobile spacing schema: 16px page gutters · 64px between-section · 16px card gaps */
+          .k-wrap{ padding-left:16px; padding-right:16px; }
+          .k-sec{ padding-top:64px; padding-bottom:64px; }
+          .k-grid{ gap:16px; }
+          .k-serv-grid, .k-sum-grid{ gap:16px; }
+          .k-stats{ margin-left:16px; margin-right:16px; padding-left:0; padding-right:0; }
+          .k-word{ font-size:1.2rem; line-height:1.12; } .k-nav-in{ height:64px; }
+          .k-hero-in{ padding:52px 16px 58px; }
+          .k-split{ padding:64px 16px; gap:24px; }
           .k-cta{ padding:34px 16px; } .k-cta-p{ font-size:1rem; }
           .k-connect{ padding:18px 16px; }
           .k-tldr{ padding:20px 16px; } .k-testi{ padding:22px 18px 20px; }

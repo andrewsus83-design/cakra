@@ -22,7 +22,8 @@ export default function robots(): MetadataRoute.Robots {
           "Applebot-Extended",
         ],
         allow: "/",
-        disallow: ["/admin", "/onboarding", "/login", "/signup"],
+        // /pitch = PRIVATE prospect preview (token-gated + noindex) — must never be indexed by any engine or AI bot.
+        disallow: ["/admin", "/onboarding", "/login", "/signup", "/pitch", "/preview"],
       },
     ],
     sitemap: "https://cakra.xyz/sitemap.xml",

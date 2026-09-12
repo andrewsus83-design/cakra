@@ -106,18 +106,42 @@ img { max-width: 100%; display: block; }
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-soft); }
 .hair { border-color: var(--line); }
 
-/* mobile: consistent 8px side gutter + a gentle downscale so content breathes */
+/* ── form fields — design-system inputs (single source of truth for every cakra form) ── */
+.field-label { font-size: .82rem; font-weight: 600; color: var(--ink-2); letter-spacing: .01em; }
+.field-input { width: 100%; background: var(--surface-2); border: 1.5px solid var(--line-2); border-radius: 11px; color: var(--ink); padding: .8rem 1rem; font: inherit; font-size: 1rem; outline: none; transition: border-color .18s ease, box-shadow .18s ease; }
+.field-input::placeholder { color: color-mix(in oklab, var(--muted) 60%, transparent); }
+.field-input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand) 18%, transparent); }
+.field-input:disabled { opacity: .6; cursor: not-allowed; }
+.field-input[aria-invalid="true"] { border-color: var(--crit); }
+.field-code { text-align: center; letter-spacing: .4em; font-size: 1.4rem; font-weight: 700; }
+textarea.field-input { resize: vertical; min-height: 84px; }
+
+/* mobile: consistent 16px side gutter + a gentle downscale so content breathes */
 @media (max-width: 640px) {
   html { font-size: 15px; }            /* downscale all rem-based sizing ~6% */
   body { font-size: 15.5px; }
   /* inline shorthand `padding: clamp(..) 0 ..` zeroes the sides, so !important is required */
-  .wrap { padding-left: 8px !important; padding-right: 8px !important; }
-  .adm-main { padding-left: 8px !important; padding-right: 8px !important; }
+  .wrap { padding-left: 16px !important; padding-right: 16px !important; }
+  .adm-main { padding-left: 16px !important; padding-right: 16px !important; }
   .lead { font-size: 1.1rem; }
-  .card { padding: 14px !important; }
+  .card { padding: 16px !important; }
   .adm-main h1.display { font-size: 1.32rem !important; }
   .adm-main h2.display { font-size: 1.05rem !important; }
   .adm-kpi { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+  /* 32px vertical breathing between stacked cards on the marketing grids */
+  .k-grid { gap: 32px !important; }
+  .lst-grid { gap: 32px 16px !important; }
+  .masonry { column-gap: 16px !important; }
+  .masonry .pin { margin-bottom: 32px !important; }
+}
+
+/* Bottom PWA action bar (MobileCTA) is fixed ≤900px — keep page content clear of it */
+@media (max-width: 900px) {
+  body { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+}
+/* Nav clears the status bar / notch when running full-screen (standalone) */
+@media (max-width: 900px) {
+  .cakra-navbar { padding-top: env(safe-area-inset-top); box-sizing: content-box; }
 }
 
 /* ── theme-aware photo hero: light cream wash in light mode, dark in dark mode ── */
@@ -135,11 +159,13 @@ img { max-width: 100%; display: block; }
   border: 1px solid color-mix(in oklab, var(--ink) 22%, transparent); backdrop-filter: blur(6px); }
 .btn-on-photo:hover { background: color-mix(in oklab, var(--surface) 74%, transparent); }
 
-/* ── Web Builder decoration layer — density via ancestor [data-decor] ── */
+/* ── Web Builder decoration layer — COVERAGE (not opacity) via ancestor [data-decor] ── */
 .k-decor { display: none; position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: -1; }
-.k-decor-item { position: absolute; }
-.k-decor-item svg { display: block; }
+.k-decor-item { position: absolute; background-position: center; }
 [data-decor="low"] > .k-decor, [data-decor="high"] > .k-decor { display: block; }
-[data-decor="low"] > .k-decor { opacity: .25; }
-[data-decor="high"] > .k-decor { opacity: .45; }
-[data-decor="low"] > .k-decor .k-decor-item:nth-child(n+11) { display: none; }
+/* faint watermark — present but transparent, never fighting the text in front of it */
+[data-decor="low"]  > .k-decor { opacity: .13; }
+[data-decor="high"] > .k-decor { opacity: .19; }
+/* HIGH ≈ 40% of the screen filled: every motif shown.
+   LOW  ≈ 20%: hide every other motif — halves coverage while staying evenly spread. */
+[data-decor="low"] > .k-decor .k-decor-item:nth-child(even) { display: none; }

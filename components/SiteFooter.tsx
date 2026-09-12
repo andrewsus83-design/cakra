@@ -19,7 +19,7 @@ const SOCIALS: [string, string, string][] = [
 
 export function SiteFooter() {
   const pathname = usePathname();
-  if (pathname === "/demo" || pathname.startsWith("/demo/") || pathname === "/admin" || pathname.startsWith("/admin/") || pathname === "/login" || pathname === "/signup" || pathname === "/onboarding") return null;
+  if (pathname === "/demo" || pathname.startsWith("/demo/") || pathname === "/s" || pathname.startsWith("/s/") || pathname === "/admin" || pathname.startsWith("/admin/") || pathname === "/login" || pathname === "/signup" || pathname === "/onboarding") return null;
   return (
     <footer style={{ borderTop: "1px solid var(--line)", background: "var(--surface-2)" }}>
       <div className="wrap" style={{ padding: "30px 0 22px" }}>
@@ -30,7 +30,7 @@ export function SiteFooter() {
               <span className="hand" style={{ fontSize: "1.6rem", fontWeight: 700, lineHeight: 1 }}>cakra</span>
             </div>
             <p className="muted" style={{ maxWidth: "38ch", marginTop: 8, fontSize: ".85rem", lineHeight: 1.5 }}>
-              Roda kehadiran untuk agen properti cerdas — punya website, selalu update, kredibel, dan mudah ditemukan.
+              SEO · GEO · Social Search yang dikhususkan untuk agen properti — website yang selalu update, kredibel, dan mudah ditemukan manusia maupun AI.
             </p>
             <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
               {SOCIALS.map(([label, href, d]) => (
@@ -57,7 +57,7 @@ export function SiteFooter() {
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8, marginTop: 22, paddingTop: 14, borderTop: "1px solid var(--line)", color: "var(--muted)", fontSize: ".78rem" }}>
           <span>© {new Date().getFullYear()} cakra · Indonesia — <span className="hand gold" style={{ fontSize: "1rem" }}>be the agent AI can&apos;t ignore</span></span>
-          <span className="mono">SEO · GEO · Social</span>
+          <span className="mono">SEO · GEO · Social Search — spesialis agen properti</span>
         </div>
       </div>
       <style>{`@media (max-width: 820px){ .cakra-foot-grid{ grid-template-columns: 1fr 1fr !important; } }`}</style>

@@ -13,7 +13,7 @@ export function PresenceCard({ score = 70 }: { score?: number }) {
   const C = 2 * Math.PI * R;
   const off = C * (1 - score / 100);
   return (
-    <div className="card" style={{ padding: 26, width: "min(420px, 92vw)", background: "var(--surface)" }}>
+    <div className="card" style={{ padding: 26, width: "min(420px, 100%)", background: "var(--surface)" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 18, borderBottom: "1px solid var(--line)", paddingBottom: 18, marginBottom: 18 }}>
         <div style={{ position: "relative", width: 92, height: 92, flex: "none" }}>
           <svg viewBox="0 0 80 80" width="92" height="92">

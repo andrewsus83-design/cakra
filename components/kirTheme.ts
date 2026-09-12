@@ -31,7 +31,7 @@ export const KIR_CSS = `
         .k-btn-primary:hover{ background:var(--k-emerald-2); }
         .k-btn-gold{ background:var(--k-gold); color:#fff; }
         .k-btn-gold:hover{ background:var(--k-gold-2); }
-        .k-btn-ghost{ background:transparent; color:var(--k-ink); border-color:var(--k-line-2); }
+        .k-btn-ghost{ background:transparent; color:var(--k-ink); border-color:var(--k-ink); }
         .k-btn-ghost:hover{ border-color:var(--k-emerald); color:var(--k-emerald); }
         .k-btn-glass{ background:rgba(255,255,255,.12); color:#fff; border-color:rgba(255,255,255,.45); backdrop-filter:blur(6px); }
         .k-btn-glass:hover{ background:rgba(255,255,255,.22); }
@@ -114,7 +114,7 @@ export const KIR_CSS = `
         .k-check{ flex:none; width:24px; height:24px; border-radius:50%; background:color-mix(in oklab, var(--k-emerald) 12%, var(--k-surface)); color:var(--k-emerald); display:grid; place-items:center; margin-top:2px; }
 
         .k-step-n{ font-family:var(--k-font-display), serif; font-size:2.4rem; font-weight:700; color:var(--k-gold); line-height:1; margin-bottom:12px; }
-        .k-step{ border-top:2px solid var(--k-line); padding-top:20px; }
+        .k-step{ border-top:2px solid var(--k-ink); padding-top:20px; }
 
         .k-testi{ padding:28px 28px 24px; }
         .k-stars{ color:var(--k-gold); letter-spacing:3px; margin-bottom:12px; }
@@ -122,7 +122,7 @@ export const KIR_CSS = `
         .k-testi-by{ font-size:.95rem; line-height:1.4; }
 
         .k-faq-grid{ display:grid; grid-template-columns:1fr 1fr; gap:2px 52px; }
-        .k-faq{ border-bottom:1px solid var(--k-line); }
+        .k-faq{ border-bottom:1px solid var(--k-ink); }
         .k-faq summary{ list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:22px 2px; font-weight:600; font-size:1.1rem; color:var(--k-ink); }
         .k-faq summary::-webkit-details-marker{ display:none; }
         .k-faq summary:hover{ color:var(--k-emerald); }

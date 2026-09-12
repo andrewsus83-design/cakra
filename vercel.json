@@ -6,7 +6,11 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
+    { "source": "/", "has": [{ "type": "host", "value": "member.cakra.xyz" }], "destination": "/admin", "permanent": false },
     { "source": "/", "has": [{ "type": "host", "value": "sample.cakra.xyz" }], "destination": "/demo", "permanent": false },
-    { "source": "/", "has": [{ "type": "host", "value": "member.cakra.xyz" }], "destination": "/admin", "permanent": false }
+    { "source": "/", "has": [{ "type": "host", "value": "www.cakra.xyz" }], "destination": "https://cakra.xyz/", "permanent": true },
+    { "source": "/", "has": [{ "type": "host", "value": "thenewton.cakra.xyz" }], "destination": "/s/thenewton", "permanent": false },
+    { "source": "/en", "has": [{ "type": "host", "value": "thenewton.cakra.xyz" }], "destination": "/s/thenewton/en", "permanent": false },
+    { "source": "/", "has": [{ "type": "host", "value": "[a-z0-9-]+\\.cakra\\.xyz" }], "destination": "/demo", "permanent": false }
   ]
 }

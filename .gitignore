@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Supabase CLI per-machine link state
+supabase/.temp/
+graphify-out/cache/

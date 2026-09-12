@@ -47,6 +47,20 @@ export function SiteNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   useEffect(() => { setMobileOpen(false); }, [pathname]);
 
+  // Keep the browser/status-bar tint in step with the nav: blended with the page while idle over a
+  // hero, solid surface once the blur bar appears on scroll. (True image-under-the-status-bar is an
+  // installed-PWA effect — iOS via apple black-translucent; a browser tab's chrome can't be painted.)
+  useEffect(() => {
+    const metas = document.querySelectorAll('meta[name="theme-color"]');
+    if (!metas.length) return;
+    const css = getComputedStyle(document.documentElement);
+    const bg = css.getPropertyValue("--bg").trim() || (theme === "dark" ? "#17130D" : "#F7F2E9");
+    const surface = css.getPropertyValue("--surface").trim() || bg;
+    // --bg/--surface already resolve to the active theme; set every theme-color meta (light+dark
+    // media variants) so whichever the browser picks tracks the scroll state.
+    metas.forEach((m) => m.setAttribute("content", scrolled ? surface : bg));
+  }, [scrolled, theme, pathname]);
+
   const overHero = isHero && !scrolled && !mobileOpen;
   const atTop = !scrolled && !mobileOpen; // transparent bar at rest on every page; blur bg on scroll
   const heroWhite = overHero && theme === "dark"; // white text only over the dark-mode hero
@@ -54,7 +68,7 @@ export function SiteNav() {
   const muted = heroWhite ? "rgba(255,255,255,.85)" : overHero ? "var(--ink-2)" : "var(--muted)";
   const heroBorder = heroWhite ? "rgba(255,255,255,.5)" : "var(--line-2)";
 
-  if (pathname === "/demo" || pathname.startsWith("/demo/") || pathname === "/admin" || pathname.startsWith("/admin/") || pathname === "/login" || pathname === "/signup" || pathname === "/onboarding") return null;
+  if (pathname === "/demo" || pathname.startsWith("/demo/") || pathname === "/s" || pathname.startsWith("/s/") || pathname === "/admin" || pathname.startsWith("/admin/") || pathname === "/login" || pathname === "/signup" || pathname === "/onboarding") return null;
 
   const themeBtn = (
     <button type="button" onClick={toggleTheme} aria-label="Ganti tema terang / gelap" style={{ display: "grid", placeItems: "center", width: 40, height: 40, borderRadius: 11, background: "transparent", color: txt, border: `1px solid ${heroBorder}`, cursor: "pointer", transition: "all .3s" }}>

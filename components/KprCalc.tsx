@@ -9,12 +9,39 @@ function rpShort(n: number) {
   return rp(n);
 }
 
-function Slider({ label, display, value, min, max, step, onChange }: { label: string; display: string; value: number; min: number; max: number; step: number; onChange: (n: number) => void }) {
+const UNIT_FAC: Record<string, number> = { M: 1e9, jt: 1e6 };
+// Slider whose readout is tappable: tap the number to type an exact value on the keypad
+// (units: "M" = miliar, "jt" = juta, "%", "thn"). Value stays clamped to the slider's range.
+function Slider({ label, display, value, min, max, step, onChange, unit }: { label: string; display: string; value: number; min: number; max: number; step: number; onChange: (n: number) => void; unit?: string }) {
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState("");
+  const fac = unit && UNIT_FAC[unit] ? UNIT_FAC[unit] : 1;
+  const toDraft = (v: number) => {
+    const x = v / fac;
+    if (unit === "M") return String(Number(x.toFixed(2)));
+    if (unit === "jt") return String(Math.round(x));
+    return String(x);
+  };
+  const commit = () => {
+    const n = parseFloat(draft.replace(/[^0-9.]/g, ""));
+    if (!isNaN(n)) onChange(Math.min(max, Math.max(min, n * fac)));
+    setEditing(false);
+  };
+  const suffix = unit === "M" ? "M" : unit === "jt" ? "jt" : unit === "%" ? "%" : unit === "thn" ? "thn" : "";
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 7 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 7, gap: 10 }}>
         <label className="muted" style={{ fontSize: ".92rem", fontWeight: 600 }}>{label}</label>
-        <span className="mono" style={{ fontWeight: 700, color: "var(--ink)" }}>{display}</span>
+        {editing ? (
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
+            <input autoFocus inputMode="decimal" value={draft} onChange={(e) => setDraft(e.target.value)} onBlur={commit} onKeyDown={(e) => { if (e.key === "Enter") commit(); if (e.key === "Escape") setEditing(false); }}
+              style={{ width: fac > 1 ? 92 : 64, textAlign: "right", background: "var(--surface-2)", border: "1.5px solid var(--brand)", borderRadius: 8, padding: ".2rem .45rem", font: "inherit", fontSize: ".95rem", fontWeight: 700, color: "var(--ink)" }} />
+            {suffix && <span className="muted" style={{ fontSize: ".85rem" }}>{suffix}</span>}
+          </span>
+        ) : (
+          <button type="button" onClick={() => { setDraft(toDraft(value)); setEditing(true); }} className="mono" title="Ketuk untuk ketik angka"
+            style={{ fontWeight: 700, color: "var(--ink)", background: "transparent", border: "none", borderBottom: "1.5px dashed var(--line-2)", cursor: "pointer", font: "inherit", padding: "0 0 1px" }}>{display}</button>
+        )}
       </div>
       <input type="range" min={min} max={max} step={step} value={value} onChange={(e) => onChange(Number(e.target.value))} style={{ width: "100%", accentColor: "var(--brand)", cursor: "pointer" }} aria-label={label} />
     </div>
@@ -39,10 +66,10 @@ export function KprCalc({ compact = false }: { compact?: boolean }) {
   return (
     <div className="card kpr-grid" style={{ padding: "clamp(22px, 3vw, 34px)", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(24px, 4vw, 44px)", alignItems: "center" }}>
       <div style={{ display: "grid", gap: 20 }}>
-        <Slider label="Harga properti" display={rpShort(harga)} value={harga} min={500_000_000} max={30_000_000_000} step={100_000_000} onChange={setHarga} />
-        <Slider label="Uang muka (DP)" display={`${dp}% · ${rpShort(harga * dp / 100)}`} value={dp} min={0} max={50} step={1} onChange={setDp} />
-        <Slider label="Tenor" display={`${tenor} tahun`} value={tenor} min={1} max={30} step={1} onChange={setTenor} />
-        <Slider label="Suku bunga / tahun" display={`${bunga.toFixed(1)}%`} value={bunga} min={1} max={15} step={0.1} onChange={setBunga} />
+        <Slider label="Harga properti" display={rpShort(harga)} value={harga} min={500_000_000} max={30_000_000_000} step={100_000_000} onChange={setHarga} unit="M" />
+        <Slider label="Uang muka (DP)" display={`${dp}% · ${rpShort(harga * dp / 100)}`} value={dp} min={0} max={50} step={1} onChange={setDp} unit="%" />
+        <Slider label="Tenor" display={`${tenor} tahun`} value={tenor} min={1} max={30} step={1} onChange={setTenor} unit="thn" />
+        <Slider label="Suku bunga / tahun" display={`${bunga.toFixed(1)}%`} value={bunga} min={1} max={15} step={0.1} onChange={setBunga} unit="%" />
       </div>
       <div style={{ background: "var(--surface-2)", borderRadius: "var(--radius)", padding: "clamp(22px, 3vw, 30px)", textAlign: "center" }}>
         <div className="muted" style={{ fontSize: ".92rem" }}>Estimasi cicilan / bulan</div>
@@ -76,9 +103,9 @@ export function RentalYield() {
   return (
     <div className="card kpr-grid" style={{ padding: "clamp(22px, 3vw, 34px)", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(24px, 4vw, 44px)", alignItems: "center" }}>
       <div style={{ display: "grid", gap: 20 }}>
-        <Slider label="Harga properti" display={rpShort(harga)} value={harga} min={500_000_000} max={30_000_000_000} step={100_000_000} onChange={setHarga} />
-        <Slider label="Pendapatan sewa / tahun" display={rpShort(sewa)} value={sewa} min={10_000_000} max={2_000_000_000} step={10_000_000} onChange={setSewa} />
-        <Slider label="Biaya manajemen" display={`${fee}% · ${rpShort(sewa * fee / 100)}/thn`} value={fee} min={0} max={30} step={1} onChange={setFee} />
+        <Slider label="Harga properti" display={rpShort(harga)} value={harga} min={500_000_000} max={30_000_000_000} step={100_000_000} onChange={setHarga} unit="M" />
+        <Slider label="Pendapatan sewa / tahun" display={rpShort(sewa)} value={sewa} min={10_000_000} max={2_000_000_000} step={10_000_000} onChange={setSewa} unit="jt" />
+        <Slider label="Biaya manajemen" display={`${fee}% · ${rpShort(sewa * fee / 100)}/thn`} value={fee} min={0} max={30} step={1} onChange={setFee} unit="%" />
       </div>
       <div style={{ background: "var(--surface-2)", borderRadius: "var(--radius)", padding: "clamp(22px, 3vw, 30px)", textAlign: "center" }}>
         <div className="muted" style={{ fontSize: ".92rem" }}>Imbal hasil bersih (net yield)</div>

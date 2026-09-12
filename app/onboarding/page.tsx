@@ -2,8 +2,10 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CakraMark } from "@/components/CakraMark";
+import { CityInput } from "@/components/CityInput";
+import { auth, db, rpc, toWaE164 } from "@/lib/supabase";
 
-type FType = "text" | "email" | "tel" | "textarea" | "choice" | "multi" | "theme" | "font" | "domain" | "social";
+type FType = "text" | "email" | "tel" | "password" | "textarea" | "choice" | "multi" | "theme" | "font" | "domain" | "social" | "city";
 type Field = { id: string; label: string; type: FType; ph?: string; optional?: boolean; options?: string[] };
 type Page = { section: string; title: string; sub?: string; fields: Field[] };
 
@@ -14,7 +16,8 @@ const PAGES: Page[] = [
       { id: "nama", label: "Nama lengkap", type: "text", ph: "mis. Andi Pratama" },
       { id: "wa", label: "Nomor WhatsApp", type: "tel", ph: "08xx-xxxx-xxxx" },
       { id: "email", label: "Email", type: "email", ph: "anda@email.com" },
-      { id: "kota", label: "Kota / area utama", type: "text", ph: "mis. Denpasar, Bali" },
+      { id: "password", label: "Kata sandi (untuk masuk nanti)", type: "password", ph: "Minimal 6 karakter" },
+      { id: "kota", label: "Kota / area utama", type: "city", ph: "Ketik kota — mis. Denpasar, Bali" },
     ],
   },
   {
@@ -22,15 +25,21 @@ const PAGES: Page[] = [
     fields: [
       { id: "brand", label: "Nama brand atau nama tampilan", type: "text", ph: "mis. Andi Pratama Property" },
       { id: "tagline", label: "Tagline singkat (opsional)", type: "text", ph: "mis. Properti tepercaya di Bali", optional: true },
-      { id: "pengalaman", label: "Pengalaman sebagai agen", type: "choice", options: ["< 1 tahun", "1–3 tahun", "3–7 tahun", "7+ tahun"] },
+      { id: "pengalaman", label: "Pengalaman sebagai agen", type: "choice", options: ["< 2 tahun", "2–5 tahun", "5–10 tahun", "10+ tahun"] },
+      { id: "tahun_mulai", label: "Tahun mulai berkarier di properti (opsional)", type: "text", ph: "mis. 2015", optional: true },
+      { id: "keunggulan", label: "Apa yang membuat Anda berbeda? (opsional)", type: "multi", optional: true, options: ["Respons cepat", "Jaringan luas", "Ahli legalitas", "Negosiator ulung", "Paham area lokal", "Layanan personal", "Portofolio premium"] },
+      { id: "bio_cerita", label: "Ceritakan singkat tentang Anda — kenapa properti? (opsional)", type: "textarea", ph: "Latar belakang, pendekatan, dan kenapa klien memercayai Anda…", optional: true },
     ],
   },
   {
     section: "Keahlian & pasar", title: "Apa keahlian Anda?", sub: "Agar listing dan konten Anda tepat sasaran.",
     fields: [
       { id: "spesialisasi", label: "Spesialisasi (pilih satu atau lebih)", type: "multi", options: ["Rumah", "Apartemen", "Tanah", "Vila", "Komersial", "Sewa"] },
+      { id: "layanan", label: "Layanan yang Anda tawarkan", type: "multi", options: ["Jual", "Sewa", "Investasi & konsultasi", "Legal & serah terima", "Manajemen properti"] },
       { id: "area", label: "Area layanan", type: "text", ph: "mis. Canggu, Seminyak, Ubud" },
       { id: "harga", label: "Rentang harga properti", type: "choice", options: ["< Rp 1 M", "Rp 1–3 M", "Rp 3–10 M", "Rp 10 M+", "Beragam"] },
+      { id: "pembeli_asing", label: "Melayani pembeli asing / ekspat?", type: "choice", options: ["Ya", "Tidak"] },
+      { id: "bahasa_lisan", label: "Bahasa yang Anda kuasai (opsional)", type: "multi", optional: true, options: ["Indonesia", "English", "Mandarin", "Jepang", "Korea"] },
     ],
   },
   {
@@ -45,13 +54,16 @@ const PAGES: Page[] = [
     section: "Alamat & bahasa", title: "Alamat website Anda.", sub: "Di subdomain cakra — bisa pakai domain sendiri nanti.",
     fields: [
       { id: "domain", label: "Alamat website", type: "domain", ph: "namaanda" },
-      { id: "bahasa", label: "Bahasa utama website", type: "choice", options: ["Indonesia", "English", "Keduanya"] },
+      { id: "bahasa", label: "Bahasa website (dwibahasa ID + EN didukung penuh)", type: "choice", options: ["Indonesia", "English", "Keduanya (ID + EN)"] },
     ],
   },
   {
     section: "Kehadiran & konten", title: "Sambungkan kehadiran Anda.", sub: "Untuk ditautkan di website Anda.",
     fields: [
       { id: "social", label: "Akun sosial (opsional, tanpa @)", type: "social", optional: true },
+      { id: "google_business", label: "Link Google Business Profile (opsional — bagus untuk SEO lokal)", type: "text", ph: "https://g.page/…", optional: true },
+      { id: "alamat_kantor", label: "Alamat kantor / basis operasi (opsional)", type: "text", ph: "mis. Jl. Sunset Road No. 8, Kuta", optional: true },
+      { id: "jam_operasional", label: "Jam operasional (opsional)", type: "text", ph: "mis. Sen–Sab, 09.00–18.00", optional: true },
       { id: "listing", label: "Sudah punya listing untuk ditampilkan?", type: "choice", options: ["Ya, banyak", "Beberapa", "Belum ada"] },
     ],
   },
@@ -66,6 +78,8 @@ const PAGES: Page[] = [
   {
     section: "Terakhir", title: "Hampir selesai!", sub: "Tambahkan sentuhan akhir, lalu kami rangkai website Anda.",
     fields: [
+      { id: "sertifikasi", label: "Lisensi / sertifikasi / brokerage (opsional — mis. AREBI)", type: "text", ph: "mis. Bersertifikat AREBI", optional: true },
+      { id: "testimoni", label: "Testimoni klien nyata (opsional — nama · peran · kutipan, satu per baris)", type: "textarea", ph: "Budi · Investor · “Prosesnya cepat & transparan.”", optional: true },
       { id: "catatan", label: "Ada permintaan khusus? (opsional)", type: "textarea", ph: "Ceritakan di sini…", optional: true },
     ],
   },
@@ -93,6 +107,61 @@ export default function Onboarding() {
   const [pageIdx, setPageIdx] = useState(0);
   const [ans, setAns] = useState<Record<string, string | string[]>>({});
   const [genStep, setGenStep] = useState(0);
+  const [obErr, setObErr] = useState<string | null>(null);
+  const [redirecting, setRedirecting] = useState(false);
+  // Onboarding creates the account + session, which must be same-origin as the dashboard.
+  // The member app lives on member.cakra.xyz, so bounce there from the marketing origin.
+  useEffect(() => {
+    try {
+      const h = window.location.hostname;
+      if (h === "cakra.xyz" || h === "www.cakra.xyz") { setRedirecting(true); window.location.replace("https://member.cakra.xyz/onboarding"); }
+    } catch {}
+  }, []);
+
+  // Live subdomain availability check (debounced) with alternative suggestions when taken.
+  const [domStatus, setDomStatus] = useState<"idle" | "checking" | "ok" | "taken">("idle");
+  const [domSug, setDomSug] = useState<string[]>([]);
+  useEffect(() => {
+    const sub = String(ans.domain || "").trim().toLowerCase();
+    if (sub.length < 3) { setDomStatus("idle"); setDomSug([]); return; }
+    let alive = true; setDomStatus("checking"); setDomSug([]);
+    const t = setTimeout(async () => {
+      try {
+        const ok = await rpc("subdomain_available", { p_sub: sub });
+        if (!alive) return;
+        if (ok === true) { setDomStatus("ok"); return; }
+        setDomStatus("taken");
+        const cands = [`${sub}property`, `${sub}-realty`, `${sub}bali`, `agen-${sub}`, `${sub}${(sub.length % 9) + 1}`];
+        const free: string[] = [];
+        for (const c of cands) { try { if (await rpc("subdomain_available", { p_sub: c })) free.push(c); } catch {} if (free.length >= 3) break; }
+        if (alive) setDomSug(free);
+      } catch { if (alive) setDomStatus("idle"); }
+    }, 500);
+    return () => { alive = false; clearTimeout(t); };
+  }, [ans.domain]);
+
+  const strOr = (v: string | string[] | undefined) => (typeof v === "string" && v.trim() ? v.trim() : null);
+  const splitList = (v: string | string[] | undefined) => String(v || "").split(",").map((s) => s.trim()).filter(Boolean);
+  const TONE_MAP: Record<string, string> = { "Elegan & tenang": "lux", "Berani & modern": "professional", "Hangat & personal": "relax" };
+  const LANG_MAP: Record<string, string> = { Indonesia: "id", English: "en", "Keduanya (ID + EN)": "id-en" };
+  const profileFromAns = () => {
+    const rest: Record<string, string | string[]> = { ...ans }; delete rest.password;
+    return {
+      name: strOr(ans.nama), brand: strOr(ans.brand) || strOr(ans.nama), tagline: strOr(ans.tagline), whatsapp: toWaE164(strOr(ans.wa) || "") || null,
+      city: strOr(ans.kota), areas: splitList(ans.area), specializations: Array.isArray(ans.spesialisasi) ? ans.spesialisasi : [],
+      price_band: strOr(ans.harga), target: strOr(ans.target), language: LANG_MAP[String(ans.bahasa)] || "id",
+      tone: TONE_MAP[String(ans.mood)] || "normal", palette: strOr(ans.theme), font: strOr(ans.font), subdomain: strOr(ans.domain),
+      onboarding: rest, // full rich answer set for the AI advertorial generator
+    };
+  };
+  const previewHref = () => {
+    try {
+      const pal = PALETTES.find((p) => p.id === ans.theme) || PALETTES[1];
+      const uid = auth.getSession()?.user?.id;
+      const cfg = { aid: uid, exp: Date.now() + 7 * 24 * 60 * 60 * 1000, brand: strOr(ans.brand) || strOr(ans.nama) || "cakra", col: { bg: pal.sw[0], em: pal.sw[1], go: pal.sw[2], ink: pal.sw[3] }, soc: { wa: toWaE164(strOr(ans.wa) || ""), ig: strOr(ans.ig), tt: strOr(ans.tiktok), fb: strOr(ans.fb) } };
+      return `https://cakra.xyz/demo#site=${btoa(encodeURIComponent(JSON.stringify(cfg)))}`;
+    } catch { return "https://cakra.xyz/demo"; }
+  };
 
   const [theme, setTheme] = useState<"light" | "dark">("light");
   useEffect(() => {
@@ -116,22 +185,49 @@ export default function Onboarding() {
     if (f.optional || f.type === "social") return true;
     const v = ans[f.id];
     if (f.type === "multi") return Array.isArray(v) && v.length > 0;
-    return typeof v === "string" && v.trim().length > 0;
+    const str = typeof v === "string" ? v.trim() : "";
+    if (!str) return false;
+    if (f.type === "email") return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(str);         // valid email before proceeding
+    if (f.type === "password") return str.length >= 6;                            // min length before proceeding
+    return true;
   };
-  const canNext = page ? page.fields.every(isFilled) : true;
+  // Block Next until the chosen subdomain is confirmed available (not merely "not yet taken"),
+  // so the done screen never advertises a subdomain that was silently dropped on collision.
+  const domainOk = !page?.fields.some((f) => f.type === "domain") || domStatus === "ok";
+  const canNext = (page ? page.fields.every(isFilled) : true) && domainOk;
 
   const next = () => { if (!canNext) return; if (pageIdx === PAGES.length - 1) setPhase("generating"); else setPageIdx(pageIdx + 1); };
   const back = () => { if (pageIdx === 0) setPhase("welcome"); else setPageIdx(pageIdx - 1); };
 
+  // Real work behind the "generating" animation: create the account + save the profile from answers.
   useEffect(() => {
     if (phase !== "generating") return;
-    setGenStep(0);
-    const iv = setInterval(() => setGenStep((g) => g + 1), 850);
-    const done = setTimeout(() => setPhase("done"), GEN_STEPS.length * 850 + 400);
-    return () => { clearInterval(iv); clearTimeout(done); };
+    let alive = true;
+    setGenStep(0); setObErr(null);
+    const iv = setInterval(() => setGenStep((g) => Math.min(g + 1, GEN_STEPS.length - 1)), 750);
+    (async () => {
+      const minDelay = new Promise((r) => setTimeout(r, GEN_STEPS.length * 750 + 400));
+      try {
+        const s = await auth.signUp(String(ans.email || "").trim(), String(ans.password || ""));
+        const uid = s?.user?.id || auth.getSession()?.user?.id;
+        if (uid) {
+          const base: any = profileFromAns();
+          try { await db("profiles", { method: "PATCH", query: `id=eq.${uid}`, body: base }); }
+          catch { delete base.subdomain; try { await db("profiles", { method: "PATCH", query: `id=eq.${uid}`, body: base }); } catch {} }
+        }
+        await minDelay;
+        if (alive) setPhase("done");
+      } catch (e: any) {
+        await minDelay.catch(() => {});
+        if (alive) { setObErr(e?.message || "Gagal membuat akun — email mungkin sudah terpakai."); setPhase("form"); setPageIdx(0); }
+      }
+    })();
+    return () => { clearInterval(iv); alive = false; };
   }, [phase]);
 
   const domain = (ans.domain as string) || "namaanda";
+
+  if (redirecting) return <div style={{ position: "fixed", inset: 0, background: "var(--bg)" }} />;
 
   /* ── WELCOME (full-bleed) ── */
   if (phase === "welcome")
@@ -206,19 +302,45 @@ export default function Onboarding() {
   /* ── DONE ── */
   if (phase === "done")
     return shell(
-      <div style={{ maxWidth: "40ch", textAlign: "center" }}>
-        <div style={{ width: 66, height: 66, margin: "0 auto 18px", borderRadius: "50%", display: "grid", placeItems: "center", background: "color-mix(in oklab, var(--good) 18%, var(--surface))", color: "var(--good)", fontSize: "1.9rem" }}>✓</div>
-        <p className="hand gold" style={{ fontSize: "1.6rem", transform: "rotate(-2deg)", margin: 0 }}>website Anda siap</p>
-        <h2 className="display" style={{ fontSize: "clamp(1.9rem, 4vw, 2.8rem)", fontWeight: 700, margin: "4px 0 0" }}>Selamat, {String(ans.nama || "Agen").split(" ")[0]}!</h2>
-        <div className="card" style={{ padding: "16px 20px", margin: "20px auto", display: "inline-flex", alignItems: "center", gap: 10 }}>
-          <span style={{ width: 9, height: 9, borderRadius: "50%", background: "var(--good)" }} />
-          <span className="mono" style={{ fontSize: ".98rem" }}>{domain}.cakra.site</span>
+      <div className="ob-done" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(20px,3vw,40px)", width: "100%", maxWidth: "min(960px, 94vw)", alignItems: "stretch" }}>
+        {/* LEFT — success */}
+        <div style={{ textAlign: "left" }}>
+          <div style={{ width: 60, height: 60, marginBottom: 16, borderRadius: "50%", display: "grid", placeItems: "center", background: "color-mix(in oklab, var(--good) 18%, var(--surface))", color: "var(--good)", fontSize: "1.8rem" }}>✓</div>
+          <p className="hand gold" style={{ fontSize: "1.6rem", transform: "rotate(-2deg)", margin: 0 }}>website Anda siap</p>
+          <h2 className="display" style={{ fontSize: "clamp(1.8rem, 3.6vw, 2.6rem)", fontWeight: 700, margin: "4px 0 0" }}>Selamat, {String(ans.nama || "Agen").split(" ")[0]}!</h2>
+          <div className="card" style={{ padding: "14px 18px", margin: "18px 0", display: "inline-flex", alignItems: "center", gap: 10 }}>
+            <span style={{ width: 9, height: 9, borderRadius: "50%", background: "var(--good)" }} />
+            <span className="mono" style={{ fontSize: ".95rem" }}>{domain}.cakra.xyz</span>
+          </div>
+          <p className="muted" style={{ margin: "0 0 22px", lineHeight: 1.6 }}>Draf website, halaman listing, dan skor kehadiran awal Anda sudah disiapkan. Tinjau lalu terbitkan.</p>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+            <a href={previewHref()} target="_blank" rel="noopener noreferrer" className="btn btn-brand" style={{ padding: ".9rem 1.6rem", fontSize: "1rem" }}>Lihat situs Anda ↗</a>
+            <Link href="/admin" className="btn btn-ghost" style={{ padding: ".9rem 1.6rem", fontSize: "1rem" }}>Buka dashboard →</Link>
+          </div>
+          <p className="muted" style={{ fontSize: ".82rem", marginTop: 16 }}>Preview gratis aktif 7 hari — lalu dijeda hingga Anda berlangganan.</p>
         </div>
-        <p className="muted" style={{ margin: "0 auto 24px", maxWidth: "38ch", lineHeight: 1.6 }}>Kami sudah menyiapkan draf website, halaman listing, dan skor kehadiran awal Anda. Langkah berikutnya: tinjau dan terbitkan.</p>
-        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <Link href="/admin" className="btn btn-brand" style={{ padding: ".9rem 1.7rem", fontSize: "1rem" }}>Buka dashboard saya →</Link>
-          <Link href="/" className="btn btn-ghost" style={{ padding: ".9rem 1.7rem", fontSize: "1rem" }}>Kembali ke beranda</Link>
+        {/* RIGHT — Pro paywall */}
+        <div className="card" style={{ padding: "clamp(24px,3vw,34px)", background: "var(--surface-2)", borderColor: "color-mix(in oklab, var(--brand) 30%, var(--line))", display: "flex", flexDirection: "column", textAlign: "left" }}>
+          <span className="pill" style={{ alignSelf: "flex-start", background: "color-mix(in oklab, var(--brand) 14%, var(--surface))", color: "var(--brand)", fontWeight: 700, fontSize: ".72rem", border: "none" }}>Upgrade ke Pro</span>
+          <h3 className="display" style={{ fontSize: "clamp(1.5rem,2.6vw,2rem)", fontWeight: 700, margin: "12px 0 6px", lineHeight: 1.12 }}>Aktifkan situs Anda sepenuhnya.</h3>
+          <p className="muted" style={{ fontSize: ".94rem", margin: "0 0 16px", lineHeight: 1.55 }}>Optimasi AI menulis ulang seluruh isi situs agar benar-benar sesuai persona &amp; lokasi Anda — plus listing asli, konten harian, dan Editor Studio.</p>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
+            <span style={{ textDecoration: "line-through", color: "var(--muted)", fontSize: "1.15rem", fontWeight: 600 }}>Rp 600rb</span>
+            <span className="display" style={{ fontSize: "2.4rem", fontWeight: 700, color: "var(--brand)", lineHeight: 1 }}>Rp 300rb</span>
+            <span className="muted" style={{ fontSize: ".9rem" }}>/bulan</span>
+          </div>
+          <p style={{ fontSize: ".8rem", color: "var(--good)", fontWeight: 600, margin: "6px 0 16px" }}>★ Penawaran spesial early access — hemat 50%</p>
+          <ul style={{ listStyle: "none", padding: 0, margin: "0 0 20px", display: "grid", gap: 10 }}>
+            {["Optimasi AI penuh — SEO, GEO & social search", "12 listing live + testimoni & profil asli", "Editor Studio — 10 build video / bulan", "Konten harian otomatis — 2 per hari"].map((f) => (
+              <li key={f} style={{ display: "flex", gap: 9, fontSize: ".92rem", lineHeight: 1.4 }}>
+                <span style={{ color: "var(--brand)", flex: "none", fontWeight: 800 }}>✓</span>{f}
+              </li>
+            ))}
+          </ul>
+          <Link href="/harga" className="btn btn-brand" style={{ marginTop: "auto", justifyContent: "center", padding: "1rem", fontSize: "1.05rem" }}>Langganan Pro →</Link>
+          <p className="muted" style={{ fontSize: ".78rem", textAlign: "center", marginTop: 10 }}>Batalkan kapan saja · tanpa kontrak</p>
         </div>
+        <style>{`@media (max-width: 760px){ .ob-done{ grid-template-columns:1fr !important; } }`}</style>
       </div>,
       false
     );
@@ -227,8 +349,10 @@ export default function Onboarding() {
   const renderField = (f: Field) => {
     const v = ans[f.id];
     switch (f.type) {
-      case "text": case "email": case "tel":
+      case "text": case "email": case "tel": case "password":
         return <input type={f.type} value={(v as string) || ""} placeholder={f.ph} onChange={(e) => setVal(f.id, e.target.value)} className="ob-input" />;
+      case "city":
+        return <CityInput value={(v as string) || ""} placeholder={f.ph} onChange={(val) => setVal(f.id, val)} />;
       case "textarea":
         return <textarea rows={3} value={(v as string) || ""} placeholder={f.ph} onChange={(e) => setVal(f.id, e.target.value)} className="ob-input" style={{ resize: "vertical", border: "1.5px solid var(--line-2)", borderRadius: 12, padding: "1rem 1.1rem", fontSize: "1.15rem" }} />;
       case "choice":
@@ -272,9 +396,19 @@ export default function Onboarding() {
         );
       case "domain":
         return (
-          <div style={{ display: "flex", alignItems: "baseline", gap: 6, maxWidth: 520, borderBottom: "2px solid var(--line-2)" }}>
-            <input value={(v as string) || ""} placeholder={f.ph} onChange={(e) => setVal(f.id, e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))} style={{ flex: 1, minWidth: 0, border: "none", background: "transparent", padding: ".5rem .1rem", font: "inherit", fontSize: "1.4rem", color: "var(--ink)", outline: "none" }} />
-            <span className="mono" style={{ fontSize: "1.1rem", color: "var(--muted)", whiteSpace: "nowrap" }}>.cakra.site</span>
+          <div>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 6, maxWidth: 520, borderBottom: `2px solid ${domStatus === "taken" ? "var(--crit)" : domStatus === "ok" ? "var(--good)" : "var(--line-2)"}` }}>
+              <input value={(v as string) || ""} placeholder={f.ph} onChange={(e) => setVal(f.id, e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))} style={{ flex: 1, minWidth: 0, border: "none", background: "transparent", padding: ".5rem .1rem", font: "inherit", fontSize: "1.4rem", color: "var(--ink)", outline: "none" }} />
+              <span className="mono" style={{ fontSize: "1.1rem", color: "var(--muted)", whiteSpace: "nowrap" }}>.cakra.xyz</span>
+            </div>
+            <div style={{ minHeight: 24, marginTop: 10, fontSize: ".9rem", display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+              {domStatus === "checking" && <span className="muted">Memeriksa ketersediaan…</span>}
+              {domStatus === "ok" && <span style={{ color: "var(--good)", fontWeight: 700 }}>✓ Tersedia</span>}
+              {domStatus === "taken" && <span style={{ color: "var(--crit)", fontWeight: 700 }}>✗ Sudah dipakai{domSug.length ? " — coba:" : ""}</span>}
+              {domStatus === "taken" && domSug.map((s) => (
+                <button key={s} type="button" onClick={() => setVal("domain", s)} className="ob-chip" style={{ fontSize: ".85rem", padding: ".35rem .8rem" }}>{s}</button>
+              ))}
+            </div>
           </div>
         );
       case "social":
@@ -296,6 +430,7 @@ export default function Onboarding() {
       <div className="mono gold" style={{ fontSize: ".82rem", marginBottom: 12 }}>{pageIdx + 1} → {PAGES.length}</div>
       <h2 className="display" style={{ fontSize: "clamp(1.7rem, 4vw, 2.6rem)", fontWeight: 700, lineHeight: 1.15, margin: 0 }}>{page.title}</h2>
       {page.sub && <p className="muted" style={{ marginTop: 8, fontSize: "1.05rem" }}>{page.sub}</p>}
+      {obErr && <div style={{ marginTop: 16, fontSize: ".88rem", color: "var(--crit)", background: "color-mix(in oklab, var(--crit) 10%, var(--surface))", border: "1px solid color-mix(in oklab, var(--crit) 30%, var(--line))", borderRadius: 10, padding: "10px 14px" }}>{obErr}</div>}
 
       <div style={{ marginTop: 28, display: "grid", gap: 24 }}>
         {page.fields.map((f) => (
